@@ -22,3 +22,10 @@
 ### Additions
 * browserify
 * firebaseFramer
+
+### TODO
+1. Add Gulp task for uploading images to cloud
+    + How to change image pointers? Just hand-jam in code?
+2. Setup Firebase database
+3. Change Firebase credentials
+4. Change demo code in app.coffee
