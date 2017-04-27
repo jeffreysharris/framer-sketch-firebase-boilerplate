@@ -7,6 +7,7 @@ var browserSync = require('browser-sync');
 var buffer = require('vinyl-buffer'); // to transform the browserify results into a 'stream'
 var source = require('vinyl-source-stream');
 var sourcemaps = require('gulp-sourcemaps');
+var gulpDropbox = require('gulp-dropbox');
 var browserify = require('browserify');
 
 gulp.task('build', ['copy', 'coffee', 'sketch']);
