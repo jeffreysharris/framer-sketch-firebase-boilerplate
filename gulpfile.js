@@ -1,4 +1,5 @@
 var gulp = require('gulp');
+var fs = require('fs');
 var coffee = require('gulp-coffee');
 var gutil = require('gulp-util');
 var watch = require('gulp-watch');
@@ -8,25 +9,31 @@ var buffer = require('vinyl-buffer'); // to transform the browserify results int
 var source = require('vinyl-source-stream');
 var sourcemaps = require('gulp-sourcemaps');
 var gulpDropbox = require('gulp-dropbox');
+var through = require('through2');
+var Dropbox = require('dropbox');
 var browserify = require('browserify');
 
+// LOAD ENIVRONMENTAL VARIABLES
+// .env HOLDS DROPBOX KEYS
+require('dotenv').config();
+
 gulp.task('build', ['copy', 'coffee', 'sketch']);
-gulp.task('default', ['build', 'watch']);
+gulp.task('default', ['build', 'deploy', 'watch']);
 
 gulp.task('watch', function(){
 
   gulp.watch('./src/*.coffee', ['coffee'])
   gulp.watch('./src/*.sketch', ['sketch'])
 
-  browserSync({
-    server: {
-      baseDir: 'build'
-    },
-    browser: 'google chrome',
-    injectChanges: false,
-    files: ['build/**/*.*'],
-    notify: false
-  })
+  // browserSync({
+  //   server: {
+  //     baseDir: 'build'
+  //   },
+  //   browser: 'google chrome',
+  //   injectChanges: false,
+  //   files: ['build/**/*.*'],
+  //   notify: false
+  // })
 
 })
 
@@ -81,3 +88,40 @@ gulp.task('copy', function(){
   gulp.src('src/images/**/*.{png, jpg, svg}')
     .pipe(gulp.dest('build/images'))
 })
+
+gulp.task('deploy', function(){
+    var fileContent = fs.readFileSync('build/images/circle.png');
+    var dbx = new Dropbox({accessToken: process.env.DROPBOX_TOKEN});
+    dbx.filesListFolder({path:''})
+        .then(function(response){
+            console.log(response);
+        })
+        .catch(function(error){
+            console.log(error);
+        });
+    dbx.filesUpload({path: '/circle.png', contents: fileContent})
+            .then(function(response) {
+                console.log(response);
+            //   gutil.log(gutil.colors.green("File '" + file.path.replace(file.base, '') + "' created in '" + replacePattern + "'."));
+            //   cb(null, file);
+            })
+            .catch(function(error) {
+                console.log(error);
+            //   throw new PluginError(PLUGIN_NAME, 'There was an error uploading at least one file to Dropbox. Please check your terminal.');
+            //   cb(null, file);
+            })
+            return false;
+        });
+
+    // return gulp.src('./src/images/circle.png')
+    //     .pipe(gulpDropbox({
+    //         token: process.env.DROPBOX_TOKEN,
+    //         path: ''
+    //     }));
+    // dbx.filesListFolder({path:''})
+    //     .then(function(response){
+    //         console.log(response);
+    //     })
+    //     .catch(function(error){
+    //         console.log(error);
+    //     });
