@@ -17,6 +17,7 @@
     "gulp-sourcemaps": "^1.5.2",
     "@google-cloud/storage": "*",
     "dotenv": "^4.0.0",
-    "gulp-gcloud-publish": "^1.2.2"
+    "gulp-gcloud-publish": "^1.2.2",
+    "gulp-changed": "^3.0.0"
   }
 }

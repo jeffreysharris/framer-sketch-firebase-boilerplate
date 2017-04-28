@@ -8,6 +8,7 @@ var buffer = require('vinyl-buffer'); // to transform the browserify results int
 var source = require('vinyl-source-stream');
 var sourcemaps = require('gulp-sourcemaps');
 var gcPub = require('gulp-gcloud-publish');
+var changed = require('gulp-changed');
 var browserify = require('browserify');
 
 // LOAD ENIVRONMENTAL VARIABLES
@@ -128,6 +129,7 @@ gulp.task('copy', function(){
 
 gulp.task('deploy', function(){
     gulp.src('build/**')
+        .pipe(changed('build/**'))
         .pipe(gcPub({
             bucket: process.env.BUCKET,
             keyFilename: process.env.KEYFILE,
