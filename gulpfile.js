@@ -9,6 +9,11 @@ var source = require('vinyl-source-stream');
 var sourcemaps = require('gulp-sourcemaps');
 var browserify = require('browserify');
 
+// GOOGLE cloud
+
+
+var datastore = require('@google-cloud/storage')(config);
+
 gulp.task('build', ['copy', 'coffee', 'sketch']);
 gulp.task('default', ['build', 'watch']);
 
