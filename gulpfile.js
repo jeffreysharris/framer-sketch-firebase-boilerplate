@@ -127,7 +127,7 @@ gulp.task('copy', function(){
 })
 
 gulp.task('deploy', function(){
-    gulp.src('build/*')
+    gulp.src('build/**')
         .pipe(gcPub({
             bucket: process.env.BUCKET,
             keyFilename: process.env.KEYFILE,
