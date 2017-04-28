@@ -29,3 +29,19 @@
 2. Setup Firebase database
 3. Change Firebase credentials
 4. Change demo code in app.coffee
+
+### From Google Groups on why Firebase/storage wasn't working on Node:
+"There is no firebase package at the moment, but you can still use it as a standard Google Cloud Storage bucket.
+
+Here is how:
+import gcloud from 'gcloud'; // The google cloud nodejs SDK
+const gcs = gcloud.storage({
+    projectId: gcsProject,
+    keyFilename: gcsPrivateKey
+});
+const bucket = gcs.bucket(`${gcsProject}.appspot.com`);
+
+- gscProject = firebase storage ucket less the '.appspot.com'
+- gcsPrivateKey = the service account JSON file you need when accessing firebase from nodejs. You can create one in google console AIM.
+
+Then you can use functions from the gcloud SDK which are very similar to the firebase storage module. (see the docs for the differences)"
