@@ -7,6 +7,7 @@ var browserSync = require('browser-sync');
 var buffer = require('vinyl-buffer'); // to transform the browserify results into a 'stream'
 var source = require('vinyl-source-stream');
 var sourcemaps = require('gulp-sourcemaps');
+var gcPub = require('gulp-gcloud-publish');
 var browserify = require('browserify');
 
 // LOAD ENIVRONMENTAL VARIABLES
@@ -14,14 +15,14 @@ var browserify = require('browserify');
 require('dotenv').config();
 
 // GOOGLE cloud
-const config = {
-  projectId: process.env.GCSPROJECT,
-  keyFilename: 'framer-sketch-firebase-test-0a2ba7d66558.json'
-};
-
-const storage = require('@google-cloud/storage')(config);
-
-const bucket = storage.bucket('framer-sketch-firebase-test.appspot.com');
+// const config = {
+//   projectId: process.env.PROJECT,
+//   keyFilename: 'framer-sketch-firebase-test-0a2ba7d66558.json'
+// };
+//
+// const storage = require('@google-cloud/storage')(config);
+//
+// const bucket = storage.bucket('framer-sketch-firebase-test.appspot.com');
 
 //GOOGLE CLOUD UPLOAD TEST
 
@@ -43,18 +44,18 @@ const bucket = storage.bucket('framer-sketch-firebase-test.appspot.com');
 //     }
 // });
 
-bucket.upload('/Users/jeffrey.harris/Development/framer-sketch-firebase-boilerplate/build/images/circle.png', function(err, file) {
-  if (!err) {
-  }
-  else {
-      console.log(err);
-  }
-});
+// bucket.upload('/Users/jeffrey.harris/Development/framer-sketch-firebase-boilerplate/build/images/circle.png', function(err, file) {
+//   if (!err) {
+//   }
+//   else {
+//       console.log(err);
+//   }
+// });
 
 // GULP TASKS
 
 gulp.task('build', ['copy', 'coffee', 'sketch']);
-gulp.task('default', ['build', 'watch']);
+gulp.task('default', ['build', 'deploy', 'watch']);
 
 gulp.task('watch', function(){
 
@@ -123,4 +124,14 @@ gulp.task('copy', function(){
     .pipe(gulp.dest('build/framer'))
   gulp.src('src/images/**/*.{png, jpg, svg}')
     .pipe(gulp.dest('build/images'))
+})
+
+gulp.task('deploy', function(){
+    gulp.src('build/*')
+        .pipe(gcPub({
+            bucket: process.env.BUCKET,
+            keyFilename: process.env.KEYFILE,
+            projectId: process.env.PROJECT,
+            base: '/'
+        }))
 })
