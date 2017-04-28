@@ -1,4 +1,4 @@
-{Firebase} = require 'firebase'
+{Firebase} = require 'firebase/app'
 
 WIDTH = Framer.Screen.width
 HEIGHT = Framer.Screen.height

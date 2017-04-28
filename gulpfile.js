@@ -19,7 +19,12 @@ var config = {
   keyFilename: 'framer-sketch-firebase-test-0a2ba7d66558.json'
 };
 
-var datastore = require('@google-cloud/storage')(config);
+var storage = require('@google-cloud/storage')(config);
+// storage.createBucket('test-bucket', function(err, bucket) {
+//     if (!err) {
+//         console.log("Bucket created");
+//     }
+// })
 
 gulp.task('build', ['copy', 'coffee', 'sketch']);
 gulp.task('default', ['build', 'watch']);
