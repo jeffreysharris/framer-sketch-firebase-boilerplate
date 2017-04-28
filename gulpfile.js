@@ -20,15 +20,38 @@ const config = {
 };
 
 const storage = require('@google-cloud/storage')(config);
-const bucket = storage.bucket('framer-sketch-firebase-test');
-bucket.upload('./build/images/circle.png', function(err, file) {
+
+const bucket = storage.bucket('framer-sketch-firebase-test.appspot.com');
+
+//GOOGLE CLOUD UPLOAD TEST
+
+// storage.getBuckets(function(err, buckets){
+//     if(!err) {
+//         console.log(buckets);
+//     }
+//     else {
+//         console.log(err);
+//     }
+// })
+
+// bucket.exists(function(err, exists) {
+//     if (!err) {
+//         console.log(exists);
+//     }
+//     else {
+//         console.log(err);
+//     }
+// });
+
+bucket.upload('/Users/jeffrey.harris/Development/framer-sketch-firebase-boilerplate/build/images/circle.png', function(err, file) {
   if (!err) {
-    // "zebra.jpg" is now in your bucket.
   }
   else {
       console.log(err);
   }
 });
+
+// GULP TASKS
 
 gulp.task('build', ['copy', 'coffee', 'sketch']);
 gulp.task('default', ['build', 'watch']);
