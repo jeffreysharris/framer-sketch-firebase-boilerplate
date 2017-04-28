@@ -15,7 +15,7 @@
 
 # Firebase REST API Class ----------------------------
 
-class exports.Firebase extends Framer.BaseClass
+class exports.FirebaseFramer extends Framer.BaseClass
 
 
 
@@ -149,4 +149,3 @@ class exports.Firebase extends Framer.BaseClass
 			source.addEventListener "patch", (ev) =>
 				callback(JSON.parse(ev.data).data, "patch", JSON.parse(ev.data).patch) if callback?
 				console.log "Firebase: Received changes made to '#{path}' via 'PATCH': #{JSON.parse(ev.data).data} \n URL: '#{url}'" if @debug
-
