@@ -14,17 +14,21 @@ var browserify = require('browserify');
 require('dotenv').config();
 
 // GOOGLE cloud
-var config = {
+const config = {
   projectId: process.env.GCSPROJECT,
   keyFilename: 'framer-sketch-firebase-test-0a2ba7d66558.json'
 };
 
-var storage = require('@google-cloud/storage')(config);
-// storage.createBucket('test-bucket', function(err, bucket) {
-//     if (!err) {
-//         console.log("Bucket created");
-//     }
-// })
+const storage = require('@google-cloud/storage')(config);
+const bucket = storage.bucket('framer-sketch-firebase-test');
+bucket.upload('./build/images/circle.png', function(err, file) {
+  if (!err) {
+    // "zebra.jpg" is now in your bucket.
+  }
+  else {
+      console.log(err);
+  }
+});
 
 gulp.task('build', ['copy', 'coffee', 'sketch']);
 gulp.task('default', ['build', 'watch']);

@@ -1,4 +1,4 @@
-{Firebase} = require 'firebase/app'
+{FirebaseFramer} = require 'firebaseframer'
 
 WIDTH = Framer.Screen.width
 HEIGHT = Framer.Screen.height
@@ -20,7 +20,7 @@ circle.on Events.Click, ->
 
   bounce.start()
 
-demoDB = new Firebase
+demoDB = new FirebaseFramer
 	projectID: "framer-demo"                           # ... Database → first part of URL
 	secret: "K2ZJjo4RXG5nlHEWgjgwBzNkeVJCz9YZAQF8dk9g" # ... Project Settings → Database → Database Secrets
 	server: "s-usc1c-nss-110.firebaseio.com"           # Get this info by setting `server: undefined´ first
