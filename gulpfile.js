@@ -9,8 +9,15 @@ var source = require('vinyl-source-stream');
 var sourcemaps = require('gulp-sourcemaps');
 var browserify = require('browserify');
 
-// GOOGLE cloud
+// LOAD ENIVRONMENTAL VARIABLES
+// .env HOLDS DROPBOX KEYS
+require('dotenv').config();
 
+// GOOGLE cloud
+var config = {
+  projectId: process.env.GCSPROJECT,
+  keyFilename: 'framer-sketch-firebase-test-0a2ba7d66558.json'
+};
 
 var datastore = require('@google-cloud/storage')(config);
 
