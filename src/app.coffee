@@ -32,12 +32,12 @@ slider.knob.backgroundColor = "grey"
 slider.knob.draggable.momentum = false
 
 
-# Events + Firebase --------------------
+# Events + FirebaseFramer --------------------
 
 slider.knob.onDragEnd ->
-	demoDB.put("/sliderValue",slider.value) # `put´ writes data to Firebase,
-											 # see http://bit.ly/firebasePut
+	demoDB.put("/sliderValue",slider.value) # `put´ writes data to FirebaseFramer,
+											 # see http://bit.ly/FirebasePut
 
 demoDB.onChange "/sliderValue", (value) -> # Retreives data onLoad and when it was changed
-											# see http://bit.ly/firebaseOnChange
+											# see http://bit.ly/FirebaseOnChange
 	slider.animateToValue(value) unless slider.knob.isDragging
