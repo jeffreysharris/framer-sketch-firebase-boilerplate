@@ -1,0 +1,22 @@
+{
+  "name": "sketch-framer-boilerplate",
+  "version": "1.0.0",
+  "description": "",
+  "devDependencies": {
+    "browser-sync": "^1.8.0",
+    "browserify": "^11.0.1",
+    "coffeeify": "^1.1.0",
+    "dotenv": "^4.0.0",
+    "firebase": "*",
+    "gulp": "^3.8.10",
+    "gulp-changed": "^3.0.0",
+    "gulp-coffee": "^2.2.0",
+    "gulp-gh-pages": "^0.5.4",
+    "gulp-sketch": "^1.0.3",
+    "gulp-sourcemaps": "^1.5.2",
+    "gulp-util": "^3.0.1",
+    "gulp-watch": "^3.0.0",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0"
+  }
+}
