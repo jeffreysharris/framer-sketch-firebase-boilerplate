@@ -56,12 +56,15 @@ require('dotenv').config();
 // GULP TASKS
 
 gulp.task('build', ['copy', 'coffee', 'sketch']);
-gulp.task('default', ['build', 'deploy', 'watch']);
+gulp.task('default', ['build', 'watch']);
 
 gulp.task('watch', function(){
 
   gulp.watch('./src/*.coffee', ['coffee'])
   gulp.watch('./src/*.sketch', ['sketch'])
+
+  //DEPLOY TO GITHUB PAGES
+  gulp.src("build/**/*").pipe(deploy())
 
   browserSync({
     server: {
@@ -125,12 +128,4 @@ gulp.task('copy', function(){
     .pipe(gulp.dest('build/framer'))
   gulp.src('src/images/**/*.{png, jpg, svg}')
     .pipe(gulp.dest('build/images'))
-})
-
-gulp.task('deploy', function(){
-    //DEPLOY TO GITHUB PAGES
-    gulp.task('deploy', function () {
-        return gulp.src("build/**/*")
-        .pipe(deploy())
-    })
 })
