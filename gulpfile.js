@@ -130,7 +130,7 @@ gulp.task('copy', function(){
 gulp.task('deploy', function(){
     //DEPLOY TO GITHUB PAGES
     gulp.task('deploy', function () {
-        return gulp.src("/build/**/*")
+        return gulp.src("build/**/*")
         .pipe(deploy())
     })
 })
