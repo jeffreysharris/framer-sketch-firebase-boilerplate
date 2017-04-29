@@ -7,15 +7,66 @@ var browserSync = require('browser-sync');
 var buffer = require('vinyl-buffer'); // to transform the browserify results into a 'stream'
 var source = require('vinyl-source-stream');
 var sourcemaps = require('gulp-sourcemaps');
+var deploy = require('gulp-gh-pages');
+var runSeq = require('run-sequence');
+var changed = require('gulp-changed');
 var browserify = require('browserify');
 
+// LOAD ENIVRONMENTAL VARIABLES
+// .env HOLDS DROPBOX KEYS
+require('dotenv').config();
+
+// GOOGLE cloud
+// const config = {
+//   projectId: process.env.PROJECT,
+//   keyFilename: 'framer-sketch-firebase-test-0a2ba7d66558.json'
+// };
+//
+// const storage = require('@google-cloud/storage')(config);
+//
+// const bucket = storage.bucket('framer-sketch-firebase-test.appspot.com');
+
+//GOOGLE CLOUD UPLOAD TEST
+
+// storage.getBuckets(function(err, buckets){
+//     if(!err) {
+//         console.log(buckets);
+//     }
+//     else {
+//         console.log(err);
+//     }
+// })
+
+// bucket.exists(function(err, exists) {
+//     if (!err) {
+//         console.log(exists);
+//     }
+//     else {
+//         console.log(err);
+//     }
+// });
+
+// bucket.upload('/Users/jeffrey.harris/Development/framer-sketch-firebase-boilerplate/build/images/circle.png', function(err, file) {
+//   if (!err) {
+//   }
+//   else {
+//       console.log(err);
+//   }
+// });
+
+// GULP TASKS
+
 gulp.task('build', ['copy', 'coffee', 'sketch']);
+gulp.task('post', function(){
+    runSeq(['coffee', 'sketch'], 'deploy');
+});
 gulp.task('default', ['build', 'watch']);
 
 gulp.task('watch', function(){
 
-  gulp.watch('./src/*.coffee', ['coffee'])
-  gulp.watch('./src/*.sketch', ['sketch'])
+  gulp.watch('./src/*.coffee', ['coffee']);
+  gulp.watch('./src/*.sketch', ['sketch']);
+  gulp.watch('build/**/*', ['deploy']) ;
 
   browserSync({
     server: {
@@ -79,4 +130,9 @@ gulp.task('copy', function(){
     .pipe(gulp.dest('build/framer'))
   gulp.src('src/images/**/*.{png, jpg, svg}')
     .pipe(gulp.dest('build/images'))
+})
+
+//DEPLOY TO GITHUB PAGES
+gulp.task('deploy', function(){
+    return gulp.src("build/**/*").pipe(deploy());
 })
