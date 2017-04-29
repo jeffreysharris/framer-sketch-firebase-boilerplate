@@ -7,7 +7,7 @@ var browserSync = require('browser-sync');
 var buffer = require('vinyl-buffer'); // to transform the browserify results into a 'stream'
 var source = require('vinyl-source-stream');
 var sourcemaps = require('gulp-sourcemaps');
-var deploy = require('gulp-gh-pages');
+var gcPub = require('gulp-gcloud-publish');
 var changed = require('gulp-changed');
 var browserify = require('browserify');
 
@@ -128,8 +128,12 @@ gulp.task('copy', function(){
 })
 
 gulp.task('deploy', function(){
-    //DEPLOY TO GITHUB PAGES
-    gulp.task('deploy', function () {
-        return gulp.src("/build/**/*")
-        .pipe(deploy())
+    gulp.src('build/**')
+        .pipe(changed('build/**'))
+        .pipe(gcPub({
+            bucket: process.env.BUCKET,
+            keyFilename: process.env.KEYFILE,
+            projectId: process.env.PROJECT,
+            base: '/'
+        }))
 })
