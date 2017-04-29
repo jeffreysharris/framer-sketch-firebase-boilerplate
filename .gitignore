@@ -1,3 +1,5 @@
 node_modules/
 .env
+build
+.publish
 framer-sketch-firebase-test-0a2ba7d66558.json
