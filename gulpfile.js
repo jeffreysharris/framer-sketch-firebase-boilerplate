@@ -8,6 +8,7 @@ var buffer = require('vinyl-buffer'); // to transform the browserify results int
 var source = require('vinyl-source-stream');
 var sourcemaps = require('gulp-sourcemaps');
 var deploy = require('gulp-gh-pages');
+var runSeq = require('run-sequence');
 var changed = require('gulp-changed');
 var browserify = require('browserify');
 
@@ -56,15 +57,16 @@ require('dotenv').config();
 // GULP TASKS
 
 gulp.task('build', ['copy', 'coffee', 'sketch']);
+gulp.task('post', function(){
+    runSeq(['coffee', 'sketch'], 'deploy');
+});
 gulp.task('default', ['build', 'watch']);
 
 gulp.task('watch', function(){
 
-  gulp.watch('./src/*.coffee', ['coffee'])
-  gulp.watch('./src/*.sketch', ['sketch'])
-
-  //DEPLOY TO GITHUB PAGES
-  gulp.src("build/**/*").pipe(deploy())
+  gulp.watch('./src/*.coffee', ['coffee']);
+  gulp.watch('./src/*.sketch', ['sketch']);
+  gulp.watch('build/**/*', ['deploy']) ;
 
   browserSync({
     server: {
@@ -128,4 +130,9 @@ gulp.task('copy', function(){
     .pipe(gulp.dest('build/framer'))
   gulp.src('src/images/**/*.{png, jpg, svg}')
     .pipe(gulp.dest('build/images'))
+})
+
+//DEPLOY TO GITHUB PAGES
+gulp.task('deploy', function(){
+    return gulp.src("build/**/*").pipe(deploy());
 })
