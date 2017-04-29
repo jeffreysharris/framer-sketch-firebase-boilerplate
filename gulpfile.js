@@ -8,7 +8,6 @@ var buffer = require('vinyl-buffer'); // to transform the browserify results int
 var source = require('vinyl-source-stream');
 var sourcemaps = require('gulp-sourcemaps');
 var deploy = require('gulp-gh-pages');
->>>>>>> parent of c6bcf60... Init gh-pages
 var changed = require('gulp-changed');
 var browserify = require('browserify');
 
@@ -133,4 +132,5 @@ gulp.task('deploy', function(){
     gulp.task('deploy', function () {
         return gulp.src("/build/**/*")
         .pipe(deploy())
+    })
 })
