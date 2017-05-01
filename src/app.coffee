@@ -21,23 +21,41 @@ circle.on Events.Click, ->
   bounce.start()
 
 demoDB = new FirebaseFramer
-	projectID: "framer-demo"                           # ... Database → first part of URL
-	secret: "K2ZJjo4RXG5nlHEWgjgwBzNkeVJCz9YZAQF8dk9g" # ... Project Settings → Database → Database Secrets
-	server: "s-usc1c-nss-110.firebaseio.com"           # Get this info by setting `server: undefined´ first
+	projectID: "framer-sketch-firebase-test" # ... Database → first part of URL
+	secret: "lHwsK4ljhwUmMt3EU1ybrMPQcSDgbKhvTIwuqJ9I" # ... Project Settings → Database → Database Secrets
+	server: "s-usc1c-nss-134.firebaseio.com" # Get this info by setting `server: undefined´ first
 
-slider = new SliderComponent
-slider.center()
-
-slider.knob.backgroundColor = "grey"
-slider.knob.draggable.momentum = false
+# slider = new SliderComponent
+# slider.center()
+#
+# slider.knob.backgroundColor = "grey"
+# slider.knob.draggable.momentum = false
 
 
 # Events + FirebaseFramer --------------------
 
-slider.knob.onDragEnd ->
-	demoDB.put("/sliderValue",slider.value) # `put´ writes data to FirebaseFramer,
-											 # see http://bit.ly/FirebasePut
+demoDB.get '/messages', (messages) ->
+    # print messages
+    messageArray = _.toArray(messages)
+    # print message for message in messageArray
+    h = 30
+    i = 1
+    for message in messageArray
+        # print message.name + ": " + message.text
+        line = new TextLayer
+            x: 50
+            textAlign: "left"
+            y: h * i
+            text: message.name + ": " + message.text
+            color: "#d0d0d0"
+            font: "14px/1.5 Helvetica"
+        i++
+#Text to load chats into
 
-demoDB.onChange "/sliderValue", (value) -> # Retreives data onLoad and when it was changed
-											# see http://bit.ly/FirebaseOnChange
-	slider.animateToValue(value) unless slider.knob.isDragging
+# slider.knob.onDragEnd ->
+# 	demoDB.put("/sliderValue",slider.value) # `put´ writes data to FirebaseFramer,
+# 											 # see http://bit.ly/FirebasePut
+#
+# demoDB.onChange "/sliderValue", (value) -> # Retreives data onLoad and when it was changed
+# 											# see http://bit.ly/FirebaseOnChange
+# 	slider.animateToValue(value) unless slider.knob.isDragging
