@@ -1,5 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var FirebaseFramer, HEIGHT, WIDTH, circle, demoDB, slider;
+var FirebaseFramer, HEIGHT, WIDTH, circle, demoDB;
 
 FirebaseFramer = require('firebaseframer').FirebaseFramer;
 
@@ -30,27 +30,20 @@ circle.on(Events.Click, function() {
 });
 
 demoDB = new FirebaseFramer({
-  projectID: "framer-demo",
-  secret: "K2ZJjo4RXG5nlHEWgjgwBzNkeVJCz9YZAQF8dk9g",
-  server: "s-usc1c-nss-110.firebaseio.com"
+  projectID: "framer-sketch-firebase-test",
+  secret: "lHwsK4ljhwUmMt3EU1ybrMPQcSDgbKhvTIwuqJ9I",
+  server: "undefined"
 });
 
-slider = new SliderComponent;
-
-slider.center();
-
-slider.knob.backgroundColor = "grey";
-
-slider.knob.draggable.momentum = false;
-
-slider.knob.onDragEnd(function() {
-  return demoDB.put("/sliderValue", slider.value);
-});
-
-demoDB.onChange("/sliderValue", function(value) {
-  if (!slider.knob.isDragging) {
-    return slider.animateToValue(value);
+demoDB.get('messages', function(messages) {
+  var i, len, message, messageArray, results;
+  messageArray = _.toArray(messages);
+  results = [];
+  for (i = 0, len = messageArray.length; i < len; i++) {
+    message = messageArray[i];
+    results.push(print(message));
   }
+  return results;
 });
 
 
