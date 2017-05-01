@@ -43,7 +43,7 @@ demoDB.get('/messages', function(messages) {
     message = messageArray[i];
     results.push(line = new TextLayer({
       text: message.name + ": " + message.text,
-      color: "#333333",
+      color: "#fafafa",
       font: "14px/20 Helvetica"
     }));
   }
