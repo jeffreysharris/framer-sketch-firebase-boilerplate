@@ -36,15 +36,19 @@ demoDB = new FirebaseFramer({
 });
 
 demoDB.get('/messages', function(messages) {
-  var i, len, line, message, messageArray, results;
+  var h, i, j, len, line, message, messageArray, results;
   messageArray = _.toArray(messages);
+  h = 20;
+  i = 0;
   results = [];
-  for (i = 0, len = messageArray.length; i < len; i++) {
-    message = messageArray[i];
+  for (j = 0, len = messageArray.length; j < len; j++) {
+    message = messageArray[j];
     results.push(line = new TextLayer({
+      x: Align.center,
+      y: h * i,
       text: message.name + ": " + message.text,
       color: "#d0d0d0",
-      font: "14px/20 Helvetica"
+      font: "14px/(h*3) Helvetica"
     }));
   }
   return results;
