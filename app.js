@@ -48,7 +48,7 @@ demoDB.get('/messages', function(messages) {
       y: h * i,
       text: message.name + ": " + message.text,
       color: "#d0d0d0",
-      font: "14px/(h*3) Helvetica"
+      font: "14px/1.5 Helvetica"
     }));
   }
   return results;
