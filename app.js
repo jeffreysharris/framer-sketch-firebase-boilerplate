@@ -43,13 +43,14 @@ demoDB.get('/messages', function(messages) {
   results = [];
   for (j = 0, len = messageArray.length; j < len; j++) {
     message = messageArray[j];
-    results.push(line = new TextLayer({
+    line = new TextLayer({
       x: Align.center,
       y: h * i,
       text: message.name + ": " + message.text,
       color: "#d0d0d0",
       font: "14px/1.5 Helvetica"
-    }));
+    });
+    results.push(i++);
   }
   return results;
 });
