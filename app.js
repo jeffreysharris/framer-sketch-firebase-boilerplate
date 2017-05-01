@@ -31,8 +31,7 @@ circle.on(Events.Click, function() {
 
 demoDB = new FirebaseFramer({
   projectID: "framer-sketch-firebase-test",
-  secret: "lHwsK4ljhwUmMt3EU1ybrMPQcSDgbKhvTIwuqJ9I",
-  server: "undefined"
+  secret: "lHwsK4ljhwUmMt3EU1ybrMPQcSDgbKhvTIwuqJ9I"
 });
 
 demoDB.get('messages', function(messages) {
