@@ -35,7 +35,7 @@ demoDB = new FirebaseFramer({
   server: "s-usc1c-nss-134.firebaseio.com"
 });
 
-demoDB.get('messages', function(messages) {});
+demoDB.get('/messages', function(messages) {});
 
 
 },{"firebaseframer":2}],2:[function(require,module,exports){
