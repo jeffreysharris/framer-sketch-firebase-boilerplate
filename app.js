@@ -39,7 +39,7 @@ demoDB.get('/messages', function(messages) {
   var h, i, j, len, line, message, messageArray, results;
   messageArray = _.toArray(messages);
   h = 20;
-  i = 0;
+  i = 1;
   results = [];
   for (j = 0, len = messageArray.length; j < len; j++) {
     message = messageArray[j];
