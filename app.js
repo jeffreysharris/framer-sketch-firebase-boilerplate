@@ -36,7 +36,8 @@ demoDB = new FirebaseFramer({
 });
 
 line = new TextLayer({
-  text: "dummy"
+  text: "dummy",
+  font: "-apple-system"
 });
 
 demoDB.get('/messages', function(messages) {
