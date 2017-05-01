@@ -48,6 +48,7 @@ demoDB.get('/messages', function(messages) {
   results = [];
   for (j = 0, len1 = messageArray.length; j < len1; j++) {
     message = messageArray[j];
+    print(message.name + ": " + message.text);
     results.push(line = new TextLayer({
       text: message.name + ": " + message.text
     }));
