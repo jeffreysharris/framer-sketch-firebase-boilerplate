@@ -38,16 +38,12 @@ demoDB = new FirebaseFramer({
 chats = [];
 
 demoDB.get('/messages', function(messages) {
-  var i, j, len, len1, message, messageArray, results;
+  var i, len, message, messageArray, results;
   print(messages);
   messageArray = _.toArray(messages);
+  results = [];
   for (i = 0, len = messageArray.length; i < len; i++) {
     message = messageArray[i];
-    print(message);
-  }
-  results = [];
-  for (j = 0, len1 = messageArray.length; j < len1; j++) {
-    message = messageArray[j];
     results.push(print(message.name + ": " + message.text));
   }
   return results;
