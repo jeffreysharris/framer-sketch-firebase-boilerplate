@@ -39,7 +39,6 @@ chats = [];
 
 demoDB.get('/messages', function(messages) {
   var i, len, message, messageArray, results;
-  print(messages);
   messageArray = _.toArray(messages);
   results = [];
   for (i = 0, len = messageArray.length; i < len; i++) {
