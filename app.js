@@ -36,14 +36,7 @@ demoDB = new FirebaseFramer({
 });
 
 demoDB.get('messages', function(messages) {
-  var i, len, message, messageArray, results;
-  messageArray = _.toArray(messages);
-  results = [];
-  for (i = 0, len = messageArray.length; i < len; i++) {
-    message = messageArray[i];
-    results.push(print(message));
-  }
-  return results;
+  return print(messages);
 });
 
 
