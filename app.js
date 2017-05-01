@@ -44,6 +44,7 @@ demoDB.get('/messages', function(messages) {
   for (j = 0, len = messageArray.length; j < len; j++) {
     message = messageArray[j];
     line = new TextLayer({
+      textAlign: "left",
       x: Align.center,
       y: h * i,
       text: message.name + ": " + message.text,
