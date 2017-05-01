@@ -38,7 +38,7 @@ demoDB = new FirebaseFramer({
 chats = [];
 
 demoDB.get('/messages', function(messages) {
-  var i, j, len, len1, line, message, messageArray, results;
+  var i, j, len, len1, message, messageArray, results;
   print(messages);
   messageArray = _.toArray(messages);
   for (i = 0, len = messageArray.length; i < len; i++) {
@@ -48,10 +48,7 @@ demoDB.get('/messages', function(messages) {
   results = [];
   for (j = 0, len1 = messageArray.length; j < len1; j++) {
     message = messageArray[j];
-    print(message.name + ": " + message.text);
-    results.push(line = new TextLayer({
-      text: message.name + ": " + message.text
-    }));
+    results.push(print(message.name + ": " + message.text));
   }
   return results;
 });
