@@ -38,7 +38,7 @@ circle.on(Events.Click, function() {
 textfield = new Input({
   setup: false,
   type: "text",
-  x: 110,
+  x: 100,
   y: Canvas.height - 200,
   width: 200,
   height: 30
@@ -73,7 +73,7 @@ demoDB.get('/messages', function(messages) {
   for (j = 0, len = messageArray.length; j < len; j++) {
     message = messageArray[j];
     line = new TextLayer({
-      x: 100,
+      x: 110,
       textAlign: "left",
       y: Canvas.height - 230 - h * i,
       text: message.text,
