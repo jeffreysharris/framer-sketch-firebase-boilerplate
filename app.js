@@ -104,7 +104,7 @@ post = function() {
     "text": textfield.value
   });
   stream.animate({
-    y: y - lineHeight
+    y: stream.y - lineHeight
   });
   line = new TextLayer({
     x: 120,
