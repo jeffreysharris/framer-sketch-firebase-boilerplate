@@ -37,7 +37,7 @@ textfield = new textfield.Input({
   x: 50,
   y: 200,
   width: 200,
-  height: 60
+  height: 30
 });
 
 textfield.style = {
