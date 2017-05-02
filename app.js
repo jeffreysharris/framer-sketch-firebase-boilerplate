@@ -120,7 +120,7 @@ button.onMouseUp(function() {
   return post();
 });
 
-document.addEventListener('keyup', function(event) {
+document.addEventListener('keypress', function(event) {
   if (event.keyCode === 13) {
     event.preventDefault();
     return post();
