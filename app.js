@@ -53,7 +53,8 @@ textfield = new Input({
 textfield.style = {
   fontSize: "14px",
   color: "#333",
-  fontFamily: "Helvetica"
+  fontFamily: "Helvetica",
+  padding: "10px 10px 10px 20px"
 };
 
 demoDB = new FirebaseFramer({
