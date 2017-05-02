@@ -101,9 +101,10 @@ demoDB.get('/messages', function(messages) {
 
 post = function() {
   if (textfield.value.length) {
-    return demoDB.post('/messages', {
+    demoDB.post('/messages', {
       "text": textfield.value
     });
+    return update();
   }
 };
 
