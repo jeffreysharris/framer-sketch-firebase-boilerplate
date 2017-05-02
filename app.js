@@ -33,7 +33,7 @@ button = new Layer({
   image: "images/button.png"
 });
 
-button.on(Events.mouseDown(function() {
+button.on(Events.MouseDown(function() {
   return button.image = "images/button-down.png";
 }));
 
