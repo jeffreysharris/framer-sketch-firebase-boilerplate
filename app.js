@@ -48,7 +48,7 @@ textfield = new Input({
   type: "text",
   x: 100,
   y: Canvas.height - 200,
-  width: 200,
+  width: 500,
   height: 30
 });
 
