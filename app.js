@@ -89,7 +89,10 @@ demoDB.get('/messages', function(messages) {
 });
 
 button.onMouseUp(function() {
-  return button.image = "images/button.png";
+  button.image = "images/button.png";
+  return demoDB.post('/messages', {
+    "text": input.value
+  });
 });
 
 
