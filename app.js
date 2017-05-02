@@ -109,7 +109,6 @@ post = function() {
 
 demoDB.onChange("/messages", function(message) {
   var child, j, len, line, ref;
-  print(message);
   ref = stream.children;
   for (j = 0, len = ref.length; j < len; j++) {
     child = ref[j];
