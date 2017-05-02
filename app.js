@@ -86,7 +86,7 @@ post = function() {
 };
 
 demoDB.onChange("/messages", function(message) {
-  var child, h, i, j, k, len, line, m, messageArray, ref, results, t;
+  var child, h, i, j, k, len, line, m, messageArray, ref, ref1, results, t;
   ref = stream.children;
   for (j = 0, len = ref.length; j < len; j++) {
     child = ref[j];
@@ -100,7 +100,7 @@ demoDB.onChange("/messages", function(message) {
   results = [];
   for (k = messageArray.length - 1; k >= 0; k += -1) {
     m = messageArray[k];
-    t = m != null ? m.text : void 0;
+    t = (ref1 = m.text) != null ? ref1 : m;
     print(t);
     line = new TextLayer({
       x: 120,
