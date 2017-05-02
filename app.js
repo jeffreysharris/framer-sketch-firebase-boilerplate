@@ -101,6 +101,7 @@ demoDB.onChange("/messages", function(message) {
   for (k = messageArray.length - 1; k >= 0; k += -1) {
     m = messageArray[k];
     t = m != null ? m.text : void 0;
+    print(t);
     line = new TextLayer({
       x: 120,
       textAlign: "left",
