@@ -13,13 +13,6 @@ Framer.Defaults.Animation = {
   curve: 'spring(150, 10, 0)'
 };
 
-document.addEventListener('keydown', function(event) {
-  var key, keyCode;
-  keyCode = event.which;
-  key = String.fromCharCode(keyCode);
-  return print(event.keyCode);
-});
-
 demoDB = new FirebaseFramer({
   projectID: "framer-sketch-firebase-test",
   secret: "lHwsK4ljhwUmMt3EU1ybrMPQcSDgbKhvTIwuqJ9I",
@@ -103,11 +96,15 @@ demoDB.get('/messages', function(messages) {
   return results;
 });
 
-button.onMouseUp(function() {
-  button.image = "images/button.png";
+post(function() {
   return demoDB.post('/messages', {
     "text": textfield.value
   });
+});
+
+button.onMouseUp(function() {
+  button.image = "images/button.png";
+  return post;
 });
 
 
