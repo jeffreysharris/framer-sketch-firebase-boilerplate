@@ -77,19 +77,35 @@ textfield.style = {
   padding: "10px 10px 10px 20px"
 };
 
-demoDB.get('/messages', function(messages) {
-  var h, i, j, line, message, messageArray, results;
-  messageArray = _.toArray(messages);
+post = function() {
+  if (textfield.value.length) {
+    return demoDB.post('/messages', {
+      "text": textfield.value
+    });
+  }
+};
+
+demoDB.onChange("/messages", function(message) {
+  var child, h, i, j, k, len, line, m, messageArray, ref, ref1, results, t;
+  ref = stream.children;
+  for (j = 0, len = ref.length; j < len; j++) {
+    child = ref[j];
+    child.animate({
+      y: child.y - lineHeight
+    });
+  }
+  messageArray = _.toArray(message);
   i = 1;
   h = lineHeight;
   results = [];
-  for (j = messageArray.length - 1; j >= 0; j += -1) {
-    message = messageArray[j];
+  for (k = messageArray.length - 1; k >= 0; k += -1) {
+    m = messageArray[k];
+    t = (ref1 = m.text) != null ? ref1 : m;
     line = new TextLayer({
       x: 120,
       textAlign: "left",
       y: Canvas.height - 250 - h * i,
-      text: message.text,
+      text: t,
       color: "#333",
       font: "14px/1.5 Helvetica"
     });
@@ -99,34 +115,17 @@ demoDB.get('/messages', function(messages) {
   return results;
 });
 
-post = function() {
-  var child, j, len, line, ref;
-  if (textfield.value.length) {
-    demoDB.post('/messages', {
-      "text": textfield.value
-    });
-    ref = stream.children;
-    for (j = 0, len = ref.length; j < len; j++) {
-      child = ref[j];
-      child.animate({
-        y: child.y - lineHeight
-      });
-    }
-    line = new TextLayer({
-      x: 120,
-      textAlign: "left",
-      y: Canvas.height - 250 - lineHeight,
-      text: textfield.value,
-      color: "#333",
-      font: "14px/1.5 Helvetica"
-    });
-    return line.parent = stream;
-  }
-};
-
 button.onMouseUp(function() {
   button.image = "images/button.png";
   return post();
+});
+
+document.addEventListener('keypress', function(event) {
+  if (event.keyCode === 13) {
+    event.preventDefault();
+    post();
+    return textfield.value = "";
+  }
 });
 
 

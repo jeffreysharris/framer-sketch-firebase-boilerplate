@@ -31,20 +31,6 @@ stream = new Layer
     height: Canvas.height - 230
     backgroundColor: "transparent"
 
-# circle = new Layer
-#   x: WIDTH / 2
-#   y: HEIGHT / 2
-#   image: 'images/circle.png'
-#
-# circle.on Events.Click, ->
-#   bounce = new Animation
-#     layer: circle
-#     properties:
-#       x: WIDTH * Math.random()
-#       y: HEIGHT * Math.random()
-#
-#   bounce.start()
-
 #input
 
 button = new Layer
@@ -80,46 +66,49 @@ textfield.style =
 
 # Events + FirebaseFramer --------------------
 
-demoDB.get '/messages', (messages) ->
-    # print messages
-    messageArray = _.toArray(messages)
+post = ->
+    if textfield.value.length
+        demoDB.post '/messages', {"text": textfield.value}
+        # update()
+        # for child in stream.children
+        #     child.animate
+        #         y: child.y - lineHeight
+        # line = new TextLayer
+        #     x: 120
+        #     textAlign: "left"
+        #     y: Canvas.height - 250 - lineHeight
+        #     text: textfield.value
+        #     color: "#333"
+        #     font: "14px/1.5 Helvetica"
+        # line.parent = stream
+
+demoDB.onChange "/messages", (message) ->
+    for child in stream.children
+        child.animate
+            y: child.y - lineHeight
+    messageArray = _.toArray(message)
     # print message for message in messageArray
     i = 1
     h = lineHeight
     # Get messages on load
-    for message in messageArray by -1
-        # print message.name + ": " + message.text
+    for m in messageArray by -1
+        t = m.text ? m
         line = new TextLayer
             x: 120
             textAlign: "left"
             y: Canvas.height - 250 - h * i
-            text: message.text
+            text: t
             color: "#333"
             font: "14px/1.5 Helvetica"
         line.parent = stream
         i++
 
-post = ->
-    if textfield.value.length
-        demoDB.post '/messages', {"text": textfield.value}
-        for child in stream.children
-            child.animate
-                y: child.y - lineHeight
-        line = new TextLayer
-            x: 120
-            textAlign: "left"
-            y: Canvas.height - 250 - lineHeight
-            text: textfield.value
-            color: "#333"
-            font: "14px/1.5 Helvetica"
-        line.parent = stream
-
-
 button.onMouseUp ->
     button.image = "images/button.png"
     post()
 
-# document.addEventListener 'keyup', (event) ->
-#   keyCode = event.which
-#   if keyCode === 13
-#       post()
+document.addEventListener 'keypress', (event) ->
+    if event.keyCode == 13
+        event.preventDefault()
+        post()
+        textfield.value = ""
