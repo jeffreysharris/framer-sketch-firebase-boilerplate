@@ -27,7 +27,8 @@ footer = new Layer({
 
 button = new Layer({
   x: 600,
-  y: Canvas.height - 200
+  y: Canvas.height - 200,
+  image: 'images/button.png'
 });
 
 textfield = new Input({
