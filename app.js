@@ -22,7 +22,7 @@ footer = new Layer({
   y: Canvas.height - 250,
   width: Canvas.width,
   height: 250,
-  backgroundColor: "#333"
+  backgroundColor: "#555"
 });
 
 circle = new Layer({
