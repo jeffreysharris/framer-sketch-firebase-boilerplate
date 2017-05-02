@@ -37,10 +37,6 @@ button.onMouseDown(function() {
   return button.image = "images/button-down.png";
 });
 
-button.onMouseUp(function() {
-  return button.image = "images/button.png";
-});
-
 field = new Layer({
   x: 100,
   y: Canvas.height - 200,
@@ -90,6 +86,10 @@ demoDB.get('/messages', function(messages) {
     results.push(i++);
   }
   return results;
+});
+
+button.onMouseUp(function() {
+  return button.image = "images/button.png";
 });
 
 
