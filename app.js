@@ -123,7 +123,8 @@ button.onMouseUp(function() {
 document.addEventListener('keypress', function(event) {
   if (event.keyCode === 13) {
     event.preventDefault();
-    return post();
+    post();
+    return textfield.value = "";
   }
 });
 
