@@ -33,6 +33,10 @@ button = new Layer({
   image: "images/button.png"
 });
 
+button.onClick(function() {
+  return button.image = "images/button-down.png";
+});
+
 field = new Layer({
   x: 100,
   y: Canvas.height - 200,
