@@ -104,7 +104,7 @@ post = function() {
 
 button.onMouseUp(function() {
   button.image = "images/button.png";
-  return post;
+  return post();
 });
 
 
