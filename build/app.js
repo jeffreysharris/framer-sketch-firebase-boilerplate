@@ -1,33 +1,19 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var FirebaseFramer, HEIGHT, WIDTH, circle, demoDB;
+var FirebaseFramer, HEIGHT, Input, WIDTH, bg, button, demoDB, field, footer, lineHeight, post, stream, textfield;
 
 FirebaseFramer = require('firebaseframer').FirebaseFramer;
+
+Input = require("inputfield").Input;
 
 WIDTH = Framer.Screen.width;
 
 HEIGHT = Framer.Screen.height;
 
+lineHeight = 30;
+
 Framer.Defaults.Animation = {
   curve: 'spring(150, 10, 0)'
 };
-
-circle = new Layer({
-  x: WIDTH / 2,
-  y: HEIGHT / 2,
-  image: 'images/circle.png'
-});
-
-circle.on(Events.Click, function() {
-  var bounce;
-  bounce = new Animation({
-    layer: circle,
-    properties: {
-      x: WIDTH * Math.random(),
-      y: HEIGHT * Math.random()
-    }
-  });
-  return bounce.start();
-});
 
 demoDB = new FirebaseFramer({
   projectID: "framer-sketch-firebase-test",
@@ -35,29 +21,116 @@ demoDB = new FirebaseFramer({
   server: "s-usc1c-nss-134.firebaseio.com"
 });
 
+bg = new BackgroundLayer({
+  backgroundColor: "#fafafa"
+});
+
+footer = new Layer({
+  x: 0,
+  y: Canvas.height - 230,
+  width: Canvas.width,
+  height: 230,
+  backgroundColor: "#999"
+});
+
+stream = new Layer({
+  x: 0,
+  y: 0,
+  width: Canvas.width,
+  height: Canvas.height - 230,
+  backgroundColor: "transparent"
+});
+
+button = new Layer({
+  x: 620,
+  y: Canvas.height - 200,
+  width: 50,
+  height: 50,
+  image: "images/button.png"
+});
+
+button.onMouseDown(function() {
+  return button.image = "images/button-down.png";
+});
+
+field = new Layer({
+  x: 100,
+  y: Canvas.height - 200,
+  width: 520,
+  height: 50,
+  image: "images/field.png"
+});
+
+textfield = new Input({
+  setup: false,
+  type: "text",
+  x: 100,
+  y: Canvas.height - 200,
+  width: 500,
+  height: 30
+});
+
+textfield.style = {
+  fontSize: "14px",
+  color: "#333",
+  fontFamily: "Helvetica",
+  padding: "10px 10px 10px 20px"
+};
+
 demoDB.get('/messages', function(messages) {
-  var h, i, j, len, line, message, messageArray, results;
+  var h, i, j, line, message, messageArray, results;
   messageArray = _.toArray(messages);
-  h = 30;
   i = 1;
+  h = lineHeight;
   results = [];
-  for (j = 0, len = messageArray.length; j < len; j++) {
+  for (j = messageArray.length - 1; j >= 0; j += -1) {
     message = messageArray[j];
     line = new TextLayer({
-      x: 50,
+      x: 120,
       textAlign: "left",
-      y: h * i,
-      text: message.name + ": " + message.text,
-      color: "#d0d0d0",
+      y: Canvas.height - 250 - h * i,
+      text: message.text,
+      color: "#333",
       font: "14px/1.5 Helvetica"
     });
+    line.parent = stream;
     results.push(i++);
   }
   return results;
 });
 
+post = function() {
+  var child, j, len, line, ref;
+  if (textfield.value.length) {
+    demoDB.post('/messages', {
+      "text": textfield.value
+    });
+    ref = stream.children;
+    for (j = 0, len = ref.length; j < len; j++) {
+      child = ref[j];
+      child.animate({
+        y: child.y - lineHeight
+      });
+    }
+    line = new TextLayer({
+      x: 120,
+      textAlign: "left",
+      y: Canvas.height - 250 - lineHeight,
+      text: textfield.value,
+      color: "#333",
+      font: "14px/1.5 Helvetica"
+    });
+    return line.parent = stream;
+  }
+};
 
-},{"firebaseframer":2}],2:[function(require,module,exports){
+button.onMouseUp(function() {
+  button.image = "images/button.png";
+  return post();
+});
+
+
+},{"firebaseframer":2,"inputfield":3}],2:[function(require,module,exports){
 var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
 
@@ -288,6 +361,115 @@ exports.FirebaseFramer = (function(superClass) {
   return FirebaseFramer;
 
 })(Framer.BaseClass);
+
+
+},{}],3:[function(require,module,exports){
+var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  hasProp = {}.hasOwnProperty;
+
+exports.Input = (function(superClass) {
+  extend(Input, superClass);
+
+  Input.define("style", {
+    get: function() {
+      return this.input.style;
+    },
+    set: function(value) {
+      return _.extend(this.input.style, value);
+    }
+  });
+
+  Input.define("value", {
+    get: function() {
+      return this.input.value;
+    },
+    set: function(value) {
+      return this.input.value = value;
+    }
+  });
+
+  function Input(options) {
+    if (options == null) {
+      options = {};
+    }
+    if (options.setup == null) {
+      options.setup = false;
+    }
+    if (options.width == null) {
+      options.width = Screen.width;
+    }
+    if (options.clip == null) {
+      options.clip = false;
+    }
+    if (options.height == null) {
+      options.height = 60;
+    }
+    if (options.backgroundColor == null) {
+      options.backgroundColor = options.setup ? "rgba(255, 60, 47, .5)" : "transparent";
+    }
+    if (options.fontSize == null) {
+      options.fontSize = 30;
+    }
+    if (options.lineHeight == null) {
+      options.lineHeight = 30;
+    }
+    if (options.padding == null) {
+      options.padding = 10;
+    }
+    if (options.fontFamily == null) {
+      options.fontFamily = "";
+    }
+    if (options.opacity == null) {
+      options.opacity = 1;
+    }
+    if (options.text == null) {
+      options.text = "";
+    }
+    if (options.placeholder == null) {
+      options.placeholder = "";
+    }
+    if (options.type == null) {
+      options.type = "text";
+    }
+    Input.__super__.constructor.call(this, options);
+    if (options.placeholderColor != null) {
+      this.placeholderColor = options.placeholderColor;
+    }
+    this.input = document.createElement("input");
+    this.input.id = "input-" + (_.now());
+    this.input.style.cssText = "font-size: " + options.fontSize + "px; line-height: " + options.lineHeight + "px; padding: " + options.padding + "px; width: " + options.width + "px; height: " + options.height + "px; border: none; outline-width: 0; background-image: url(about:blank); background-color: " + options.backgroundColor + "; font-family: " + options.fontFamily + "; opacity: " + options.opacity + ";";
+    this.input.value = options.text;
+    this.input.type = options.type;
+    this.input.placeholder = options.placeholder;
+    this.form = document.createElement("form");
+    this.form.appendChild(this.input);
+    this._element.appendChild(this.form);
+    this.backgroundColor = "transparent";
+    if (this.placeholderColor) {
+      this.updatePlaceholderColor(options.placeholderColor);
+    }
+  }
+
+  Input.prototype.updatePlaceholderColor = function(color) {
+    var css;
+    this.placeholderColor = color;
+    if (this.pageStyle != null) {
+      document.head.removeChild(this.pageStyle);
+    }
+    this.pageStyle = document.createElement("style");
+    this.pageStyle.type = "text/css";
+    css = "#" + this.input.id + "::-webkit-input-placeholder { color: " + this.placeholderColor + "; }";
+    this.pageStyle.appendChild(document.createTextNode(css));
+    return document.head.appendChild(this.pageStyle);
+  };
+
+  Input.prototype.focus = function() {
+    return this.input.focus();
+  };
+
+  return Input;
+
+})(Layer);
 
 
 },{}]},{},[1])
