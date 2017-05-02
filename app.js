@@ -19,7 +19,7 @@ bg = new BackgroundLayer({
 
 footer = new Layer({
   x: 0,
-  y: Canvas.height - 250,
+  y: Canvas.height - 230,
   width: Canvas.width,
   height: 230,
   backgroundColor: "#555"
