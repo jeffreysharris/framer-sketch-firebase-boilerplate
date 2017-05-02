@@ -72,7 +72,7 @@ demoDB.get('/messages', function(messages) {
   for (j = 0, len = messageArray.length; j < len; j++) {
     message = messageArray[j];
     line = new TextLayer({
-      x: 110,
+      x: 120,
       textAlign: "left",
       y: Canvas.height - 230 - h * i,
       text: message.text,
