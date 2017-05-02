@@ -39,9 +39,9 @@ textfield = new Input({
   setup: false,
   type: "text",
   x: 50,
-  y: 200,
+  y: Canvas.height - 200,
   width: 200,
-  height: Canvas.height - 200
+  height: 30
 });
 
 textfield.style = {
