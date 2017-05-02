@@ -33,9 +33,9 @@ button = new Layer({
   image: "images/button.png"
 });
 
-button.mouseDown(function() {
+button.on(Events.mouseDown(function() {
   return button.image = "images/button-down.png";
-});
+}));
 
 field = new Layer({
   x: 100,
