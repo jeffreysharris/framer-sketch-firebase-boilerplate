@@ -100,6 +100,7 @@ demoDB.onChange("/messages", function(message) {
   results = [];
   for (k = messageArray.length - 1; k >= 0; k += -1) {
     m = messageArray[k];
+    print(m);
     line = new TextLayer({
       x: 120,
       textAlign: "left",
