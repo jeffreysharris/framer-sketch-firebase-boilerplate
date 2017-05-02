@@ -86,7 +86,7 @@ post = function() {
 };
 
 demoDB.onChange("/messages", function(message) {
-  var child, h, i, j, k, len, line, m, messageArray, ref, results;
+  var child, h, i, j, k, len, line, m, messageArray, ref, results, t;
   ref = stream.children;
   for (j = 0, len = ref.length; j < len; j++) {
     child = ref[j];
@@ -100,12 +100,12 @@ demoDB.onChange("/messages", function(message) {
   results = [];
   for (k = messageArray.length - 1; k >= 0; k += -1) {
     m = messageArray[k];
-    print(m);
+    t = m != null ? m.text : void 0;
     line = new TextLayer({
       x: 120,
       textAlign: "left",
       y: Canvas.height - 250 - h * i,
-      text: m.text,
+      text: t,
       color: "#333",
       font: "14px/1.5 Helvetica"
     });
