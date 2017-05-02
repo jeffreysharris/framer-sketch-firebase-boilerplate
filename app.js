@@ -13,6 +13,13 @@ Framer.Defaults.Animation = {
   curve: 'spring(150, 10, 0)'
 };
 
+document.addEventListener('keydown', function(event) {
+  var key, keyCode;
+  keyCode = event.which;
+  key = String.fromCharCode(keyCode);
+  return print(key);
+});
+
 demoDB = new FirebaseFramer({
   projectID: "framer-sketch-firebase-test",
   secret: "lHwsK4ljhwUmMt3EU1ybrMPQcSDgbKhvTIwuqJ9I",
