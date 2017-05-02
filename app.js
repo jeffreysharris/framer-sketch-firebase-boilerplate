@@ -91,7 +91,7 @@ demoDB.get('/messages', function(messages) {
 button.onMouseUp(function() {
   button.image = "images/button.png";
   return demoDB.post('/messages', {
-    "text": input.value
+    "text": textfield.value
   });
 });
 
