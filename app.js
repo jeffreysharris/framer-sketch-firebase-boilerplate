@@ -17,7 +17,7 @@ document.addEventListener('keydown', function(event) {
   var key, keyCode;
   keyCode = event.which;
   key = String.fromCharCode(keyCode);
-  return print(key);
+  return print(event.keyCode);
 });
 
 demoDB = new FirebaseFramer({
