@@ -1,5 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var FirebaseFramer, HEIGHT, Input, WIDTH, bg, button, circle, demoDB, footer, textfield;
+var FirebaseFramer, HEIGHT, Input, WIDTH, bg, button, demoDB, footer, textfield;
 
 FirebaseFramer = require('firebaseframer').FirebaseFramer;
 
@@ -25,22 +25,9 @@ footer = new Layer({
   backgroundColor: "#555"
 });
 
-circle = new Layer({
-  x: WIDTH / 2,
-  y: HEIGHT / 2,
-  image: 'images/circle.png'
-});
-
-circle.on(Events.Click, function() {
-  var bounce;
-  bounce = new Animation({
-    layer: circle,
-    properties: {
-      x: WIDTH * Math.random(),
-      y: HEIGHT * Math.random()
-    }
-  });
-  return bounce.start();
+button = new Layer({
+  x: 600,
+  y: Canvas.height - 200
 });
 
 textfield = new Input({
