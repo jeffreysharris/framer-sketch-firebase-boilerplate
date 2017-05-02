@@ -99,13 +99,17 @@ demoDB.get('/messages', function(messages) {
 });
 
 post = function() {
-  var line;
+  var child, j, len, line, ref;
   demoDB.post('/messages', {
     "text": textfield.value
   });
-  stream.animate({
-    y: stream.y - lineHeight
-  });
+  ref = stream.children;
+  for (j = 0, len = ref.length; j < len; j++) {
+    child = ref[j];
+    child.animate({
+      y: child.y - lineHeight
+    });
+  }
   line = new TextLayer({
     x: 120,
     textAlign: "left",
