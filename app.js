@@ -13,6 +13,12 @@ Framer.Defaults.Animation = {
   curve: 'spring(150, 10, 0)'
 };
 
+demoDB = new FirebaseFramer({
+  projectID: "framer-sketch-firebase-test",
+  secret: "lHwsK4ljhwUmMt3EU1ybrMPQcSDgbKhvTIwuqJ9I",
+  server: "s-usc1c-nss-134.firebaseio.com"
+});
+
 bg = new BackgroundLayer({
   backgroundColor: "#fafafa"
 });
@@ -69,19 +75,13 @@ textfield.style = {
   padding: "10px 10px 10px 20px"
 };
 
-demoDB = new FirebaseFramer({
-  projectID: "framer-sketch-firebase-test",
-  secret: "lHwsK4ljhwUmMt3EU1ybrMPQcSDgbKhvTIwuqJ9I",
-  server: "s-usc1c-nss-134.firebaseio.com"
-});
-
 demoDB.get('/messages', function(messages) {
-  var h, i, j, len, line, message, messageArray, results;
+  var h, i, j, line, message, messageArray, results;
   messageArray = _.toArray(messages);
   h = 30;
   i = 1;
   results = [];
-  for (j = 0, len = messageArray.length; j < len; j++) {
+  for (j = messageArray.length - 1; j >= 0; j += -1) {
     message = messageArray[j];
     line = new TextLayer({
       x: 120,
