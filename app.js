@@ -22,7 +22,7 @@ footer = new Layer({
   y: Canvas.height - 230,
   width: Canvas.width,
   height: 230,
-  backgroundColor: "#555"
+  backgroundColor: "#999"
 });
 
 button = new Layer({
