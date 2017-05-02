@@ -38,7 +38,7 @@ circle.on(Events.Click, function() {
 textfield = new Input({
   setup: false,
   type: "text",
-  x: 100,
+  x: 110,
   y: Canvas.height - 200,
   width: 200,
   height: 30
