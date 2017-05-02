@@ -82,7 +82,7 @@ demoDB.get('/messages', function(messages) {
     line = new TextLayer({
       x: 120,
       textAlign: "left",
-      y: Canvas.height - 230 - h * i,
+      y: Canvas.height - 250 - h * i,
       text: message.text,
       color: "#333",
       font: "14px/1.5 Helvetica"
