@@ -47,7 +47,7 @@ textfield.style = {
   border: "1px solid #ffffff"
 };
 
-button = new textField.Input({
+button = new textfield.Input({
   setup: false,
   type: "button",
   x: 250,
