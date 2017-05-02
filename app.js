@@ -57,7 +57,7 @@ textfield.style = {
   color: "#333",
   fontFamily: "Helvetica",
   border: "1px solid #333",
-  borderRadius: "10"
+  borderRadius: 10
 };
 
 button = new Input({
