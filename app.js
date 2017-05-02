@@ -77,7 +77,7 @@ demoDB.get('/messages', function(messages) {
       textAlign: "left",
       y: h * i,
       text: message.name + ": " + message.text,
-      color: "#d0d0d0",
+      color: "#333",
       font: "14px/1.5 Helvetica"
     });
     results.push(i++);
