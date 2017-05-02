@@ -1,5 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var FirebaseFramer, HEIGHT, Input, WIDTH, bg, button, demoDB, field, footer, lineHeight, post, stream, textfield, update;
+var FirebaseFramer, HEIGHT, Input, WIDTH, bg, button, demoDB, field, footer, lineHeight, post, stream, textfield;
 
 FirebaseFramer = require('firebaseframer').FirebaseFramer;
 
@@ -101,35 +101,32 @@ demoDB.get('/messages', function(messages) {
 
 post = function() {
   if (textfield.value.length) {
-    demoDB.post('/messages', {
+    return demoDB.post('/messages', {
       "text": textfield.value
     });
-    return update();
   }
 };
 
-update = function() {
-  return demoDB.onChange("/messages", function(message) {
-    var child, j, len, line, ref;
-    print(message);
-    ref = stream.children;
-    for (j = 0, len = ref.length; j < len; j++) {
-      child = ref[j];
-      child.animate({
-        y: child.y - lineHeight
-      });
-    }
-    line = new TextLayer({
-      x: 120,
-      textAlign: "left",
-      y: Canvas.height - 250 - lineHeight,
-      text: message.text,
-      color: "#333",
-      font: "14px/1.5 Helvetica"
+demoDB.onChange("/messages", function(message) {
+  var child, j, len, line, ref;
+  print(message);
+  ref = stream.children;
+  for (j = 0, len = ref.length; j < len; j++) {
+    child = ref[j];
+    child.animate({
+      y: child.y - lineHeight
     });
-    return line.parent = stream;
+  }
+  line = new TextLayer({
+    x: 120,
+    textAlign: "left",
+    y: Canvas.height - 250 - lineHeight,
+    text: message.text,
+    color: "#333",
+    font: "14px/1.5 Helvetica"
   });
-};
+  return line.parent = stream;
+});
 
 button.onMouseUp(function() {
   button.image = "images/button.png";
