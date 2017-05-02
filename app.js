@@ -122,7 +122,7 @@ update = function() {
       x: 120,
       textAlign: "left",
       y: Canvas.height - 250 - lineHeight,
-      text: message.value,
+      text: message.text,
       color: "#333",
       font: "14px/1.5 Helvetica"
     });
