@@ -1,5 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var FirebaseFramer, HEIGHT, Input, WIDTH, bg, button, demoDB, field, footer, post, stream, textfield;
+var FirebaseFramer, HEIGHT, Input, WIDTH, bg, button, demoDB, field, footer, lineHeight, post, stream, textfield;
 
 FirebaseFramer = require('firebaseframer').FirebaseFramer;
 
@@ -8,6 +8,8 @@ Input = require("inputfield").Input;
 WIDTH = Framer.Screen.width;
 
 HEIGHT = Framer.Screen.height;
+
+lineHeight = 30;
 
 Framer.Defaults.Animation = {
   curve: 'spring(150, 10, 0)'
@@ -31,7 +33,12 @@ footer = new Layer({
   backgroundColor: "#999"
 });
 
-stream = [];
+stream = new Layer({
+  x: 0,
+  y: 0,
+  width: Canvas.width,
+  height: Canvas.height - 230
+});
 
 button = new Layer({
   x: 620,
@@ -72,8 +79,8 @@ textfield.style = {
 demoDB.get('/messages', function(messages) {
   var h, i, j, line, message, messageArray, results;
   messageArray = _.toArray(messages);
-  h = 30;
   i = 1;
+  h = lineHeight;
   results = [];
   for (j = messageArray.length - 1; j >= 0; j += -1) {
     message = messageArray[j];
@@ -85,16 +92,29 @@ demoDB.get('/messages', function(messages) {
       color: "#333",
       font: "14px/1.5 Helvetica"
     });
-    stream.push(line);
+    line.parent = stream;
     results.push(i++);
   }
   return results;
 });
 
 post = function() {
-  return demoDB.post('/messages', {
+  var line;
+  demoDB.post('/messages', {
     "text": textfield.value
   });
+  stream.animate({
+    y: y - lineHeight
+  });
+  line = new TextLayer({
+    x: 120,
+    textAlign: "left",
+    y: Canvas.height - 250 - lineHeight,
+    text: textfield.value,
+    color: "#333",
+    font: "14px/1.5 Helvetica"
+  });
+  return line.parent = stream;
 };
 
 button.onMouseUp(function() {
