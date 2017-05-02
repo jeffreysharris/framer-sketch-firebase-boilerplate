@@ -36,7 +36,7 @@ button = new Layer({
 field = new Layer({
   x: 100,
   y: Canvas.height - 200,
-  width: 500,
+  width: 520,
   height: 50,
   image: "images/field.png"
 });
