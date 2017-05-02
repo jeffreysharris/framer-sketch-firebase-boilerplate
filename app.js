@@ -21,7 +21,7 @@ footer = new Layer({
   x: 0,
   y: Canvas.height - 250,
   width: Canvas.width,
-  height: 250,
+  height: 230,
   backgroundColor: "#555"
 });
 
