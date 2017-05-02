@@ -51,8 +51,7 @@ button = new textfield.Input({
   setup: false,
   type: "button",
   x: 250,
-  y: 200,
-  text: "Post"
+  y: 200
 });
 
 demoDB = new FirebaseFramer({
