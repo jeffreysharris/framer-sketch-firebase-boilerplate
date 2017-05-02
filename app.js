@@ -28,6 +28,8 @@ footer = new Layer({
 button = new Layer({
   x: 600,
   y: Canvas.height - 200,
+  width: 30,
+  height: 30,
   image: "images/button.png"
 });
 
