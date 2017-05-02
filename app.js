@@ -37,7 +37,8 @@ stream = new Layer({
   x: 0,
   y: 0,
   width: Canvas.width,
-  height: Canvas.height - 230
+  height: Canvas.height - 230,
+  backgroundColor: "transparent"
 });
 
 button = new Layer({
