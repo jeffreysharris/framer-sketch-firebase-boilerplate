@@ -101,25 +101,27 @@ demoDB.get('/messages', function(messages) {
 
 post = function() {
   var child, j, len, line, ref;
-  demoDB.post('/messages', {
-    "text": textfield.value
-  });
-  ref = stream.children;
-  for (j = 0, len = ref.length; j < len; j++) {
-    child = ref[j];
-    child.animate({
-      y: child.y - lineHeight
+  if (textfield.value.length) {
+    demoDB.post('/messages', {
+      "text": textfield.value
     });
+    ref = stream.children;
+    for (j = 0, len = ref.length; j < len; j++) {
+      child = ref[j];
+      child.animate({
+        y: child.y - lineHeight
+      });
+    }
+    line = new TextLayer({
+      x: 120,
+      textAlign: "left",
+      y: Canvas.height - 250 - lineHeight,
+      text: textfield.value,
+      color: "#333",
+      font: "14px/1.5 Helvetica"
+    });
+    return line.parent = stream;
   }
-  line = new TextLayer({
-    x: 120,
-    textAlign: "left",
-    y: Canvas.height - 250 - lineHeight,
-    text: textfield.value,
-    color: "#333",
-    font: "14px/1.5 Helvetica"
-  });
-  return line.parent = stream;
 };
 
 button.onMouseUp(function() {
