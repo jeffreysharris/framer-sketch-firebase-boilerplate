@@ -42,7 +42,7 @@ textfield = new textfield.Input({
   fontSize: "14px",
   color: "#d0d0d0",
   fontFamily: "Helvetica",
-  border: "1px solid black"
+  border: "1px solid #ffffff"
 });
 
 demoDB = new FirebaseFramer({
