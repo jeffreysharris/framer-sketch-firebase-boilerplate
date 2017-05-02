@@ -46,7 +46,7 @@ textfield = new Input({
 
 textfield.style = {
   fontSize: "14px",
-  color: "#d0d0d0",
+  color: "#333",
   fontFamily: "Helvetica",
   border: "1px solid #333"
 };
@@ -75,7 +75,7 @@ demoDB.get('/messages', function(messages) {
     line = new TextLayer({
       x: 50,
       textAlign: "left",
-      y: h * i,
+      y: Canvas.height - h * i,
       text: message.text,
       color: "#333",
       font: "14px/1.5 Helvetica"
