@@ -49,13 +49,6 @@ textfield.style = {
   border: "1px solid #333"
 };
 
-button = new Input({
-  setup: false,
-  type: "button",
-  x: 250,
-  y: 200
-});
-
 demoDB = new FirebaseFramer({
   projectID: "framer-sketch-firebase-test",
   secret: "lHwsK4ljhwUmMt3EU1ybrMPQcSDgbKhvTIwuqJ9I",
