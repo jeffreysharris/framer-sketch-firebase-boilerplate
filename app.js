@@ -77,28 +77,6 @@ textfield.style = {
   padding: "10px 10px 10px 20px"
 };
 
-demoDB.get('/messages', function(messages) {
-  var h, i, j, line, message, messageArray, results;
-  messageArray = _.toArray(messages);
-  i = 1;
-  h = lineHeight;
-  results = [];
-  for (j = messageArray.length - 1; j >= 0; j += -1) {
-    message = messageArray[j];
-    line = new TextLayer({
-      x: 120,
-      textAlign: "left",
-      y: Canvas.height - 250 - h * i,
-      text: message.text,
-      color: "#333",
-      font: "14px/1.5 Helvetica"
-    });
-    line.parent = stream;
-    results.push(i++);
-  }
-  return results;
-});
-
 post = function() {
   if (textfield.value.length) {
     return demoDB.post('/messages', {
@@ -108,7 +86,7 @@ post = function() {
 };
 
 demoDB.onChange("/messages", function(message) {
-  var child, j, len, line, ref;
+  var child, h, i, j, k, len, line, m, messageArray, ref, results;
   ref = stream.children;
   for (j = 0, len = ref.length; j < len; j++) {
     child = ref[j];
@@ -116,15 +94,24 @@ demoDB.onChange("/messages", function(message) {
       y: child.y - lineHeight
     });
   }
-  line = new TextLayer({
-    x: 120,
-    textAlign: "left",
-    y: Canvas.height - 250 - lineHeight,
-    text: message.text,
-    color: "#333",
-    font: "14px/1.5 Helvetica"
-  });
-  return line.parent = stream;
+  messageArray = _.toArray(message);
+  i = 1;
+  h = lineHeight;
+  results = [];
+  for (k = messageArray.length - 1; k >= 0; k += -1) {
+    m = messageArray[k];
+    line = new TextLayer({
+      x: 120,
+      textAlign: "left",
+      y: Canvas.height - 250 - h * i,
+      text: m.text,
+      color: "#333",
+      font: "14px/1.5 Helvetica"
+    });
+    line.parent = stream;
+    results.push(i++);
+  }
+  return results;
 });
 
 button.onMouseUp(function() {
