@@ -31,13 +31,7 @@ footer = new Layer({
   backgroundColor: "#999"
 });
 
-stream = new Layer({
-  x: 0,
-  y: 0,
-  width: Canvas.width,
-  height: Canvas.height - 230,
-  backgroundColor: "#fafafa"
-});
+stream = [];
 
 button = new Layer({
   x: 620,
@@ -91,6 +85,7 @@ demoDB.get('/messages', function(messages) {
       color: "#333",
       font: "14px/1.5 Helvetica"
     });
+    stream.push(line);
     results.push(i++);
   }
   return results;
