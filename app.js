@@ -28,6 +28,8 @@ for (j = 0, len = ref.length; j < len; j++) {
   });
 }
 
+slices.footer.style.width = "100%";
+
 Framer.Defaults.Animation = {
   curve: 'spring(150, 10, 0)'
 };
