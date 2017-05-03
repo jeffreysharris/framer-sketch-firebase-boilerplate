@@ -20936,7 +20936,9 @@ WIDTH = Framer.Screen.width;
 
 HEIGHT = Framer.Screen.height;
 
-fs.mkdir('/home');
+fs.mkdir('/home', function(err) {
+  return console.log(err);
+});
 
 lineHeight = 30;
 
