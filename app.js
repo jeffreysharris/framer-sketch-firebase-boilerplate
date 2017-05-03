@@ -1,5 +1,11 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var FirebaseFramer, HEIGHT, Input, WIDTH, bg, button, demoDB, f, field, file, footer, j, len, lineHeight, post, ref, stream, textfield;
+
+},{}],2:[function(require,module,exports){
+var FirebaseFramer, HEIGHT, Input, WIDTH, bg, button, demoDB, field, footer, fs, images, lineHeight, post, stream, textfield;
+
+images = '/images';
+
+fs = require('fs');
 
 FirebaseFramer = require('firebaseframer').FirebaseFramer;
 
@@ -11,13 +17,15 @@ HEIGHT = Framer.Screen.height;
 
 lineHeight = 30;
 
-ref = "images/";
-for (j = 0, len = ref.length; j < len; j++) {
-  file = ref[j];
-  f = new Layer({
-    image: "images" + file
-  });
-}
+fs.readdir(images, err(files))(function() {
+  var file, j, len, results;
+  results = [];
+  for (j = 0, len = files.length; j < len; j++) {
+    file = files[j];
+    results.push(console.log(file));
+  }
+  return results;
+});
 
 Framer.Defaults.Animation = {
   curve: 'spring(150, 10, 0)'
@@ -94,10 +102,10 @@ post = function() {
 };
 
 demoDB.onChange("/messages", function(message) {
-  var child, h, i, k, l, len1, line, m, messageArray, ref1, ref2, results, t;
-  ref1 = stream.children;
-  for (k = 0, len1 = ref1.length; k < len1; k++) {
-    child = ref1[k];
+  var child, h, i, j, k, len, line, m, messageArray, ref, ref1, results, t;
+  ref = stream.children;
+  for (j = 0, len = ref.length; j < len; j++) {
+    child = ref[j];
     child.animate({
       y: child.y - lineHeight
     });
@@ -106,9 +114,9 @@ demoDB.onChange("/messages", function(message) {
   i = 1;
   h = lineHeight;
   results = [];
-  for (l = messageArray.length - 1; l >= 0; l += -1) {
-    m = messageArray[l];
-    t = (ref2 = m.text) != null ? ref2 : m;
+  for (k = messageArray.length - 1; k >= 0; k += -1) {
+    m = messageArray[k];
+    t = (ref1 = m.text) != null ? ref1 : m;
     line = new TextLayer({
       x: 120,
       textAlign: "left",
@@ -137,7 +145,7 @@ document.addEventListener('keypress', function(event) {
 });
 
 
-},{"firebaseframer":2,"inputfield":3}],2:[function(require,module,exports){
+},{"firebaseframer":3,"fs":1,"inputfield":4}],3:[function(require,module,exports){
 var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
 
@@ -370,7 +378,7 @@ exports.FirebaseFramer = (function(superClass) {
 })(Framer.BaseClass);
 
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
 
@@ -479,6 +487,6 @@ exports.Input = (function(superClass) {
 })(Layer);
 
 
-},{}]},{},[1])
+},{}]},{},[2])
 
 //# sourceMappingURL=app.js.map
