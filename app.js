@@ -1,5 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var FirebaseFramer, HEIGHT, Input, WIDTH, bg, data, demoDB, j, len, lineHeight, post, ref, slice, slices, stream, textfield;
+var FirebaseFramer, HEIGHT, Input, WIDTH, bg, data, demoDB, j, len, lineHeight, post, ref, slice, slices, textfield;
 
 FirebaseFramer = require('firebaseframer').FirebaseFramer;
 
@@ -42,14 +42,6 @@ bg = new BackgroundLayer({
   backgroundColor: "#fafafa"
 });
 
-stream = new Layer({
-  x: 0,
-  y: 0,
-  width: Canvas.width,
-  height: Canvas.height - 230,
-  backgroundColor: "transparent"
-});
-
 slices.button.onMouseDown(function() {
   return slices.button.image = "images/button-down.png";
 });
@@ -80,7 +72,7 @@ post = function() {
 
 demoDB.onChange("/messages", function(message) {
   var child, h, i, k, l, len1, line, m, messageArray, ref1, ref2, results, t;
-  ref1 = stream.children;
+  ref1 = slices.chat_window.children;
   for (k = 0, len1 = ref1.length; k < len1; k++) {
     child = ref1[k];
     child.animate({
@@ -102,7 +94,7 @@ demoDB.onChange("/messages", function(message) {
       color: "#333",
       font: "14px/1.5 Helvetica"
     });
-    line.parent = stream;
+    line.parent = slices.chat_window;
     results.push(i++);
   }
   return results;
