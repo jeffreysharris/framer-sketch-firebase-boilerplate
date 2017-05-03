@@ -30,13 +30,6 @@ demoDB = new FirebaseFramer
 bg = new BackgroundLayer
     backgroundColor: "#fafafa"
 
-# stream = new Layer
-#     x: 0
-#     y: 0
-#     width: Canvas.width
-#     height: Canvas.height - 230
-#     backgroundColor: "transparent"
-
 #input
 
 slices.button.onMouseDown ->
