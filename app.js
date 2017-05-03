@@ -20922,7 +20922,7 @@ function wrappy (fn, cb) {
 }
 
 },{}],126:[function(require,module,exports){
-var FirebaseFramer, HEIGHT, Input, WIDTH, button, demoDB, field, footer, fs, lineHeight, path, post, stream, textfield;
+var FirebaseFramer, HEIGHT, Input, WIDTH, bg, button, demoDB, field, footer, fs, lineHeight, path, post, stream, textfield;
 
 fs = require('browserify-fs');
 
@@ -20952,7 +20952,9 @@ demoDB = new FirebaseFramer({
   server: "s-usc1c-nss-134.firebaseio.com"
 });
 
-Screen.backgroundColor = "#fafafa";
+bg = new BackgroundLayer({
+  backgroundColor: "#fafafa"
+});
 
 footer = new Layer({
   x: 0,
