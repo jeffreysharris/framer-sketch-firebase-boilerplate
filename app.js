@@ -15,7 +15,7 @@ ref = "images/";
 for (j = 0, len = ref.length; j < len; j++) {
   file = ref[j];
   f = new Layer({
-    image: "images" + file.name
+    image: "images" + file
   });
 }
 
