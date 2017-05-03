@@ -20936,7 +20936,7 @@ HEIGHT = Framer.Screen.height;
 
 lineHeight = 30;
 
-fs.readFile("app.yaml", function(err, data) {
+fs.readFile("./app.yaml", function(err, data) {
   console.log(data);
   return console.log(err);
 });
