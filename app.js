@@ -13,6 +13,8 @@ lineHeight = 30;
 
 data = Utils.domLoadJSONSync("slices.json");
 
+console.log(data);
+
 Framer.Defaults.Animation = {
   curve: 'spring(150, 10, 0)'
 };
