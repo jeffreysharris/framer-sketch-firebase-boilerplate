@@ -13,46 +13,7 @@ var changed = require('gulp-changed');
 var browserify = require('browserify');
 
 // LOAD ENIVRONMENTAL VARIABLES
-// .env HOLDS DROPBOX KEYS
 require('dotenv').config();
-
-// GOOGLE cloud
-// const config = {
-//   projectId: process.env.PROJECT,
-//   keyFilename: 'framer-sketch-firebase-test-0a2ba7d66558.json'
-// };
-//
-// const storage = require('@google-cloud/storage')(config);
-//
-// const bucket = storage.bucket('framer-sketch-firebase-test.appspot.com');
-
-//GOOGLE CLOUD UPLOAD TEST
-
-// storage.getBuckets(function(err, buckets){
-//     if(!err) {
-//         console.log(buckets);
-//     }
-//     else {
-//         console.log(err);
-//     }
-// })
-
-// bucket.exists(function(err, exists) {
-//     if (!err) {
-//         console.log(exists);
-//     }
-//     else {
-//         console.log(err);
-//     }
-// });
-
-// bucket.upload('/Users/jeffrey.harris/Development/framer-sketch-firebase-boilerplate/build/images/circle.png', function(err, file) {
-//   if (!err) {
-//   }
-//   else {
-//       console.log(err);
-//   }
-// });
 
 // GULP TASKS
 
@@ -85,7 +46,7 @@ gulp.task('coffee', function(){
     entries: ["./src/app.coffee"],
     debug: true,
     extensions: [".coffee"],
-    paths: ["./src/modules"],
+    paths: ["./src/modules", "../node_modules"],
     transform: ["coffeeify"] // npm install --save-dev coffeeify
     })
     .bundle()
@@ -98,17 +59,8 @@ gulp.task('coffee', function(){
     .pipe(source('app.js'))
     .pipe(buffer())
     .pipe(sourcemaps.init({loadMaps: true,debug: true}))
-    // .pipe(uglify( {
-    //       debug: true,
-    //       options: {
-    //         sourceMap: true,
-    //       }
-    //   }))
     .pipe(sourcemaps.write("./" /* optional second param here */))
     .pipe(gulp.dest('build'))
-  // gulp.src('src/*.coffee')
-  //   .pipe(coffee({bare: true}).on('error', gutil.log))
-  //   .pipe(gulp.dest('build/'))
 })
 
 gulp.task('sketch', function(){
@@ -121,6 +73,19 @@ gulp.task('sketch', function(){
       trimmed: false
     }))
     .pipe(gulp.dest('build/images'))
+
+// export Sketch slices into slices.json
+    var util = require('util'),
+    exec = require('child_process').exec,
+    child;
+    child = exec('sketchtool list slices src/*.sketch > build/slices.json', // command line argument directly in string
+      function (error, stdout, stderr) {      // one easy function to capture data/errors
+        console.log('stdout: ' + stdout);
+        console.log('stderr: ' + stderr);
+        if (error !== null) {
+          console.log('exec error: ' + error);
+        }
+    });
 })
 
 gulp.task('copy', function(){

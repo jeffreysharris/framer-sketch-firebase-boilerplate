@@ -1,5 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var FirebaseFramer, HEIGHT, Input, WIDTH, bg, button, demoDB, field, footer, lineHeight, post, stream, textfield;
+var FirebaseFramer, HEIGHT, Input, WIDTH, bg, data, demoDB, j, len, lineHeight, post, ref, slice, slices, textfield;
 
 FirebaseFramer = require('firebaseframer').FirebaseFramer;
 
@@ -10,6 +10,23 @@ WIDTH = Framer.Screen.width;
 HEIGHT = Framer.Screen.height;
 
 lineHeight = 30;
+
+data = Utils.domLoadJSONSync("slices.json");
+
+slices = {};
+
+ref = data.pages[0].slices;
+for (j = 0, len = ref.length; j < len; j++) {
+  slice = ref[j];
+  slices[slice.name] = new Layer({
+    height: slice.relative.height,
+    width: slice.relative.width,
+    x: slice.relative.x,
+    y: slice.relative.y,
+    name: slice.name,
+    image: "images/" + slice.name + ".png"
+  });
+}
 
 Framer.Defaults.Animation = {
   curve: 'spring(150, 10, 0)'
@@ -25,56 +42,24 @@ bg = new BackgroundLayer({
   backgroundColor: "#fafafa"
 });
 
-footer = new Layer({
-  x: 0,
-  y: Canvas.height - 230,
-  width: Canvas.width,
-  height: 230,
-  backgroundColor: "#999"
-});
-
-stream = new Layer({
-  x: 0,
-  y: 0,
-  width: Canvas.width,
-  height: Canvas.height - 230,
-  backgroundColor: "transparent"
-});
-
-button = new Layer({
-  x: 620,
-  y: Canvas.height - 200,
-  width: 50,
-  height: 50,
-  image: "images/button.png"
-});
-
-button.onMouseDown(function() {
-  return button.image = "images/button-down.png";
-});
-
-field = new Layer({
-  x: 100,
-  y: Canvas.height - 200,
-  width: 520,
-  height: 50,
-  image: "images/field.png"
+slices.button.onMouseDown(function() {
+  return slices.button.image = "images/button-down.png";
 });
 
 textfield = new Input({
   setup: false,
   type: "text",
-  x: 100,
-  y: Canvas.height - 200,
-  width: 500,
-  height: 30
+  x: slices.field.x,
+  y: slices.field.y,
+  width: slices.field.width,
+  height: slices.field.height
 });
 
 textfield.style = {
   fontSize: "14px",
   color: "#333",
   fontFamily: "Helvetica",
-  padding: "10px 10px 10px 20px"
+  padding: "0px 0px 0px 20px"
 };
 
 post = function() {
@@ -86,10 +71,10 @@ post = function() {
 };
 
 demoDB.onChange("/messages", function(message) {
-  var child, h, i, j, k, len, line, m, messageArray, ref, ref1, results, t;
-  ref = stream.children;
-  for (j = 0, len = ref.length; j < len; j++) {
-    child = ref[j];
+  var child, h, i, k, l, len1, line, m, messageArray, ref1, ref2, results, t;
+  ref1 = slices.chat_window.children;
+  for (k = 0, len1 = ref1.length; k < len1; k++) {
+    child = ref1[k];
     child.animate({
       y: child.y - lineHeight
     });
@@ -98,26 +83,27 @@ demoDB.onChange("/messages", function(message) {
   i = 1;
   h = lineHeight;
   results = [];
-  for (k = messageArray.length - 1; k >= 0; k += -1) {
-    m = messageArray[k];
-    t = (ref1 = m.text) != null ? ref1 : m;
+  for (l = messageArray.length - 1; l >= 0; l += -1) {
+    m = messageArray[l];
+    t = (ref2 = m.text) != null ? ref2 : m;
     line = new TextLayer({
-      x: 120,
+      x: 0,
       textAlign: "left",
-      y: Canvas.height - 250 - h * i,
+      y: slices.chat_window.height - h * i,
       text: t,
       color: "#333",
       font: "14px/1.5 Helvetica"
     });
-    line.parent = stream;
+    line.parent = slices.chat_window;
     results.push(i++);
   }
   return results;
 });
 
-button.onMouseUp(function() {
-  button.image = "images/button.png";
-  return post();
+slices.button.onMouseUp(function() {
+  slices.button.image = "images/button.png";
+  post();
+  return textfield.value = "";
 });
 
 document.addEventListener('keypress', function(event) {
