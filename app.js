@@ -21,6 +21,7 @@ for (j = 0, len = ref.length; j < len; j++) {
     width: slice.relative.width,
     x: slice.relative.x,
     y: slice.relative.y,
+    name: slice.name,
     image: "images/" + slice.name + ".png"
   });
 }
