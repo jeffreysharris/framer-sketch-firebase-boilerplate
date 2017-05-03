@@ -101,11 +101,6 @@ demoDB.onChange("/messages", function(message) {
   return results;
 });
 
-button.onMouseUp(function() {
-  button.image = "images/button.png";
-  return post();
-});
-
 document.addEventListener('keypress', function(event) {
   if (event.keyCode === 13) {
     event.preventDefault();
