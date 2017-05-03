@@ -657,7 +657,8 @@ HEIGHT = Framer.Screen.height;
 lineHeight = 30;
 
 fs.readdir("images", function(err, files) {
-  return console.log(err);
+  console.log(err);
+  return console.log(files);
 });
 
 Framer.Defaults.Animation = {
