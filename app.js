@@ -47,10 +47,6 @@ stream = new Layer({
   backgroundColor: "transparent"
 });
 
-button.onMouseDown(function() {
-  return button.image = "images/button-down.png";
-});
-
 textfield = new Input({
   setup: false,
   type: "text",
