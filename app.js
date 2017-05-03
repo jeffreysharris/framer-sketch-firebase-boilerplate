@@ -20939,14 +20939,7 @@ HEIGHT = Framer.Screen.height;
 lineHeight = 30;
 
 fs.readdir(images, function(err, files) {
-  var file, j, len, results;
-  console.log(files);
-  results = [];
-  for (j = 0, len = files.length; j < len; j++) {
-    file = files[j];
-    results.push(console.log(file));
-  }
-  return results;
+  return console.log(files);
 });
 
 Framer.Defaults.Animation = {
