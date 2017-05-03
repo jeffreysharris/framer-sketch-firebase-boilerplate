@@ -67,7 +67,7 @@ textfield.style = {
   fontSize: "14px",
   color: "#333",
   fontFamily: "Helvetica",
-  padding: "10px 10px 10px 20px"
+  padding: "0px 0px 0px 0px"
 };
 
 post = function() {
