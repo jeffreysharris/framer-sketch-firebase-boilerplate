@@ -87,7 +87,7 @@ demoDB.onChange("/messages", function(message) {
     m = messageArray[l];
     t = (ref2 = m.text) != null ? ref2 : m;
     line = new TextLayer({
-      x: 120,
+      x: 0,
       textAlign: "left",
       y: Canvas.height - 250 - h * i,
       text: t,
