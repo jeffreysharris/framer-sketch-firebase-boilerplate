@@ -20922,7 +20922,7 @@ function wrappy (fn, cb) {
 }
 
 },{}],126:[function(require,module,exports){
-var FirebaseFramer, HEIGHT, Input, WIDTH, bg, button, demoDB, field, file, footer, fs, images, j, len, lineHeight, post, stream, textfield;
+var FirebaseFramer, HEIGHT, Input, WIDTH, bg, button, demoDB, field, footer, fs, images, lineHeight, post, stream, textfield;
 
 images = "/images";
 
@@ -20939,13 +20939,15 @@ HEIGHT = Framer.Screen.height;
 lineHeight = 30;
 
 fs.readdir(images, function(err, files) {
-  return conole.log(file);
+  var file, j, len, results;
+  conole.log(files);
+  results = [];
+  for (j = 0, len = files.length; j < len; j++) {
+    file = files[j];
+    results.push(console.log(file));
+  }
+  return results;
 });
-
-for (j = 0, len = files.length; j < len; j++) {
-  file = files[j];
-  console.log(file);
-}
 
 Framer.Defaults.Animation = {
   curve: 'spring(150, 10, 0)'
@@ -21022,10 +21024,10 @@ post = function() {
 };
 
 demoDB.onChange("/messages", function(message) {
-  var child, h, i, k, l, len1, line, m, messageArray, ref, ref1, results, t;
+  var child, h, i, j, k, len, line, m, messageArray, ref, ref1, results, t;
   ref = stream.children;
-  for (k = 0, len1 = ref.length; k < len1; k++) {
-    child = ref[k];
+  for (j = 0, len = ref.length; j < len; j++) {
+    child = ref[j];
     child.animate({
       y: child.y - lineHeight
     });
@@ -21034,8 +21036,8 @@ demoDB.onChange("/messages", function(message) {
   i = 1;
   h = lineHeight;
   results = [];
-  for (l = messageArray.length - 1; l >= 0; l += -1) {
-    m = messageArray[l];
+  for (k = messageArray.length - 1; k >= 0; k += -1) {
+    m = messageArray[k];
     t = (ref1 = m.text) != null ? ref1 : m;
     line = new TextLayer({
       x: 120,
