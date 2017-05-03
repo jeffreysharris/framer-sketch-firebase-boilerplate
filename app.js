@@ -20936,7 +20936,7 @@ HEIGHT = Framer.Screen.height;
 
 lineHeight = 30;
 
-fs.readdir("framer", function(err, files) {
+fs.readdir("lib", function(err, files) {
   console.log(files);
   return console.log(err);
 });
