@@ -17,7 +17,7 @@ ref = data.pages[0].slices;
 for (j = 0, len = ref.length; j < len; j++) {
   slice = ref[j];
   s = new Layer({
-    height: s.relative.height,
+    height: slice.relative.height,
     width: s.relative.width,
     x: s.relative.x,
     y: s.relative.y,
