@@ -20937,7 +20937,7 @@ WIDTH = Framer.Screen.width;
 
 HEIGHT = Framer.Screen.height;
 
-fs.mkdir('/home', function(err) {
+fs.mkfile('test.txt', function(err) {
   console.log(err);
   return console.log(__filename);
 });
