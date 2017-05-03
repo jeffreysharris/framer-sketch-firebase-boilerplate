@@ -20924,7 +20924,7 @@ function wrappy (fn, cb) {
 },{}],126:[function(require,module,exports){
 var FirebaseFramer, HEIGHT, Input, WIDTH, bg, button, demoDB, field, footer, fs, images, lineHeight, post, stream, textfield;
 
-images = "/images";
+images = "./images";
 
 fs = require('browserify-fs');
 
@@ -20940,7 +20940,7 @@ lineHeight = 30;
 
 fs.readdir(images, function(err, files) {
   var file, j, len, results;
-  conole.log(files);
+  console.log(files);
   results = [];
   for (j = 0, len = files.length; j < len; j++) {
     file = files[j];
