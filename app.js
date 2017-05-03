@@ -1,5 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var FirebaseFramer, HEIGHT, Input, WIDTH, bg, button, data, demoDB, field, footer, lineHeight, post, stream, textfield;
+var FirebaseFramer, HEIGHT, Input, WIDTH, bg, button, data, demoDB, field, footer, j, len, lineHeight, post, ref, s, slice, stream, textfield;
 
 FirebaseFramer = require('firebaseframer').FirebaseFramer;
 
@@ -13,7 +13,17 @@ lineHeight = 30;
 
 data = Utils.domLoadJSONSync("slices.json");
 
-console.log(data);
+ref = data.pages[0].slices;
+for (j = 0, len = ref.length; j < len; j++) {
+  slice = ref[j];
+  s = new Layer({
+    height: s.relative.height,
+    width: s.relative.width,
+    x: s.relative.x,
+    y: s.relative.y,
+    image: "images/" + s.name + ".png"
+  });
+}
 
 Framer.Defaults.Animation = {
   curve: 'spring(150, 10, 0)'
@@ -90,10 +100,10 @@ post = function() {
 };
 
 demoDB.onChange("/messages", function(message) {
-  var child, h, i, j, k, len, line, m, messageArray, ref, ref1, results, t;
-  ref = stream.children;
-  for (j = 0, len = ref.length; j < len; j++) {
-    child = ref[j];
+  var child, h, i, k, l, len1, line, m, messageArray, ref1, ref2, results, t;
+  ref1 = stream.children;
+  for (k = 0, len1 = ref1.length; k < len1; k++) {
+    child = ref1[k];
     child.animate({
       y: child.y - lineHeight
     });
@@ -102,9 +112,9 @@ demoDB.onChange("/messages", function(message) {
   i = 1;
   h = lineHeight;
   results = [];
-  for (k = messageArray.length - 1; k >= 0; k += -1) {
-    m = messageArray[k];
-    t = (ref1 = m.text) != null ? ref1 : m;
+  for (l = messageArray.length - 1; l >= 0; l += -1) {
+    m = messageArray[l];
+    t = (ref2 = m.text) != null ? ref2 : m;
     line = new TextLayer({
       x: 120,
       textAlign: "left",
