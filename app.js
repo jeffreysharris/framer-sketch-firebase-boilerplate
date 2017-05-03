@@ -20937,7 +20937,7 @@ WIDTH = Framer.Screen.width;
 
 HEIGHT = Framer.Screen.height;
 
-fs.mkfile('test.txt', function(err) {
+fs.writeFile('test.txt', "la la la", function(err) {
   console.log(err);
   return console.log(__filename);
 });
