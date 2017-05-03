@@ -20923,7 +20923,7 @@ function wrappy (fn, cb) {
 
 },{}],126:[function(require,module,exports){
 (function (__dirname){
-var FirebaseFramer, HEIGHT, Input, WIDTH, bg, button, demoDB, field, footer, fs, lineHeight, path, post, stream, textfield;
+var FirebaseFramer, HEIGHT, Input, WIDTH, bg, button, demoDB, field, footer, fs, images, lineHeight, path, post, stream, textfield;
 
 fs = require('browserify-fs');
 
@@ -20939,7 +20939,11 @@ HEIGHT = Framer.Screen.height;
 
 console.log(path.resolve(__dirname));
 
-console.log(path.resolve("./"));
+images = path.resolve("images");
+
+fs.readdir(images, function(err, files) {
+  return console.log(err);
+});
 
 lineHeight = 30;
 
