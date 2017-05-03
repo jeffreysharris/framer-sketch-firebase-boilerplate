@@ -28,8 +28,6 @@ for (j = 0, len = ref.length; j < len; j++) {
   });
 }
 
-console.log(slices);
-
 Framer.Defaults.Animation = {
   curve: 'spring(150, 10, 0)'
 };
@@ -52,13 +50,17 @@ stream = new Layer({
   backgroundColor: "transparent"
 });
 
+slices.button.onMouseDown(function() {
+  return slices.button.image = "images/button-down.png";
+});
+
 textfield = new Input({
   setup: false,
   type: "text",
-  x: 100,
-  y: Canvas.height - 200,
-  width: 500,
-  height: 30
+  x: slices.field.x,
+  y: slices.field.y,
+  width: slices.field.width,
+  height: slices.field.height
 });
 
 textfield.style = {
@@ -104,6 +106,11 @@ demoDB.onChange("/messages", function(message) {
     results.push(i++);
   }
   return results;
+});
+
+slices.button.onMouseUp(function() {
+  slices.button.image = "images/button.png";
+  return post();
 });
 
 document.addEventListener('keypress', function(event) {
