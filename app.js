@@ -20922,6 +20922,7 @@ function wrappy (fn, cb) {
 }
 
 },{}],126:[function(require,module,exports){
+(function (__dirname){
 var FirebaseFramer, HEIGHT, Input, WIDTH, bg, button, demoDB, field, footer, fs, lineHeight, path, post, stream, textfield;
 
 fs = require('browserify-fs');
@@ -20936,9 +20937,7 @@ WIDTH = Framer.Screen.width;
 
 HEIGHT = Framer.Screen.height;
 
-fs.stat("../../../images/button.png", function(err, files) {
-  return console.log(err);
-});
+console.log(__dirname);
 
 lineHeight = 30;
 
@@ -21059,6 +21058,8 @@ document.addEventListener('keypress', function(event) {
   }
 });
 
+
+}).call(this,"/src")
 
 },{"browserify-fs":7,"firebaseframer":127,"inputfield":128,"path":96}],127:[function(require,module,exports){
 var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
