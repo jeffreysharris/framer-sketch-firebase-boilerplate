@@ -18,9 +18,9 @@ for (j = 0, len = ref.length; j < len; j++) {
   slice = ref[j];
   s = new Layer({
     height: slice.relative.height,
-    width: s.relative.width,
-    x: s.relative.x,
-    y: s.relative.y,
+    width: slice.relative.width,
+    x: slice.relative.x,
+    y: slice.relative.y,
     image: "images/" + s.name + ".png"
   });
 }
