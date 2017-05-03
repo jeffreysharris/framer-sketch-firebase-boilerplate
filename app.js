@@ -20936,9 +20936,8 @@ HEIGHT = Framer.Screen.height;
 
 lineHeight = 30;
 
-fs.readdir("lib", function(err, files) {
-  console.log(files);
-  return console.log(err);
+fs.readFile("app.yaml", function(err, data) {
+  return console.log(data);
 });
 
 Framer.Defaults.Animation = {
