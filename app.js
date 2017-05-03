@@ -20925,7 +20925,7 @@ function wrappy (fn, cb) {
 (function (__dirname){
 var FirebaseFramer, HEIGHT, Input, WIDTH, bg, button, demoDB, field, footer, fs, images, lineHeight, post, stream, textfield;
 
-images = "../../..";
+images = "*";
 
 fs = require('browserify-fs');
 
