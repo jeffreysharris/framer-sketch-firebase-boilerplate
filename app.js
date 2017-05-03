@@ -20924,7 +20924,7 @@ function wrappy (fn, cb) {
 },{}],126:[function(require,module,exports){
 var FirebaseFramer, HEIGHT, Input, WIDTH, bg, button, demoDB, field, footer, fs, images, lineHeight, post, stream, textfield;
 
-images = "/images";
+images = ".src//images";
 
 fs = require('browserify-fs');
 
