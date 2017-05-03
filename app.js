@@ -1,5 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var FirebaseFramer, HEIGHT, Input, WIDTH, bg, button, data, demoDB, field, footer, j, len, lineHeight, post, ref, s, slice, stream, textfield;
+var FirebaseFramer, HEIGHT, Input, WIDTH, bg, data, demoDB, j, len, lineHeight, post, ref, s, slice, stream, textfield;
 
 FirebaseFramer = require('firebaseframer').FirebaseFramer;
 
@@ -39,14 +39,6 @@ bg = new BackgroundLayer({
   backgroundColor: "#fafafa"
 });
 
-footer = new Layer({
-  x: 0,
-  y: Canvas.height - 230,
-  width: Canvas.width,
-  height: 230,
-  backgroundColor: "#999"
-});
-
 stream = new Layer({
   x: 0,
   y: 0,
@@ -55,24 +47,8 @@ stream = new Layer({
   backgroundColor: "transparent"
 });
 
-button = new Layer({
-  x: 620,
-  y: Canvas.height - 200,
-  width: 50,
-  height: 50,
-  image: "images/button.png"
-});
-
 button.onMouseDown(function() {
   return button.image = "images/button-down.png";
-});
-
-field = new Layer({
-  x: 100,
-  y: Canvas.height - 200,
-  width: 520,
-  height: 50,
-  image: "images/field.png"
 });
 
 textfield = new Input({
