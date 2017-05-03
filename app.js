@@ -20936,7 +20936,7 @@ WIDTH = Framer.Screen.width;
 
 HEIGHT = Framer.Screen.height;
 
-fs.exists("/images", function(err, files) {
+fs.exists("./images/", function(err, files) {
   return console.log(err);
 });
 
