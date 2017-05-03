@@ -102,7 +102,8 @@ demoDB.onChange("/messages", function(message) {
 
 slices.button.onMouseUp(function() {
   slices.button.image = "images/button.png";
-  return post();
+  post();
+  return textfield.value = "";
 });
 
 document.addEventListener('keypress', function(event) {
