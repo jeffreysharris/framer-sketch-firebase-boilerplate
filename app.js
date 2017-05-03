@@ -17,7 +17,7 @@ HEIGHT = Framer.Screen.height;
 
 lineHeight = 30;
 
-fs.readdir(images, err(files))(function() {
+fs.readdir(images, function(err, files) {
   var file, j, len, results;
   results = [];
   for (j = 0, len = files.length; j < len; j++) {
