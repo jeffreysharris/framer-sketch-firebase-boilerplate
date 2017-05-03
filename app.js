@@ -20924,7 +20924,7 @@ function wrappy (fn, cb) {
 },{}],126:[function(require,module,exports){
 var FirebaseFramer, HEIGHT, Input, WIDTH, bg, button, demoDB, field, footer, fs, images, lineHeight, post, stream, textfield;
 
-images = "images";
+images = "./images";
 
 fs = require('browserify-fs');
 
@@ -20939,7 +20939,8 @@ HEIGHT = Framer.Screen.height;
 lineHeight = 30;
 
 fs.readdir(images, function(err, files) {
-  return console.log(files);
+  console.log(files);
+  return console.log(err);
 });
 
 Framer.Defaults.Animation = {
