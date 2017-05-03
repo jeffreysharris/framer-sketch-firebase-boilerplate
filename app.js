@@ -20922,7 +20922,8 @@ function wrappy (fn, cb) {
 }
 
 },{}],126:[function(require,module,exports){
-var FirebaseFramer, HEIGHT, Input, WIDTH, bg, button, demoDB, field, footer, fs, images, lineHeight, path, post, stream, textfield;
+(function (__dirname){
+var FirebaseFramer, HEIGHT, Input, WIDTH, button, demoDB, field, footer, fs, images, lineHeight, path, post, stream, textfield;
 
 fs = require('browserify-fs');
 
@@ -20936,7 +20937,7 @@ WIDTH = Framer.Screen.width;
 
 HEIGHT = Framer.Screen.height;
 
-images = "__dirname";
+images = __dirname;
 
 fs.readdir(images, function(err, files) {
   return console.log(err);
@@ -20954,9 +20955,7 @@ demoDB = new FirebaseFramer({
   server: "s-usc1c-nss-134.firebaseio.com"
 });
 
-bg = new BackgroundLayer({
-  backgroundColor: "#fafafa"
-});
+Screen.backgroundColor = "#fafafa";
 
 footer = new Layer({
   x: 0,
@@ -21061,6 +21060,8 @@ document.addEventListener('keypress', function(event) {
   }
 });
 
+
+}).call(this,"/src")
 
 },{"browserify-fs":7,"firebaseframer":127,"inputfield":128,"path":96}],127:[function(require,module,exports){
 var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
