@@ -65,8 +65,8 @@ for (j = 0, len = ref.length; j < len; j++) {
   constraints = anima.kModelPropertiesKey.constraints;
   if (constraints) {
     for (constraint in constraints) {
+      print(constraint);
       attr = getObject(_anima, constraint);
-      print(attr);
     }
     break;
   }
