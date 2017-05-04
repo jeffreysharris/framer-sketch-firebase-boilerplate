@@ -104,7 +104,7 @@ for (slice in slices) {
       for (prop in _anima) {
         if (constraint === prop) {
           constant = constraint.constant;
-          slices[slice][_anima[prop].attribute] = fn(prop, container);
+          slices[slice][_anima[prop].attribute] = getFn(prop, container);
         }
       }
     }
