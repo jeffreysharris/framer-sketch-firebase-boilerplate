@@ -54,7 +54,11 @@ for (i = 0, len = ref.length; i < len; i++) {
   });
   slices[slice.name].sketch_id = slice.id;
   asset = getObject(_assets, "objectID", slice.id);
-  print(asset.objectID);
+  if (asset["userInfo.com.animaapp"].kModelPropertiesKey.constraints) {
+    console.log(asset["userInfo.com.animaapp"].kModelPropertiesKey.constraints);
+  } else {
+
+  }
 }
 
 
