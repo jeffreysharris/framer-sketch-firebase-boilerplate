@@ -23,6 +23,7 @@ slices = {};
 getObject = function() {
   var i, key, object, prop, result, value;
   object = arguments[0], key = arguments[1], value = 3 <= arguments.length ? slice1.call(arguments, 2) : [];
+  print(value);
   result = null;
   if (object instanceof Array) {
     i = 0;
