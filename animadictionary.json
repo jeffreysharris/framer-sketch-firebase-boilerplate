@@ -17,7 +17,7 @@
     },
     "width" : {
         "attribute" : "width",
-        "function" : "(slices[slice].parent?Screen).width(constant)"
+        "function" : "slices[slice].parent?Screen.width(constant)"
     },
     "height" : {
         "attribute" : "height",
