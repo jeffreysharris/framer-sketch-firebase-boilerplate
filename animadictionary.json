@@ -1,7 +1,3 @@
-/*if !constant
-    constant = 0
-    */
-
 {
     "top" : {
         "attribute" : "y",
