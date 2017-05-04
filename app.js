@@ -54,7 +54,7 @@ for (i = 0, len = ref.length; i < len; i++) {
   });
   slices[slice.name].sketch_id = slice.id;
   asset = getObject(_assets, "objectID", slice.id);
-  if (asset["userInfo.com.animaapp"].kModelPropertiesKey.constraints) {
+  if (asset.userInfo["com.animaapp.stc-sketch-plugin"].kModelPropertiesKey.constraints) {
     console.log(asset["userInfo.com.animaapp"].kModelPropertiesKey.constraints);
   } else {
 
