@@ -109,7 +109,6 @@ for (slice in slices) {
         }
       }
     }
-    break;
   }
   if (anima.kViewTypeKey) {
     break;
