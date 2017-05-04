@@ -18,7 +18,7 @@ _assets = Utils.domLoadJSONSync("assets.json");
 slices = {};
 
 getObject = function(object, key, value) {
-  var i, j, len, len1, prop, result;
+  var i, len, prop, result;
   result = null;
   if (object instanceof Array) {
     for (i = 0, len = object.length; i < len; i++) {
@@ -28,8 +28,7 @@ getObject = function(object, key, value) {
       }
     }
   } else {
-    for (j = 0, len1 = object.length; j < len1; j++) {
-      prop = object[j];
+    for (prop in object) {
       print(object);
       if (prop === key) {
         if (object[prop] === value) {
