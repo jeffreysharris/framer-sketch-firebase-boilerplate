@@ -1,5 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var FirebaseFramer, HEIGHT, Input, WIDTH, _assets, _slices, asset, getObject, i, len, lineHeight, ref, slice, slices;
+var FirebaseFramer, HEIGHT, Input, WIDTH, _assets, _slices, asset, getObject, j, len, lineHeight, ref, slice, slices;
 
 FirebaseFramer = require('firebaseframer').FirebaseFramer;
 
@@ -18,14 +18,16 @@ _assets = Utils.domLoadJSONSync("assets.json");
 slices = {};
 
 getObject = function(object, key, value) {
-  var i, len, prop, result;
+  var i, prop, result;
   result = null;
   if (object instanceof Array) {
-    for (i = 0, len = object.length; i < len; i++) {
-      result = object[i];
+    i = 0;
+    while (i < theObject.length) {
+      result = getObject(theObject[i]);
       if (result) {
         break;
       }
+      i++;
     }
   } else {
     for (prop in object) {
@@ -46,8 +48,8 @@ getObject = function(object, key, value) {
 };
 
 ref = _slices.pages[0].slices;
-for (i = 0, len = ref.length; i < len; i++) {
-  slice = ref[i];
+for (j = 0, len = ref.length; j < len; j++) {
+  slice = ref[j];
   slices[slice.name] = new Layer({
     name: slice.name,
     image: "images/" + slice.name + ".png"
