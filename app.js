@@ -79,7 +79,7 @@ for (j = 0, len = ref.length; j < len; j++) {
     sketch_id: slice.id
   });
   print(slice.id);
-  print(this.sketch_id);
+  print(slices[slice.name].sketch_id);
 }
 
 for (slice in slices) {
