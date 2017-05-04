@@ -94,6 +94,7 @@ for (slice in slices) {
       for (prop in _anima) {
         if (constraint === prop) {
           constant = constraint.constant;
+          fn;
           if (prop === "width" || "height") {
             t = container + _anima[prop]["function"];
             fn = eval(t);
