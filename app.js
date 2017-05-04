@@ -78,7 +78,8 @@ for (j = 0, len = ref.length; j < len; j++) {
     image: "images/" + slice.name + ".png",
     sketch_id: slice.id
   });
-  print(slice.id);
+  print(this.id);
+  print;
 }
 
 for (slice in slices) {
