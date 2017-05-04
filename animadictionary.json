@@ -1,0 +1,41 @@
+//
+
+if !constant
+    constant = 0
+
+//
+
+{
+    "top" : {
+        "attribute" : "y",
+        "function" : "Align.top(constant)"
+    },
+    "bottom" : {
+        "attribute" : "y",
+        "function" : "Align.bottom(constant)"
+    },
+    "left" : {
+        "attribute" : "x",
+        "function" : "Align.left(constant)"
+    },
+    "right" : {
+        "attribute" : "x",
+        "function" : "Align.right(constant)"
+    },
+    "width" : {
+        "attribute" : "width",
+        "function" : "this.parent.width(constant)"
+    },
+    "height" : {
+        "attribute" : "height",
+        "function" : "this.parent.height(constant)"
+    },
+    "centerHorizontally" : {
+        "attribute" : "x",
+        "function" : "Align.center(constant)"
+    },
+    "centerVertically" : {
+        "attribute" : "y",
+        "function" : "Align.center(constant)"
+    }
+}
