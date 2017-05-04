@@ -1,5 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var FirebaseFramer, HEIGHT, Input, WIDTH, _assets, _slices, asset, getObject, j, len, lineHeight, ref, slice, slices;
+var FirebaseFramer, HEIGHT, Input, WIDTH, _assets, _slices, anima, asset, getObject, j, len, lineHeight, ref, slice, slices;
 
 FirebaseFramer = require('firebaseframer').FirebaseFramer;
 
@@ -56,10 +56,12 @@ for (j = 0, len = ref.length; j < len; j++) {
   });
   slices[slice.name].sketch_id = slice.id;
   asset = getObject(_assets, "objectID", slice.id);
-  if (asset.userInfo["com.animaapp.stc-sketch-plugin"].kModelPropertiesKey.constraints) {
-    print("got it");
-  } else {
-
+  anima = asset.userInfo["com.animaapp.stc-sketch-plugin"];
+  if (anima.kModelPropertiesKey.constraints) {
+    break;
+  }
+  if (anima.kViewTypeKey) {
+    break;
   }
 }
 
