@@ -29,7 +29,6 @@ getObject = function(object, key, value) {
     }
   } else {
     for (prop in object) {
-      print(prop);
       if (prop === key) {
         if (object[prop] === value) {
           return object;
@@ -55,6 +54,7 @@ for (i = 0, len = ref.length; i < len; i++) {
   });
   slices[slice.name].sketch_id = slice.id;
   asset = getObject(_assets, "objectID", slice.id);
+  print(asset);
 }
 
 
