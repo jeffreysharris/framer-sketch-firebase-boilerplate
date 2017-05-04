@@ -26,16 +26,13 @@ getObject = function(object, key, value) {
     for (i = 0, len = object.length; i < len; i++) {
       result = object[i];
       if (result) {
-        print("array");
         break;
       }
     }
   } else {
-    print("object");
     for (j = 0, len1 = object.length; j < len1; j++) {
       prop = object[j];
-      print("for");
-      print(prop + ': ' + object[prop]);
+      print(prop);
       if (prop === key) {
         if (object[prop] === value) {
           return object;
