@@ -62,6 +62,8 @@ for (j = 0, len = ref.length; j < len; j++) {
   slices[slice.name].sketch_id = slice.id;
 }
 
+print(slices);
+
 for (slice in slices) {
   print(slice.image);
   asset = getObject(_assets, "objectID", slice.sketch_id);
