@@ -22,8 +22,8 @@ getObject = function(object, key, value) {
   result = null;
   if (object instanceof Array) {
     i = 0;
-    while (i < theObject.length) {
-      result = getObject(theObject[i]);
+    while (i < object.length) {
+      result = getObject(object[i]);
       if (result) {
         break;
       }
@@ -31,8 +31,9 @@ getObject = function(object, key, value) {
     }
   } else {
     for (prop in object) {
-      if (prop === key) {
-        if (object[prop] === value) {
+      console.log(prop + ': ' + object[prop]);
+      if (prop === 'id') {
+        if (object[prop] === 1) {
           return object;
         }
       }
