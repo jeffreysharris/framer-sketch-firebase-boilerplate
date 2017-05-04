@@ -24,6 +24,7 @@ getObject = function(object, key, value) {
     for (i = 0, len = object.length; i < len; i++) {
       result = object[i];
       if (result) {
+        print("array");
         break;
       }
     }
