@@ -32,10 +32,8 @@ Slice = (function(superClass) {
 
 })(Layer({
   constructor: function(options) {
-    if (options == null) {
-      options = {};
-    }
-    return options.sketch_id;
+    this.options = options != null ? options : {};
+    return this.ptions.sketch_id = null;
   }
 }));
 
