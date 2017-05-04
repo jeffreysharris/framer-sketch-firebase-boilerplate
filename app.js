@@ -19,6 +19,7 @@ slices = {};
 
 getObject = function(object, key, value) {
   var i, j, len, len1, prop, result;
+  print(object);
   result = null;
   if (object instanceof Array) {
     for (i = 0, len = object.length; i < len; i++) {
