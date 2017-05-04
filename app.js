@@ -85,7 +85,10 @@ for (j = 0, len = ref.length; j < len; j++) {
 
 for (slice in slices) {
   asset = getObject(_assets, "objectID", slices[slice].sketch_id);
-  container = "Screen";
+  container = Screen;
+  if (container == null) {
+    container = slices[slice].parent;
+  }
   anima = asset.userInfo["com.animaapp.stc-sketch-plugin"];
   constraints = anima.kModelPropertiesKey.constraints;
   if (constraints) {
