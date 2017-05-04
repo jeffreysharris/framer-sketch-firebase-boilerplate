@@ -30,7 +30,7 @@ getObject = function(object, key, value) {
   } else {
     for (j = 0, len1 = object.length; j < len1; j++) {
       prop = object[j];
-      print(object[prop]);
+      print(object);
       if (prop === key) {
         if (object[prop] === value) {
           return object;
@@ -55,7 +55,7 @@ for (i = 0, len = ref.length; i < len; i++) {
     image: "images/" + slice.name + ".png"
   });
   slices[slice.name].sketch_id = slice.id;
-  asset = getObject(_assets, 'objectID', slice.id);
+  asset = getObject(_assets, "objectID", slice.id);
 }
 
 
