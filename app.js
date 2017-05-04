@@ -31,6 +31,7 @@ Slice = (function(superClass) {
       base.sketch_id = 111;
     }
     Slice.__super__.constructor.call(this, this.options);
+    this.sketch_id = this.options.sketch_id;
   }
 
   return Slice;
