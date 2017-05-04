@@ -24,7 +24,7 @@ for (i = 0, len = ref.length; i < len; i++) {
     name: slice.name,
     image: "images/" + slice.name + ".png"
   });
-  slices[slice.name]["sketch_id"] = slice.id;
+  slices[slice.name].sketch_id = slice.id;
 }
 
 print(slices);
