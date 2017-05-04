@@ -34,6 +34,9 @@ getObject = function(object, key, value) {
   } else {
     for (prop in object) {
       if (prop === key) {
+        if (!value) {
+          return object;
+        }
         if (object[prop] === value) {
           return object;
         }
