@@ -68,7 +68,7 @@ for (j = 0, len = ref.length; j < len; j++) {
       for (prop in _anima) {
         if (constraint === prop) {
           print(_anima[prop]);
-          slices[slice.name][_anima.prop.attribute] = _anima.prop["function"];
+          slices[slice.name][_anima[prop].attribute] = _anima.prop["function"];
         }
       }
     }
