@@ -35,7 +35,7 @@ Slice = (function(superClass) {
     if (options == null) {
       options = {};
     }
-    return this.sketch_id;
+    return options.sketch_id;
   }
 }));
 
