@@ -21,7 +21,7 @@
     },
     "height" : {
         "attribute" : "height",
-        "function" : "slices[slice].parent.height(constant)"
+        "function" : "slices[slice].parent?Screen.height(constant)"
     },
     "centerHorizontally" : {
         "attribute" : "x",
