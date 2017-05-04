@@ -31,9 +31,8 @@ getObject = function(object, key, value) {
     }
   } else {
     for (prop in object) {
-      console.log(prop + ': ' + object[prop]);
-      if (prop === 'id') {
-        if (object[prop] === 1) {
+      if (prop === key) {
+        if (object[prop] === value) {
           return object;
         }
       }
