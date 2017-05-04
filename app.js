@@ -1,5 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var FirebaseFramer, HEIGHT, Input, WIDTH, _assets, _slices, i, len, lineHeight, ref, slice, slices;
+var FirebaseFramer, HEIGHT, Input, WIDTH, _assets, _slices, asset, getObject, i, len, lineHeight, ref, slice, slices;
 
 FirebaseFramer = require('firebaseframer').FirebaseFramer;
 
@@ -17,6 +17,36 @@ _assets = Utils.domLoadJSONSync("assets.json");
 
 slices = {};
 
+getObject = function(object, key, value) {
+  var i, j, len, len1, prop, result;
+  result = null;
+  if (object instanceof Array) {
+    for (i = 0, len = object.length; i < len; i++) {
+      result = object[i];
+      if (result) {
+        break;
+      }
+    }
+  } else {
+    for (j = 0, len1 = object.length; j < len1; j++) {
+      prop = object[j];
+      print(prop + ': ' + object[prop]);
+      if (prop === 'id') {
+        if (object[prop] === 1) {
+          return object;
+        }
+      }
+      if (object[prop] instanceof Object || object[prop] instanceof Array) {
+        result = getObject(object[prop]);
+        if (result) {
+          break;
+        }
+      }
+    }
+  }
+  return result;
+};
+
 ref = _slices.pages[0].slices;
 for (i = 0, len = ref.length; i < len; i++) {
   slice = ref[i];
@@ -25,11 +55,9 @@ for (i = 0, len = ref.length; i < len; i++) {
     image: "images/" + slice.name + ".png"
   });
   slices[slice.name].sketch_id = slice.id;
+  asset = getObject(_assets, 'objectID', slice.id);
+  print(asset);
 }
-
-print(slices);
-
-print(slices.footer.sketch_id);
 
 
 },{"firebaseframer":2,"inputfield":3}],2:[function(require,module,exports){
