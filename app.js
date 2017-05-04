@@ -54,7 +54,7 @@ for (i = 0, len = ref.length; i < len; i++) {
   });
   slices[slice.name].sketch_id = slice.id;
   asset = getObject(_assets, "objectID", slice.id);
-  print(asset);
+  print(asset.objectID);
 }
 
 
