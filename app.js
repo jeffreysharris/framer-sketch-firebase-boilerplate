@@ -93,7 +93,7 @@ for (j = 0, len = ref.length; j < len; j++) {
 
 for (slice in slices) {
   asset = getObject(_assets, "objectID", slices[slice].sketch_id);
-  if (slices[slice].parent.name != null) {
+  if (slices[slice].parent != null) {
     container = slices[slice].parent.name.toString();
   } else {
     container = "Screen";
