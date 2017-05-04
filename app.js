@@ -66,7 +66,7 @@ for (j = 0, len = ref.length; j < len; j++) {
   if (constraints) {
     for (constraint in constraints) {
       for (prop in _anima) {
-        if (constaint === prop) {
+        if (constraint === prop) {
           print(constraint);
         }
       }
