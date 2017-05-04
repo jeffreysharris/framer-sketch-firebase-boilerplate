@@ -57,7 +57,7 @@ for (j = 0, len = ref.length; j < len; j++) {
   slices[slice.name].sketch_id = slice.id;
   asset = getObject(_assets, "objectID", slice.id);
   if (asset.userInfo["com.animaapp.stc-sketch-plugin"].kModelPropertiesKey.constraints) {
-    print(asset.userInfo["com.animaapp.stc-sketch-plugin"].kModelPropertiesKey.constraints);
+    print("got it");
   } else {
 
   }
