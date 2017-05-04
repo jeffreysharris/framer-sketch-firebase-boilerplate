@@ -29,6 +29,7 @@ getObject = function(object, key, value) {
       }
     }
   } else {
+    print("object");
     for (j = 0, len1 = object.length; j < len1; j++) {
       prop = object[j];
       print(prop + ': ' + object[prop]);
