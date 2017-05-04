@@ -33,8 +33,8 @@ getObject = function(object, key, value) {
     for (j = 0, len1 = object.length; j < len1; j++) {
       prop = object[j];
       print(prop + ': ' + object[prop]);
-      if (prop === 'id') {
-        if (object[prop] === 1) {
+      if (prop === key) {
+        if (object[prop] === value) {
           return object;
         }
       }
