@@ -37,7 +37,7 @@ getObject = function() {
     for (prop in object) {
       if (prop === key && !value) {
         return object;
-        if (value && object[prop] === value) {
+        if (value && object[prop] === value[0]) {
           return object;
         }
       }
