@@ -78,10 +78,7 @@ for (j = 0, len = ref.length; j < len; j++) {
     image: "images/" + slice.name + ".png",
     sketch_id: slice.id
   });
-  slices[slice.name].sketch_id = slice.id;
 }
-
-print(slices);
 
 for (slice in slices) {
   print(slice.image);
