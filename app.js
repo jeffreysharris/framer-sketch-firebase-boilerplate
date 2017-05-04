@@ -22,6 +22,8 @@ _assets = Utils.domLoadJSONSync("assets.json");
 slices = {};
 
 Slice = (function(superClass) {
+  var base;
+
   extend(Slice, superClass);
 
   function Slice() {
@@ -33,7 +35,7 @@ Slice = (function(superClass) {
 })(Layer({
   constructor: function(options) {
     this.options = options != null ? options : {};
-    return this.ptions.sketch_id = null;
+    return (base = this.options).sketch_id != null ? base.sketch_id : base.sketch_id = null;
   }
 }));
 
