@@ -19,7 +19,6 @@ slices = {};
 
 getObject = function(object, key, value) {
   var i, j, len, len1, prop, result;
-  print(object);
   result = null;
   if (object instanceof Array) {
     for (i = 0, len = object.length; i < len; i++) {
@@ -31,7 +30,7 @@ getObject = function(object, key, value) {
   } else {
     for (j = 0, len1 = object.length; j < len1; j++) {
       prop = object[j];
-      print(prop);
+      print(object[prop]);
       if (prop === key) {
         if (object[prop] === value) {
           return object;
