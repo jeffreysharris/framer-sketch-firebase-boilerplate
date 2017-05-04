@@ -97,7 +97,7 @@ for (slice in slices) {
         if (constraint === prop) {
           constant = constraint.constant;
           fn = eval(_anima[prop]["function"]);
-          slices[slice.name][_anima[prop].attribute] = fn;
+          slices[slice][_anima[prop].attribute] = fn;
         }
       }
     }
