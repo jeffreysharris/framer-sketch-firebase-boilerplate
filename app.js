@@ -19,7 +19,7 @@ _slices = Utils.domLoadJSONSync("slices.json");
 
 _assets = Utils.domLoadJSONSync("assets.json");
 
-slices = {};
+slices = [];
 
 Slice = (function(superClass) {
   extend(Slice, superClass);
