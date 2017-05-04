@@ -73,9 +73,10 @@ getObject = function(object, key, value) {
 ref = _slices.pages[0].slices;
 for (j = 0, len = ref.length; j < len; j++) {
   slice = ref[j];
-  slices[slice.name] = new Layer({
+  slices[slice.name] = new Slice({
     name: slice.name,
-    image: "images/" + slice.name + ".png"
+    image: "images/" + slice.name + ".png",
+    sketch_id: slice.id
   });
   slices[slice.name].sketch_id = slice.id;
 }
