@@ -76,7 +76,7 @@ getFn = function(pr, cn) {
   if (pr === "width" || pr === "height") {
     t = cn + _anima[pr]["function"];
     print(Function(t));
-    return eval(t);
+    return Function(t);
   } else {
     return eval(_anima[pr]["function"]);
   }
