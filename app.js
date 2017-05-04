@@ -22,22 +22,20 @@ _assets = Utils.domLoadJSONSync("assets.json");
 slices = {};
 
 Slice = (function(superClass) {
-  var base;
-
   extend(Slice, superClass);
 
-  function Slice() {
-    return Slice.__super__.constructor.apply(this, arguments);
+  function Slice(options) {
+    var base;
+    this.options = options != null ? options : {};
+    if ((base = this.options).sketch_id == null) {
+      base.sketch_id = null;
+    }
+    Slice.__super__.constructor.call(this, this.options);
   }
 
   return Slice;
 
-})(Layer({
-  constructor: function(options) {
-    this.options = options != null ? options : {};
-    return (base = this.options).sketch_id != null ? base.sketch_id : base.sketch_id = null;
-  }
-}));
+})(Layer);
 
 getObject = function(object, key, value) {
   var i, prop, result;
