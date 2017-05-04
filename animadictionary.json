@@ -1,9 +1,5 @@
-//
-
-if !constant
-    constant = 0
-
-//
+/*if !constant
+    constant = 0*/
 
 {
     "top" : {
