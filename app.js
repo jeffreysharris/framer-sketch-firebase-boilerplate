@@ -105,7 +105,7 @@ for (slice in slices) {
               slices[slice].x = Align.right(constant);
               break;
             case "width":
-              slices[slice].width = container.width - constant;
+              slices[slice].width = Screen.width - constant;
               break;
             case "height":
               slices[slice].height = container.height - constant;
