@@ -91,6 +91,7 @@ for (slice in slices) {
       for (prop in _anima) {
         if (constraint === prop) {
           constant = constraint.constant;
+          print(constraint.constant);
           switch (prop) {
             case "top":
               slices[slice].y = Align.top(constant);
