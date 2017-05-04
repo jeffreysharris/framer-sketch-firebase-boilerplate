@@ -17,7 +17,7 @@
     },
     "width" : {
         "attribute" : "width",
-        "function" : "this.parent.width(constant)"
+        "function" : "slices[slice.name].parent.width(constant)"
     },
     "height" : {
         "attribute" : "height",
