@@ -19,7 +19,7 @@ _slices = Utils.domLoadJSONSync("slices.json");
 
 _assets = Utils.domLoadJSONSync("assets.json");
 
-slices = [];
+slices = {};
 
 Slice = (function(superClass) {
   extend(Slice, superClass);
@@ -82,7 +82,6 @@ for (j = 0, len = ref.length; j < len; j++) {
 
 for (k = 0, len1 = slices.length; k < len1; k++) {
   slice = slices[k];
-  print(slice);
   asset = getObject(_assets, "objectID", slice.sketch_id);
   container = Screen;
   if (container == null) {
