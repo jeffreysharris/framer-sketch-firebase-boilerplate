@@ -23,7 +23,7 @@ getObject = function(object, key, value) {
   if (object instanceof Array) {
     i = 0;
     while (i < object.length) {
-      result = getObject(object[i]);
+      result = getObject(object[i], key, value);
       if (result) {
         break;
       }
@@ -32,13 +32,12 @@ getObject = function(object, key, value) {
   } else {
     for (prop in object) {
       if (prop === key) {
-        print(prop);
         if (object[prop] === value) {
           return object;
         }
       }
       if (object[prop] instanceof Object || object[prop] instanceof Array) {
-        result = getObject(object[prop]);
+        result = getObject(object[prop], key, value);
         if (result) {
           break;
         }
