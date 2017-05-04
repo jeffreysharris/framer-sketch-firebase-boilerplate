@@ -65,10 +65,9 @@ for (j = 0, len = ref.length; j < len; j++) {
   constraints = anima.kModelPropertiesKey.constraints;
   if (constraints) {
     for (constraint in constraints) {
-      print(constraint);
       for (prop in _anima) {
         if (constraint === prop) {
-          print(constraint);
+          slices[slice.name][prop] = [_anima[prop]];
         }
       }
     }
