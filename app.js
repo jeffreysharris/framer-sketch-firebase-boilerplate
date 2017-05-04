@@ -63,7 +63,7 @@ for (j = 0, len = ref.length; j < len; j++) {
 }
 
 for (slice in slices) {
-  print(slice.name);
+  print(slice.image);
   asset = getObject(_assets, "objectID", slice.sketch_id);
   container = Screen;
   if (container == null) {
