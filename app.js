@@ -73,7 +73,7 @@ getObject = function(object, key, value) {
 
 getFn = function(pr, cn) {
   var fn, t;
-  if (pr === "width" || "height") {
+  if (pr === "width" || pr === "height") {
     t = cn + _anima[pr]["function"];
     return fn = eval(t);
   } else {
