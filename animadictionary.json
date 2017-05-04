@@ -17,11 +17,11 @@
     },
     "width" : {
         "attribute" : "width",
-        "function" : "slices[slice].parent?Screen.width(constant)"
+        "function" : ".width(constant)"
     },
     "height" : {
         "attribute" : "height",
-        "function" : "slices[slice].parent?Screen.height(constant)"
+        "function" : ".height(constant)"
     },
     "centerHorizontally" : {
         "attribute" : "x",
