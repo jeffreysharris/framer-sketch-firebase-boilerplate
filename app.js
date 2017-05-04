@@ -31,7 +31,12 @@ Slice = (function(superClass) {
   return Slice;
 
 })(Layer({
-  sketch_id: this.sketch_id
+  constructor: function(options) {
+    if (options == null) {
+      options = {};
+    }
+    return this.sketch_id;
+  }
 }));
 
 getObject = function(object, key, value) {
