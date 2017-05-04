@@ -1,5 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var FirebaseFramer, HEIGHT, Input, WIDTH, bg, data, demoDB, j, len, lineHeight, post, ref, slice, slices, textfield;
+var FirebaseFramer, HEIGHT, Input, WIDTH, _assets, _slices, i, len, lineHeight, ref, slice, slices;
 
 FirebaseFramer = require('firebaseframer').FirebaseFramer;
 
@@ -11,110 +11,23 @@ HEIGHT = Framer.Screen.height;
 
 lineHeight = 30;
 
-data = Utils.domLoadJSONSync("slices.json");
+_slices = Utils.domLoadJSONSync("slices.json");
+
+_assets = Utils.domLoadJSONSync("assets.json");
 
 slices = {};
 
-ref = data.pages[0].slices;
-for (j = 0, len = ref.length; j < len; j++) {
-  slice = ref[j];
+ref = _slices.pages[0].slices;
+for (i = 0, len = ref.length; i < len; i++) {
+  slice = ref[i];
   slices[slice.name] = new Layer({
-    height: slice.relative.height,
-    width: slice.relative.width,
-    x: slice.relative.x,
-    y: slice.relative.y,
     name: slice.name,
     image: "images/" + slice.name + ".png"
   });
+  slices[slice.name].sketch_id = slice.id;
 }
 
-slices.footer.style.width = "100%";
-
-Framer.Defaults.Animation = {
-  curve: 'spring(150, 10, 0)'
-};
-
-demoDB = new FirebaseFramer({
-  projectID: "framer-sketch-firebase-test",
-  secret: "lHwsK4ljhwUmMt3EU1ybrMPQcSDgbKhvTIwuqJ9I",
-  server: "s-usc1c-nss-134.firebaseio.com"
-});
-
-bg = new BackgroundLayer({
-  backgroundColor: "#fafafa"
-});
-
-slices.button.onMouseDown(function() {
-  return slices.button.image = "images/button-down.png";
-});
-
-textfield = new Input({
-  setup: false,
-  type: "text",
-  x: slices.field.x,
-  y: slices.field.y,
-  width: slices.field.width,
-  height: slices.field.height
-});
-
-textfield.style = {
-  fontSize: "14px",
-  color: "#333",
-  fontFamily: "Helvetica",
-  padding: "0px 0px 0px 20px"
-};
-
-post = function() {
-  if (textfield.value.length) {
-    return demoDB.post('/messages', {
-      "text": textfield.value
-    });
-  }
-};
-
-demoDB.onChange("/messages", function(message) {
-  var child, h, i, k, l, len1, line, m, messageArray, ref1, ref2, results, t;
-  ref1 = slices.chat_window.children;
-  for (k = 0, len1 = ref1.length; k < len1; k++) {
-    child = ref1[k];
-    child.animate({
-      y: child.y - lineHeight
-    });
-  }
-  messageArray = _.toArray(message);
-  i = 1;
-  h = lineHeight;
-  results = [];
-  for (l = messageArray.length - 1; l >= 0; l += -1) {
-    m = messageArray[l];
-    t = (ref2 = m.text) != null ? ref2 : m;
-    line = new TextLayer({
-      x: 0,
-      textAlign: "left",
-      y: slices.chat_window.height - h * i,
-      text: t,
-      color: "#333",
-      font: "14px/1.5 Helvetica"
-    });
-    line.parent = slices.chat_window;
-    results.push(i++);
-  }
-  return results;
-});
-
-slices.button.onMouseUp(function() {
-  slices.button.image = "images/button.png";
-  post();
-  return textfield.value = "";
-});
-
-document.addEventListener('keypress', function(event) {
-  if (event.keyCode === 13) {
-    event.preventDefault();
-    post();
-    return textfield.value = "";
-  }
-});
+print(slices);
 
 
 },{"firebaseframer":2,"inputfield":3}],2:[function(require,module,exports){
