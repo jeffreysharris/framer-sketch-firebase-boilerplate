@@ -118,8 +118,6 @@ for (slice in slices) {
 
 print(slices["footer"].width);
 
-slices["footer"].width = Screen.width;
-
 
 },{"firebaseframer":2,"inputfield":3}],2:[function(require,module,exports){
 var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
