@@ -15,8 +15,6 @@ _slices = Utils.domLoadJSONSync("slices.json");
 
 _assets = Utils.domLoadJSONSync("assets.json");
 
-print(_assets);
-
 slices = {};
 
 getObject = function(object, key, value) {
