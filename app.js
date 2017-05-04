@@ -28,7 +28,7 @@ Slice = (function(superClass) {
     var base;
     this.options = options != null ? options : {};
     if ((base = this.options).sketch_id == null) {
-      base.sketch_id = null;
+      base.sketch_id = 111;
     }
     Slice.__super__.constructor.call(this, this.options);
   }
