@@ -81,6 +81,7 @@ for (slice in slices) {
   if (layer.layers.length > 0) {
     for (s in slices) {
       child = getObject(layer.layers, "id", slices[s].sketch_id);
+      print(child);
       if (child != null) {
         slices[slice].addChild(child);
       }
