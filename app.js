@@ -57,6 +57,7 @@ getParents = function(list) {
         for (j = 0, len = list.length; j < len; j++) {
           id = list[j];
           result = getObject(layer.layers, "id", id);
+          print(result);
           if (result) {
             results1.push(print(layer.name));
           } else {
