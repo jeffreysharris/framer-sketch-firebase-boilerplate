@@ -19,7 +19,9 @@ require('dotenv').config();
 
 gulp.task('build', ['copy', 'coffee', 'sketch']);
 gulp.task('post', function(){
-    runSeq(['coffee', 'sketch'], 'deploy');
+    // runSeq(['coffee', 'sketch'], 'deploy');
+    // turn off deploy for now...
+    runSeq(['coffee', 'sketch']);
 });
 gulp.task('default', ['build', 'watch']);
 
@@ -78,7 +80,7 @@ gulp.task('sketch', function(){
     var util = require('util'),
     exec = require('child_process').exec,
     child;
-    child = exec('sketchtool list slices src/*.sketch > build/slices.json', // command line argument directly in string
+    child = exec('sketchtool list slices src/*.sketch > build/slices.json; sketchtool dump src/*.sketch > build/assets.json; sketchtool list layers src/*.sketch > build/layers.json', // command line argument directly in string
       function (error, stdout, stderr) {      // one easy function to capture data/errors
         console.log('stdout: ' + stdout);
         console.log('stderr: ' + stderr);

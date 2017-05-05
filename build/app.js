@@ -1,118 +1,138 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var FirebaseFramer, HEIGHT, Input, WIDTH, bg, data, demoDB, j, len, lineHeight, post, ref, slice, slices, textfield;
+var FirebaseFramer, Input, Slice, _assets, _layers, _slices, anima, asset, child, constant, constraint, constraints, container, getGroups, getObject, groups, j, layer, len, ref, ref1, ref2, s, slice, slices,
+  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  hasProp = {}.hasOwnProperty;
 
 FirebaseFramer = require('firebaseframer').FirebaseFramer;
 
 Input = require("inputfield").Input;
 
-WIDTH = Framer.Screen.width;
+_slices = Utils.domLoadJSONSync("slices.json");
 
-HEIGHT = Framer.Screen.height;
+_assets = Utils.domLoadJSONSync("assets.json");
 
-lineHeight = 30;
+_layers = Utils.domLoadJSONSync("layers.json");
 
-data = Utils.domLoadJSONSync("slices.json");
+getObject = function(object, key, value) {
+  var i, prop, result;
+  result = null;
+  if (object instanceof Array) {
+    i = 0;
+    while (i < object.length) {
+      result = getObject(object[i], key, value);
+      if (result) {
+        break;
+      }
+      i++;
+    }
+  } else {
+    for (prop in object) {
+      if (prop === key) {
+        if (!value) {
+          return object;
+        }
+        if (object[prop] === value) {
+          return object;
+        }
+      }
+      if (object[prop] instanceof Object || object[prop] instanceof Array) {
+        result = getObject(object[prop], key, value);
+        if (result) {
+          break;
+        }
+      }
+    }
+  }
+  return result;
+};
+
+getGroups = function(layers, list) {
+  var result;
+  return result = null;
+};
 
 slices = {};
 
-ref = data.pages[0].slices;
+groups = {};
+
+Slice = (function(superClass) {
+  extend(Slice, superClass);
+
+  function Slice(options) {
+    var base;
+    this.options = options != null ? options : {};
+    if ((base = this.options).sketch_id == null) {
+      base.sketch_id = 111;
+    }
+    Slice.__super__.constructor.call(this, this.options);
+    this.sketch_id = this.options.sketch_id;
+  }
+
+  return Slice;
+
+})(Layer);
+
+ref = _slices.pages[0].slices;
 for (j = 0, len = ref.length; j < len; j++) {
   slice = ref[j];
-  slices[slice.name] = new Layer({
-    height: slice.relative.height,
-    width: slice.relative.width,
-    x: slice.relative.x,
-    y: slice.relative.y,
+  slices[slice.name] = new Slice({
     name: slice.name,
-    image: "images/" + slice.name + ".png"
+    image: "images/" + slice.name + ".png",
+    sketch_id: slice.id
   });
 }
 
-Framer.Defaults.Animation = {
-  curve: 'spring(150, 10, 0)'
-};
-
-demoDB = new FirebaseFramer({
-  projectID: "framer-sketch-firebase-test",
-  secret: "lHwsK4ljhwUmMt3EU1ybrMPQcSDgbKhvTIwuqJ9I",
-  server: "s-usc1c-nss-134.firebaseio.com"
-});
-
-bg = new BackgroundLayer({
-  backgroundColor: "#fafafa"
-});
-
-slices.button.onMouseDown(function() {
-  return slices.button.image = "images/button-down.png";
-});
-
-textfield = new Input({
-  setup: false,
-  type: "text",
-  x: slices.field.x,
-  y: slices.field.y,
-  width: slices.field.width,
-  height: slices.field.height
-});
-
-textfield.style = {
-  fontSize: "14px",
-  color: "#333",
-  fontFamily: "Helvetica",
-  padding: "0px 0px 0px 20px"
-};
-
-post = function() {
-  if (textfield.value.length) {
-    return demoDB.post('/messages', {
-      "text": textfield.value
-    });
+for (slice in slices) {
+  asset = getObject(_assets, "objectID", slices[slice].sketch_id);
+  layer = getObject(_layers, "id", slices[slice].sketch_id);
+  if (layer.layers.length > 0) {
+    for (s in slices) {
+      child = getObject(layer.layers, "id", slices[s].sketch_id);
+      if (child != null) {
+        print(child);
+      }
+    }
   }
-};
-
-demoDB.onChange("/messages", function(message) {
-  var child, h, i, k, l, len1, line, m, messageArray, ref1, ref2, results, t;
-  ref1 = slices.chat_window.children;
-  for (k = 0, len1 = ref1.length; k < len1; k++) {
-    child = ref1[k];
-    child.animate({
-      y: child.y - lineHeight
-    });
+  container = (ref1 = slices[slice].parent) != null ? ref1 : Screen;
+  anima = asset.userInfo["com.animaapp.stc-sketch-plugin"];
+  constraints = anima.kModelPropertiesKey.constraints;
+  if (constraints) {
+    for (constraint in constraints) {
+      constant = (ref2 = constraint.constant) != null ? ref2 : 0;
+      switch (constraint) {
+        case "top":
+          slices[slice].y = Align.top(constant);
+          break;
+        case "bottom":
+          slices[slice].y = Align.bottom(constant);
+          break;
+        case "left":
+          slices[slice].x = Align.left(constant);
+          break;
+        case "right":
+          slices[slice].x = Align.right(constant);
+          break;
+        case "width":
+          slices[slice].width = container.width - constant;
+          break;
+        case "height":
+          slices[slice].height = container.height - constant;
+          break;
+        case "centerHorizontally":
+          slices[slice].x = Align.center(constant);
+          break;
+        case "centerVertically":
+          slices[slice].y = Align.center(constant);
+          break;
+        default:
+          break;
+      }
+    }
   }
-  messageArray = _.toArray(message);
-  i = 1;
-  h = lineHeight;
-  results = [];
-  for (l = messageArray.length - 1; l >= 0; l += -1) {
-    m = messageArray[l];
-    t = (ref2 = m.text) != null ? ref2 : m;
-    line = new TextLayer({
-      x: 0,
-      textAlign: "left",
-      y: slices.chat_window.height - h * i,
-      text: t,
-      color: "#333",
-      font: "14px/1.5 Helvetica"
-    });
-    line.parent = slices.chat_window;
-    results.push(i++);
+  if (anima.kViewTypeKey) {
+    break;
   }
-  return results;
-});
-
-slices.button.onMouseUp(function() {
-  slices.button.image = "images/button.png";
-  post();
-  return textfield.value = "";
-});
-
-document.addEventListener('keypress', function(event) {
-  if (event.keyCode === 13) {
-    event.preventDefault();
-    post();
-    return textfield.value = "";
-  }
-});
+}
 
 
 },{"firebaseframer":2,"inputfield":3}],2:[function(require,module,exports){
