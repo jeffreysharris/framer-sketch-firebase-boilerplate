@@ -121,7 +121,7 @@ for (slice in slices) {
   }
 }
 
-print(slices["footer"]);
+print(slices["footer"].parent);
 
 
 },{"firebaseframer":2,"inputfield":3}],2:[function(require,module,exports){
