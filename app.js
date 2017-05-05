@@ -76,7 +76,7 @@ for (j = 0, len = ref.length; j < len; j++) {
 }
 
 for (slice in slices) {
-  print(slice.name + ":" + slice.sketch_id);
+  print(slices[slice].name + ":" + slices[slice].sketch_id);
   asset = getObject(_assets, "objectID", slices[slice].sketch_id);
   foo = getObject(groups.layers, "objectID", slice.name);
   print(foo.objectID + ":" + foo.name);
