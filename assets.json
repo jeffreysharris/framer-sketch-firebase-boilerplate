@@ -3753,7 +3753,7 @@
                   "resizingType" : 0,
                   "<class>" : "MSLayerGroup",
                   "isLocked" : 0,
-                  "layerListExpandedType" : 1,
+                  "layerListExpandedType" : 2,
                   "nameIsFixed" : 1,
                   "name" : "field_group",
                   "userInfo" : {
@@ -3798,7 +3798,21 @@
               "userInfo" : {
                 "com.animaapp.stc-sketch-plugin" : {
                   "kModelPropertiesKey" : {
-
+                    "constraints" : {
+                      "automatic" : 1,
+                      "scaleFactor" : 1,
+                      "model_version" : 0.1,
+                      "model_class" : "ADModelViewConstraints",
+                      "width" : {
+                        "modelID" : "constraint_e120f27e-8711-4577-923b-13d9e43e6dea",
+                        "model_version" : 0.1,
+                        "multiplier" : 1,
+                        "model_class" : "ADModelConstraint",
+                        "constant" : 0,
+                        "enabled" : 1
+                      },
+                      "modelID" : "viewConstraints_200bf789-8155-4211-b388-0b0b35cd1351"
+                    }
                   }
                 }
               }

@@ -84,12 +84,13 @@ for (slice in slices) {
   if (container == null) {
     container = slices[slice].parent;
   }
-  print(slices[slice].name + ":" + slices[slice].parent);
+  print(slices[slice].name + ":" + container.width);
   anima = asset.userInfo["com.animaapp.stc-sketch-plugin"];
   constraints = anima.kModelPropertiesKey.constraints;
   if (constraints) {
     for (constraint in constraints) {
       constant = (ref1 = constraint.constant) != null ? ref1 : 0;
+      print(constant);
       switch (constraint) {
         case "top":
           slices[slice].y = Align.top(constant);
@@ -125,7 +126,7 @@ for (slice in slices) {
   }
 }
 
-print(slices["footer"].parent);
+print(slices["footer"].width);
 
 
 },{"firebaseframer":2,"inputfield":3}],2:[function(require,module,exports){
