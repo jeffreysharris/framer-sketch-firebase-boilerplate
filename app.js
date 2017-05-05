@@ -84,7 +84,7 @@ for (j = 0, len = ref.length; j < len; j++) {
 for (slice in slices) {
   asset = getObject(_assets, "objectID", slices[slice].sketch_id);
   for (other_slices in slices) {
-    foo = getObject(asset.layers, "objectID", other_slices);
+    foo = getObject(asset.layers, "objectID", other_slices.sketch_id);
   }
   print(foo);
   container = (ref1 = slices[slice].parent) != null ? ref1 : Screen;
