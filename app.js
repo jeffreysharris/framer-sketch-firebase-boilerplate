@@ -78,8 +78,8 @@ for (j = 0, len = ref.length; j < len; j++) {
 for (slice in slices) {
   print(slices[slice].name + ":" + slices[slice].sketch_id);
   asset = getObject(_assets, "objectID", slices[slice].sketch_id);
-  foo = getObject(groups.layers, "objectID", slice.name);
-  print(foo.objectID + ":" + foo.name);
+  foo = getObject(groups.layers, "name", slices[slice].name);
+  print(foo.name);
   container = (ref1 = slices[slice].parent) != null ? ref1 : Screen;
   anima = asset.userInfo["com.animaapp.stc-sketch-plugin"];
   constraints = anima.kModelPropertiesKey.constraints;
