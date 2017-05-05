@@ -1091,7 +1091,29 @@
                   "userInfo" : {
                     "com.animaapp.stc-sketch-plugin" : {
                       "kModelPropertiesKey" : {
-
+                        "constraints" : {
+                          "bottom" : {
+                            "modelID" : "constraint_c080f463-8987-4c3c-8b8b-2a3eeeebd13a",
+                            "model_version" : 0.1,
+                            "multiplier" : 0,
+                            "model_class" : "ADModelConstraint",
+                            "constant" : 0,
+                            "enabled" : 1
+                          },
+                          "automatic" : 1,
+                          "width" : {
+                            "modelID" : "constraint_3592fcdf-d9ab-4aa1-87fd-5db578497922",
+                            "model_version" : 0.1,
+                            "multiplier" : 1,
+                            "model_class" : "ADModelConstraint",
+                            "constant" : 0,
+                            "enabled" : 1
+                          },
+                          "model_class" : "ADModelViewConstraints",
+                          "scaleFactor" : 1,
+                          "model_version" : 0.1,
+                          "modelID" : "viewConstraints_671a80d2-abb4-4795-b558-77d05a36cc1b"
+                        }
                       }
                     }
                   },
