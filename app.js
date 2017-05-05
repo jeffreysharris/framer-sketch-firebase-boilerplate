@@ -46,8 +46,6 @@ getObject = function(object, key, value) {
 
 groups = getObject(_assets, "<class>", "MSLayerGroup");
 
-print(groups);
-
 slices = {};
 
 Slice = (function(superClass) {
@@ -76,6 +74,8 @@ for (j = 0, len = ref.length; j < len; j++) {
     sketch_id: slice.id
   });
 }
+
+print(Slices);
 
 for (slice in slices) {
   asset = getObject(_assets, "objectID", slices[slice].sketch_id);
