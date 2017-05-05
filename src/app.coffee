@@ -30,6 +30,7 @@ makeLayerFromParent = (item) ->
                 width: item.relative?.width ? Canvas.width
                 height: item.relative?.height ? Canvas.height
                 sketch_id: item.id
+                backgroundColor: "transparent"
             layer = slices[item.name]
         when 1
             # print matches[0].name
@@ -88,8 +89,6 @@ getParents = (object, list) ->
 slices = {}
 # prepare list of groups
 groups = {}
-# prepare list of slice ids
-slice_ids = []
 
 class Slice extends Layer
     constructor: (@options={}) ->
@@ -107,36 +106,51 @@ for slice in _slices.pages[0].slices
         y: slice.relative.y
         width: slice.relative.width
         height: slice.relative.height
-    slice_ids.push(slice.id)
+
+print slices["field"].width
 
 # now go through catalog and determine hierarchy and positioning based on groups
 getParents(_layers, slices)
 
+print slices["field"].width
+
 for slice of slices
-    # print slices[slice].name + ":"
-    # print slices[slice].parent
     # find slice in assets to collect anima data
     asset = getObject(_assets, "objectID", slices[slice].sketch_id)
 
-    # if not, set parent to "Screen"
+    # if no parent, set parent to "Screen"
     container = slices[slice].parent ? Canvas
     # check for anima data i.e. kModelPropertiesKey
     anima = asset?.userInfo?["com.animaapp.stc-sketch-plugin"]
 
     # check for constraints
     constraints = anima?.kModelPropertiesKey?.constraints
-    if constraints
+    if constraints?
         # cycle through contraints and match to flexbox properties
-        for constraint of constraints
-            constant = constraint.constant ? 0
+        for c of constraints
+            constant = constraints[c].constant ? 0
+            multiplier = constraints[c].multiplier ? 0
+            # print slices[slice].name + ":" + constant
             # anima -> Framer translation
-            switch constraint
+            switch c
                 when "top" then slices[slice].y = Align.top(constant)
-                when "bottom" then slices[slice].y = Align.bottom(constant)
+                when "bottom" then slices[slice].y = Align.bottom(-constant)
                 when "left" then slices[slice].x = Align.left(constant)
-                when "right" then slices[slice].x = Align.right(constant)
-                when "width" then slices[slice].width = container.width - constant
-                when "height" then slices[slice].height = container.height - constant
+                when "right" then slices[slice].x = Align.right(-constant)
+                when "width"
+                    if multiplier?
+                        slices[slice].width = container.width * multiplier
+                        if constant?
+                            slices[slice].width -= constant
+                    else
+                        slices[slice].width = container.width - constant
+                when "height"
+                    if multiplier?
+                        slices[slice].height = container.height * multiplier
+                        if constant?
+                            slices[slice].height -= constant
+                    else
+                        slices[slice].width = container.width - constant
                 when "centerHorizontally" then slices[slice].x = Align.center(constant)
                 when "centerVertically" then slices[slice].y = Align.center(constant)
                 else break
@@ -155,7 +169,8 @@ for slice of slices
 
         break
 
-
+print slices["field"].width
+print slices["field"].parent
 
 # ======= REST OF FILE TO UNCOMMENT AFTER TEST ========
 # WIDTH = Framer.Screen.width

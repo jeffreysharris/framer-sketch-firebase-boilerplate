@@ -1,5 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var FirebaseFramer, Input, Slice, _assets, _layers, _slices, anima, asset, constant, constraint, constraints, container, getObject, getParents, groups, j, len, makeLayerFromParent, ref, ref1, ref2, ref3, ref4, ref5, slice, slice_ids, slices, ƒ, ƒƒ,
+var FirebaseFramer, Input, Slice, _assets, _layers, _slices, anima, asset, c, constant, constraints, container, getObject, getParents, groups, j, len, makeLayerFromParent, multiplier, ref, ref1, ref2, ref3, ref4, ref5, ref6, slice, slices, ƒ, ƒƒ,
   extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
 
@@ -31,7 +31,8 @@ makeLayerFromParent = function(item) {
         y: (ref3 = (ref4 = item.relative) != null ? ref4.y : void 0) != null ? ref3 : 0,
         width: (ref5 = (ref6 = item.relative) != null ? ref6.width : void 0) != null ? ref5 : Canvas.width,
         height: (ref7 = (ref8 = item.relative) != null ? ref8.height : void 0) != null ? ref7 : Canvas.height,
-        sketch_id: item.id
+        sketch_id: item.id,
+        backgroundColor: "transparent"
       });
       layer = slices[item.name];
       break;
@@ -114,8 +115,6 @@ slices = {};
 
 groups = {};
 
-slice_ids = [];
-
 Slice = (function(superClass) {
   extend(Slice, superClass);
 
@@ -145,37 +144,55 @@ for (j = 0, len = ref1.length; j < len; j++) {
     width: slice.relative.width,
     height: slice.relative.height
   });
-  slice_ids.push(slice.id);
 }
 
+print(slices["field"].width);
+
 getParents(_layers, slices);
+
+print(slices["field"].width);
 
 for (slice in slices) {
   asset = getObject(_assets, "objectID", slices[slice].sketch_id);
   container = (ref2 = slices[slice].parent) != null ? ref2 : Canvas;
   anima = asset != null ? (ref3 = asset.userInfo) != null ? ref3["com.animaapp.stc-sketch-plugin"] : void 0 : void 0;
   constraints = anima != null ? (ref4 = anima.kModelPropertiesKey) != null ? ref4.constraints : void 0 : void 0;
-  if (constraints) {
-    for (constraint in constraints) {
-      constant = (ref5 = constraint.constant) != null ? ref5 : 0;
-      switch (constraint) {
+  if (constraints != null) {
+    for (c in constraints) {
+      constant = (ref5 = constraints[c].constant) != null ? ref5 : 0;
+      multiplier = (ref6 = constraints[c].multiplier) != null ? ref6 : 0;
+      switch (c) {
         case "top":
           slices[slice].y = Align.top(constant);
           break;
         case "bottom":
-          slices[slice].y = Align.bottom(constant);
+          slices[slice].y = Align.bottom(-constant);
           break;
         case "left":
           slices[slice].x = Align.left(constant);
           break;
         case "right":
-          slices[slice].x = Align.right(constant);
+          slices[slice].x = Align.right(-constant);
           break;
         case "width":
-          slices[slice].width = container.width - constant;
+          if (multiplier != null) {
+            slices[slice].width = container.width * multiplier;
+            if (constant != null) {
+              slices[slice].width -= constant;
+            }
+          } else {
+            slices[slice].width = container.width - constant;
+          }
           break;
         case "height":
-          slices[slice].height = container.height - constant;
+          if (multiplier != null) {
+            slices[slice].height = container.height * multiplier;
+            if (constant != null) {
+              slices[slice].height -= constant;
+            }
+          } else {
+            slices[slice].width = container.width - constant;
+          }
           break;
         case "centerHorizontally":
           slices[slice].x = Align.center(constant);
@@ -192,6 +209,10 @@ for (slice in slices) {
     break;
   }
 }
+
+print(slices["field"].width);
+
+print(slices["field"].parent);
 
 
 },{"findModule":2,"firebaseframer":3,"inputfield":4}],2:[function(require,module,exports){
