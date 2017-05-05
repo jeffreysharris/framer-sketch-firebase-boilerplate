@@ -46,6 +46,8 @@ getObject = function(object, key, value) {
 
 groups = getObject(_assets, "<class>", "MSLayerGroup");
 
+print(groups);
+
 slices = {};
 
 Slice = (function(superClass) {
