@@ -86,7 +86,6 @@ for (slice in slices) {
       }
     }
   }
-  print(slice.children);
   container = (ref1 = slices[slice].parent) != null ? ref1 : Screen;
   anima = asset.userInfo["com.animaapp.stc-sketch-plugin"];
   constraints = anima.kModelPropertiesKey.constraints;
