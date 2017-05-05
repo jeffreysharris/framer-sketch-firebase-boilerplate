@@ -1,5 +1,6 @@
 {FirebaseFramer} = require 'firebaseframer'
 {Input} = require "inputfield"
+{ƒ,ƒƒ} = require 'findModule'
 
 # We get Slices from slices.json
 # We get Anima data from assets.json (dump)
@@ -7,6 +8,34 @@
 _slices = Utils.domLoadJSONSync "slices.json"
 _assets = Utils.domLoadJSONSync "assets.json"
 _layers = Utils.domLoadJSONSync "layers.json"
+
+# TODO: INCLUDE PROMISE FOR JSON LOAD
+
+makeLayerFromParent = (item) ->
+    # print item.name
+    layer = null
+    # check if it's already a Layer
+    if item.name?
+        matches = ƒƒ(item.name)
+    else
+        return layer
+    # see if there's more than one
+    switch matches.length
+        when 0
+        # no matches found
+            slices[item.name] = new Slice
+                name: item.name
+                x: item.relative?.x ? 0
+                y: item.relative?.y ? 0
+                width: item.relative?.width ? Canvas.width
+                height: item.relative?.height ? Canvas.height
+                sketch_id: item.id
+            layer = slices[item.name]
+        when 1
+            # print matches[0].name
+        # 1 match found
+            layer = matches[0]
+    return layer
 
 # traversing a nested json object for matching value
 getObject = (object, key, value) ->
@@ -31,17 +60,36 @@ getObject = (object, key, value) ->
                     break
     return result
 
-getGroups = (layers, list) ->
-    # take a list of object ids and search for them in each layers["layers"] array
-    result = null
-    
-
-
+getParents = (object, list) ->
+    # take an object of slices and search for them in each _layers.x.layers array, assign as parents
+    for prop of object
+        # does this have the layers array?
+        if object[prop].hasOwnProperty("layers")
+            # go through layers
+            layers = object[prop].layers
+            # we know layers is an array from the json
+            for layer in layers
+                # compare to slices
+                for slice of list
+                    if layer.id == list[slice].sketch_id
+                        # parent layer accordingly
+                        parent = makeLayerFromParent(object[prop])
+                        if parent?
+                            list[slice].parent = parent
+                            parent_slice_list = {"#{parent.name}" : slices[parent.name]}
+                            # print parent_slice_list
+                            getParents(_layers, parent_slice_list)
+                # head down the descendant chain for each layer
+                getParents(layers, list)
+        # if not, check children
+        else getParents(object[prop], list)
 
 # prepare list of slices
 slices = {}
 # prepare list of groups
 groups = {}
+# prepare list of slice ids
+slice_ids = []
 
 class Slice extends Layer
     constructor: (@options={}) ->
@@ -55,39 +103,28 @@ for slice in _slices.pages[0].slices
         name: slice.name
         image: "images/" + slice.name + ".png"
         sketch_id: slice.id
+        x: slice.relative.x
+        y: slice.relative.y
+        width: slice.relative.width
+        height: slice.relative.height
+    slice_ids.push(slice.id)
+
 # now go through catalog and determine hierarchy and positioning based on groups
+getParents(_layers, slices)
 
 for slice of slices
+    # print slices[slice].name + ":"
+    # print slices[slice].parent
     # find slice in assets to collect anima data
     asset = getObject(_assets, "objectID", slices[slice].sketch_id)
 
-    # finding layer groups for placement...
-    # walk down the tree and at each level search for slice ids in layers[]
-        # see if that parent object is already a slice
-        # if not, make new layer
-        # assign slice as child
-
-
-
-    # match slice to layer by id
-    layer = getObject(_layers, "id", slices[slice].sketch_id)
-    # check if that layer has child layers
-    if layer.layers.length > 0
-        # check if those layers match other slices
-        for s of slices
-            child = getObject(layer.layers, "id", slices[s].sketch_id)
-            if child?
-                print child
-                # slices[slice].addChild(child)
-
-
     # if not, set parent to "Screen"
-    container = slices[slice].parent ? Screen
+    container = slices[slice].parent ? Canvas
     # check for anima data i.e. kModelPropertiesKey
-    anima = asset.userInfo["com.animaapp.stc-sketch-plugin"]
+    anima = asset?.userInfo?["com.animaapp.stc-sketch-plugin"]
 
     # check for constraints
-    constraints = anima.kModelPropertiesKey.constraints
+    constraints = anima?.kModelPropertiesKey?.constraints
     if constraints
         # cycle through contraints and match to flexbox properties
         for constraint of constraints
@@ -109,7 +146,7 @@ for slice of slices
 # ====== FLEXBOX =======
 
     # if a stacked group parent object i.e. kViewTypeKey
-    if anima.kViewTypeKey
+    if anima?.kViewTypeKey
 
         # make this layer a Flexbox container, etc.
 

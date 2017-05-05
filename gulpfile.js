@@ -29,7 +29,8 @@ gulp.task('watch', function(){
 
   gulp.watch('./src/*.coffee', ['coffee']);
   gulp.watch('./src/*.sketch', ['sketch']);
-  gulp.watch('build/**/*', ['deploy']) ;
+  // gulp.watch('build/**/*', ['deploy']) ;
+  // turn off deploy for now
 
   browserSync({
     server: {

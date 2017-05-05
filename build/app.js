@@ -1,5 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var FirebaseFramer, Input, Slice, _assets, _layers, _slices, anima, asset, child, constant, constraint, constraints, container, getGroups, getObject, groups, j, layer, len, ref, ref1, ref2, s, slice, slices,
+var FirebaseFramer, Input, Slice, _assets, _layers, _slices, anima, asset, constant, constraint, constraints, container, getObject, getParents, groups, j, len, makeLayerFromParent, ref, ref1, ref2, ref3, ref4, ref5, slice, slice_ids, slices, ƒ, ƒƒ,
   extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
 
@@ -7,11 +7,39 @@ FirebaseFramer = require('firebaseframer').FirebaseFramer;
 
 Input = require("inputfield").Input;
 
+ref = require('findModule'), ƒ = ref.ƒ, ƒƒ = ref.ƒƒ;
+
 _slices = Utils.domLoadJSONSync("slices.json");
 
 _assets = Utils.domLoadJSONSync("assets.json");
 
 _layers = Utils.domLoadJSONSync("layers.json");
+
+makeLayerFromParent = function(item) {
+  var layer, matches, ref1, ref2, ref3, ref4, ref5, ref6, ref7, ref8;
+  layer = null;
+  if (item.name != null) {
+    matches = ƒƒ(item.name);
+  } else {
+    return layer;
+  }
+  switch (matches.length) {
+    case 0:
+      slices[item.name] = new Slice({
+        name: item.name,
+        x: (ref1 = (ref2 = item.relative) != null ? ref2.x : void 0) != null ? ref1 : 0,
+        y: (ref3 = (ref4 = item.relative) != null ? ref4.y : void 0) != null ? ref3 : 0,
+        width: (ref5 = (ref6 = item.relative) != null ? ref6.width : void 0) != null ? ref5 : Canvas.width,
+        height: (ref7 = (ref8 = item.relative) != null ? ref8.height : void 0) != null ? ref7 : Canvas.height,
+        sketch_id: item.id
+      });
+      layer = slices[item.name];
+      break;
+    case 1:
+      layer = matches[0];
+  }
+  return layer;
+};
 
 getObject = function(object, key, value) {
   var i, prop, result;
@@ -46,14 +74,47 @@ getObject = function(object, key, value) {
   return result;
 };
 
-getGroups = function(layers, list) {
-  var result;
-  return result = null;
+getParents = function(object, list) {
+  var layer, layers, parent, parent_slice_list, prop, results, slice;
+  results = [];
+  for (prop in object) {
+    if (object[prop].hasOwnProperty("layers")) {
+      layers = object[prop].layers;
+      results.push((function() {
+        var j, len, obj, results1;
+        results1 = [];
+        for (j = 0, len = layers.length; j < len; j++) {
+          layer = layers[j];
+          for (slice in list) {
+            if (layer.id === list[slice].sketch_id) {
+              parent = makeLayerFromParent(object[prop]);
+              if (parent != null) {
+                list[slice].parent = parent;
+                parent_slice_list = (
+                  obj = {},
+                  obj["" + parent.name] = slices[parent.name],
+                  obj
+                );
+                getParents(_layers, parent_slice_list);
+              }
+            }
+          }
+          results1.push(getParents(layers, list));
+        }
+        return results1;
+      })());
+    } else {
+      results.push(getParents(object[prop], list));
+    }
+  }
+  return results;
 };
 
 slices = {};
 
 groups = {};
+
+slice_ids = [];
 
 Slice = (function(superClass) {
   extend(Slice, superClass);
@@ -72,33 +133,31 @@ Slice = (function(superClass) {
 
 })(Layer);
 
-ref = _slices.pages[0].slices;
-for (j = 0, len = ref.length; j < len; j++) {
-  slice = ref[j];
+ref1 = _slices.pages[0].slices;
+for (j = 0, len = ref1.length; j < len; j++) {
+  slice = ref1[j];
   slices[slice.name] = new Slice({
     name: slice.name,
     image: "images/" + slice.name + ".png",
-    sketch_id: slice.id
+    sketch_id: slice.id,
+    x: slice.relative.x,
+    y: slice.relative.y,
+    width: slice.relative.width,
+    height: slice.relative.height
   });
+  slice_ids.push(slice.id);
 }
+
+getParents(_layers, slices);
 
 for (slice in slices) {
   asset = getObject(_assets, "objectID", slices[slice].sketch_id);
-  layer = getObject(_layers, "id", slices[slice].sketch_id);
-  if (layer.layers.length > 0) {
-    for (s in slices) {
-      child = getObject(layer.layers, "id", slices[s].sketch_id);
-      if (child != null) {
-        print(child);
-      }
-    }
-  }
-  container = (ref1 = slices[slice].parent) != null ? ref1 : Screen;
-  anima = asset.userInfo["com.animaapp.stc-sketch-plugin"];
-  constraints = anima.kModelPropertiesKey.constraints;
+  container = (ref2 = slices[slice].parent) != null ? ref2 : Canvas;
+  anima = asset != null ? (ref3 = asset.userInfo) != null ? ref3["com.animaapp.stc-sketch-plugin"] : void 0 : void 0;
+  constraints = anima != null ? (ref4 = anima.kModelPropertiesKey) != null ? ref4.constraints : void 0 : void 0;
   if (constraints) {
     for (constraint in constraints) {
-      constant = (ref2 = constraint.constant) != null ? ref2 : 0;
+      constant = (ref5 = constraint.constant) != null ? ref5 : 0;
       switch (constraint) {
         case "top":
           slices[slice].y = Align.top(constant);
@@ -129,13 +188,100 @@ for (slice in slices) {
       }
     }
   }
-  if (anima.kViewTypeKey) {
+  if (anima != null ? anima.kViewTypeKey : void 0) {
     break;
   }
 }
 
 
-},{"firebaseframer":2,"inputfield":3}],2:[function(require,module,exports){
+},{"findModule":2,"firebaseframer":3,"inputfield":4}],2:[function(require,module,exports){
+var _findAll, _getHierarchy, _match;
+
+_getHierarchy = function(layer) {
+  var a, i, len, ref, string;
+  string = '';
+  ref = layer.ancestors();
+  for (i = 0, len = ref.length; i < len; i++) {
+    a = ref[i];
+    string = a.name + '>' + string;
+  }
+  return string = string + layer.name;
+};
+
+_match = function(hierarchy, string) {
+  var regExp, regexString;
+  string = string.replace(/\s*>\s*/g, '>');
+  string = string.split('*').join('[^>]*');
+  string = string.split(' ').join('(?:.*)>');
+  string = string.split(',').join('$|');
+  regexString = "(^|>)" + string + "$";
+  regExp = new RegExp(regexString);
+  return hierarchy.match(regExp);
+};
+
+_findAll = function(selector, fromLayer) {
+  var layers, stringNeedsRegex;
+  layers = Framer.CurrentContext._layers;
+  if (selector != null) {
+    stringNeedsRegex = _.find(['*', ' ', '>', ','], function(c) {
+      return _.includes(selector, c);
+    });
+    if (!(stringNeedsRegex || fromLayer)) {
+      return layers = _.filter(layers, function(layer) {
+        if (layer.name === selector) {
+          return true;
+        }
+      });
+    } else {
+      return layers = _.filter(layers, function(layer) {
+        var hierarchy;
+        hierarchy = _getHierarchy(layer);
+        if (fromLayer != null) {
+          return _match(hierarchy, fromLayer.name + ' ' + selector);
+        } else {
+          return _match(hierarchy, selector);
+        }
+      });
+    }
+  } else {
+    return layers;
+  }
+};
+
+exports.Find = function(selector, fromLayer) {
+  return _findAll(selector, fromLayer)[0];
+};
+
+exports.ƒ = function(selector, fromLayer) {
+  return _findAll(selector, fromLayer)[0];
+};
+
+exports.FindAll = function(selector, fromLayer) {
+  return _findAll(selector, fromLayer);
+};
+
+exports.ƒƒ = function(selector, fromLayer) {
+  return _findAll(selector, fromLayer);
+};
+
+Layer.prototype.find = function(selector, fromLayer) {
+  return _findAll(selector, this)[0];
+};
+
+Layer.prototype.ƒ = function(selector, fromLayer) {
+  return _findAll(selector, this)[0];
+};
+
+Layer.prototype.findAll = function(selector, fromLayer) {
+  return _findAll(selector, this);
+};
+
+Layer.prototype.ƒƒ = function(selector, fromLayer) {
+  return _findAll(selector, this);
+};
+
+
+},{}],3:[function(require,module,exports){
 var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
 
@@ -368,7 +514,7 @@ exports.FirebaseFramer = (function(superClass) {
 })(Framer.BaseClass);
 
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
 
