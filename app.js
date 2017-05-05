@@ -112,7 +112,7 @@ for (slice in slices) {
           slices[slice].y = Align.center(constant);
           break;
         default:
-          return;
+          false;
       }
     }
   }
