@@ -79,7 +79,14 @@ for (slice in slices) {
   asset = getObject(_assets, "objectID", slices[slice].sketch_id);
   layer = getObject(_layers, "id", slices[slice].sketch_id);
   if (layer.layers.length > 0) {
-    print(layer);
+    slices[slice].addChild((function() {
+      var results;
+      results = [];
+      for (slice in slices) {
+        results.push(getObject(layer.layers, "id", slices[slice].sketch_id));
+      }
+      return results;
+    })());
   }
   container = (ref1 = slices[slice].parent) != null ? ref1 : Screen;
   anima = asset.userInfo["com.animaapp.stc-sketch-plugin"];
