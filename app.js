@@ -79,7 +79,7 @@ for (slice in slices) {
   print(slices[slice].name + ":" + slices[slice].sketch_id);
   asset = getObject(_assets, "objectID", slices[slice].sketch_id);
   foo = getObject(groups.layers, "name", slices[slice].name);
-  if (foo.name != null) {
+  if (foo != null) {
     print(foo.name);
   }
   container = (ref1 = slices[slice].parent) != null ? ref1 : Screen;
