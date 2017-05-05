@@ -1,0 +1,250 @@
+{
+  "pages" : [
+    {
+      "id" : "16F2D4DF-EA73-41AC-9B38-BB5700B67C08",
+      "name" : "canvas",
+      "bounds" : "2123.000000,652.000000,1440.000000,800.000000",
+      "slices" : [
+        {
+          "rect" : {
+            "y" : 1282,
+            "x" : 2123,
+            "width" : 1440,
+            "height" : 170
+          },
+          "id" : "035510DD-9BE1-4E49-81D8-DE66BF194E1E",
+          "influence" : {
+            "y" : 1282,
+            "x" : 2123,
+            "width" : 1440,
+            "height" : 170
+          },
+          "name" : "footer",
+          "trimmed" : {
+            "y" : 1282,
+            "x" : 2123,
+            "width" : 1440,
+            "height" : 170
+          },
+          "relative" : {
+            "y" : 0,
+            "x" : 0,
+            "width" : 1440,
+            "height" : 170
+          }
+        },
+        {
+          "rect" : {
+            "y" : 1308,
+            "x" : 2793,
+            "width" : 50,
+            "height" : 50
+          },
+          "id" : "E07A13A2-EED2-4140-8F5F-A16014C8711B",
+          "influence" : {
+            "y" : 1308,
+            "x" : 2793,
+            "width" : 50,
+            "height" : 50
+          },
+          "name" : "button-down",
+          "trimmed" : {
+            "y" : 1308,
+            "x" : 2793,
+            "width" : 50,
+            "height" : 50
+          },
+          "relative" : {
+            "y" : 0,
+            "x" : 520,
+            "width" : 50,
+            "height" : 50
+          }
+        },
+        {
+          "rect" : {
+            "y" : 1308,
+            "x" : 2273,
+            "width" : 520,
+            "height" : 50
+          },
+          "id" : "3CA158CA-F241-417D-81DA-AC0E8696E871",
+          "influence" : {
+            "y" : 1308,
+            "x" : 2273,
+            "width" : 520,
+            "height" : 50
+          },
+          "name" : "field",
+          "trimmed" : {
+            "y" : 1308,
+            "x" : 2273,
+            "width" : 520,
+            "height" : 50
+          },
+          "relative" : {
+            "y" : 0,
+            "x" : 0,
+            "width" : 520,
+            "height" : 50
+          }
+        },
+        {
+          "rect" : {
+            "y" : 1308,
+            "x" : 2793,
+            "width" : 50,
+            "height" : 50
+          },
+          "id" : "8D8CFD44-DEF1-4020-BA05-1807D94C730E",
+          "influence" : {
+            "y" : 1308,
+            "x" : 2793,
+            "width" : 50,
+            "height" : 50
+          },
+          "name" : "button",
+          "trimmed" : {
+            "y" : 1308,
+            "x" : 2793,
+            "width" : 50,
+            "height" : 50
+          },
+          "relative" : {
+            "y" : 0,
+            "x" : 520,
+            "width" : 50,
+            "height" : 50
+          }
+        },
+        {
+          "rect" : {
+            "y" : 682,
+            "x" : 2288,
+            "width" : 530,
+            "height" : 580
+          },
+          "id" : "8078D452-8D45-43EA-840A-1B99D2B2A54F",
+          "influence" : {
+            "y" : 682,
+            "x" : 2288,
+            "width" : 530.0000000000002,
+            "height" : 580
+          },
+          "name" : "chat_window",
+          "trimmed" : {
+            "y" : 682,
+            "x" : 2288,
+            "width" : 530,
+            "height" : 580
+          },
+          "relative" : {
+            "y" : 30,
+            "x" : 165,
+            "width" : 530,
+            "height" : 580
+          }
+        }
+      ]
+    },
+    {
+      "id" : "36AFB809-D6C2-493A-8A7D-2828CED59122",
+      "name" : "Page 3",
+      "bounds" : "-102.000000,-17.000000,100.000000,100.000000",
+      "slices" : [
+
+      ]
+    },
+    {
+      "id" : "6D15605E-9B5E-4FB6-987D-93BD2225FD2F",
+      "name" : "Page 2",
+      "bounds" : "2188.000000,-108.000000,632.000000,419.000000",
+      "slices" : [
+        {
+          "rect" : {
+            "y" : 261,
+            "x" : 2770,
+            "width" : 50,
+            "height" : 50
+          },
+          "id" : "73A433C5-6970-4BF8-85B1-ACA25513FEBF",
+          "influence" : {
+            "y" : 261,
+            "x" : 2770,
+            "width" : 50,
+            "height" : 50
+          },
+          "name" : "_button",
+          "trimmed" : {
+            "y" : 261,
+            "x" : 2770,
+            "width" : 50,
+            "height" : 50
+          },
+          "relative" : {
+            "y" : 261,
+            "x" : 2770,
+            "width" : 50,
+            "height" : 50
+          }
+        },
+        {
+          "rect" : {
+            "y" : 192,
+            "x" : 2188,
+            "width" : 520,
+            "height" : 50
+          },
+          "id" : "6B2220B2-8F22-4613-A260-096464F4F75A",
+          "influence" : {
+            "y" : 192,
+            "x" : 2188,
+            "width" : 520,
+            "height" : 50
+          },
+          "name" : "_field",
+          "trimmed" : {
+            "y" : 192,
+            "x" : 2188,
+            "width" : 520,
+            "height" : 50
+          },
+          "relative" : {
+            "y" : 192,
+            "x" : 2188,
+            "width" : 520,
+            "height" : 50
+          }
+        },
+        {
+          "rect" : {
+            "y" : -108,
+            "x" : 2244,
+            "width" : 178,
+            "height" : 178
+          },
+          "id" : "10976791-2545-41AE-BF19-11F026395228",
+          "influence" : {
+            "y" : -108,
+            "x" : 2244,
+            "width" : 178,
+            "height" : 178
+          },
+          "name" : "circle",
+          "trimmed" : {
+            "y" : -108,
+            "x" : 2244,
+            "width" : 178,
+            "height" : 178
+          },
+          "relative" : {
+            "y" : -108,
+            "x" : 2244,
+            "width" : 178,
+            "height" : 178
+          }
+        }
+      ]
+    }
+  ]
+}
