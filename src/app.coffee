@@ -107,12 +107,8 @@ for slice in _slices.pages[0].slices
         width: slice.relative.width
         height: slice.relative.height
 
-print slices["field"].width
-
 # now go through catalog and determine hierarchy and positioning based on groups
 getParents(_layers, slices)
-
-print slices["field"].width
 
 for slice of slices
     # find slice in assets to collect anima data
@@ -121,7 +117,9 @@ for slice of slices
     # if no parent, set parent to "Screen"
     container = slices[slice].parent ? Canvas
     # check for anima data i.e. kModelPropertiesKey
-    anima = asset?.userInfo?["com.animaapp.stc-sketch-plugin"]
+    anima = asset.userInfo?["com.animaapp.stc-sketch-plugin"]
+
+# ===== RELATIVE POSITIONING IN ANIMA =======
 
     # check for constraints
     constraints = anima?.kModelPropertiesKey?.constraints
@@ -132,11 +130,29 @@ for slice of slices
             multiplier = constraints[c].multiplier ? 0
             # print slices[slice].name + ":" + constant
             # anima -> Framer translation
+
+# TODO : IF MULTIPLIER, ADD EVENT LISTENER FOR PARENT SHAPE CHANGE
             switch c
-                when "top" then slices[slice].y = Align.top(constant)
-                when "bottom" then slices[slice].y = Align.bottom(-constant)
-                when "left" then slices[slice].x = Align.left(constant)
-                when "right" then slices[slice].x = Align.right(-constant)
+                when "top"
+                    if multiplier?
+                        slices[slice].y = Align.top(container.height * multiplier - constant)
+                    else
+                        Align.top(constant)
+                when "bottom"
+                    if multiplier?
+                        slices[slice].y = Align.bottom(-(container.height * multiplier) - constant)
+                    else
+                        Align.bottom(constant)
+                when "left"
+                    if multiplier?
+                        slices[slice].x = Align.left(container.width * multiplier - constant)
+                    else
+                        Align.left(constant)
+                when "right"
+                    if multiplier?
+                        slices[slice].x = Align.right(-(container.width * multiplier)-constant)
+                    else
+                        Align.right(-constant)
                 when "width"
                     if multiplier?
                         slices[slice].width = container.width * multiplier
@@ -157,20 +173,41 @@ for slice of slices
 
         # Set everything else to relative values from slices
 
-# ====== FLEXBOX =======
+# ====== FLEXBOX FROM ANIMA =======
 
     # if a stacked group parent object i.e. kViewTypeKey
-    if anima?.kViewTypeKey
-
+    if anima?.kViewTypeKey?
+        flexprops = anima?.kModelPropertiesKey
+        style = slices[slice].style
         # make this layer a Flexbox container, etc.
+        style.display = "flex"
+        # assign props
 
-        # run getObject and find children from this object's layers property
-            # assign each as a flexbox child
+        # TODO ASSIGN TO CHILDREN
+        switch flexprops.type
+            when 0
+                style.flexDirection = "column"
+            when 1
+                style.flexDirection = "row"
+            else break
+        switch flexprops.align
+            when 0
+                style.alignItems = "center"
+            when 1
+                style.alignItems = "stretch"
+            when 2
+                style.alignItems = "flex-start"
+            when 3
+                style.alignItems = "flex-end"
+            else break
 
         break
 
-print slices["field"].width
-print slices["field"].parent
+slices["rect_group"].style.alignItems = "stretch"
+
+print slices["rect_group"].style.display
+print slices["rect_group"].style.flexDirection
+print slices["rect_group"].style.alignItems
 
 # ======= REST OF FILE TO UNCOMMENT AFTER TEST ========
 # WIDTH = Framer.Screen.width

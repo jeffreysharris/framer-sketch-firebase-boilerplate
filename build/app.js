@@ -1,5 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var FirebaseFramer, Input, Slice, _assets, _layers, _slices, anima, asset, c, constant, constraints, container, getObject, getParents, groups, j, len, makeLayerFromParent, multiplier, ref, ref1, ref2, ref3, ref4, ref5, ref6, slice, slices, ƒ, ƒƒ,
+var FirebaseFramer, Input, Slice, _assets, _layers, _slices, anima, asset, c, constant, constraints, container, flexprops, getObject, getParents, groups, j, len, makeLayerFromParent, multiplier, ref, ref1, ref2, ref3, ref4, ref5, ref6, slice, slices, style, ƒ, ƒƒ,
   extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
 
@@ -146,16 +146,12 @@ for (j = 0, len = ref1.length; j < len; j++) {
   });
 }
 
-print(slices["field"].width);
-
 getParents(_layers, slices);
-
-print(slices["field"].width);
 
 for (slice in slices) {
   asset = getObject(_assets, "objectID", slices[slice].sketch_id);
   container = (ref2 = slices[slice].parent) != null ? ref2 : Canvas;
-  anima = asset != null ? (ref3 = asset.userInfo) != null ? ref3["com.animaapp.stc-sketch-plugin"] : void 0 : void 0;
+  anima = (ref3 = asset.userInfo) != null ? ref3["com.animaapp.stc-sketch-plugin"] : void 0;
   constraints = anima != null ? (ref4 = anima.kModelPropertiesKey) != null ? ref4.constraints : void 0 : void 0;
   if (constraints != null) {
     for (c in constraints) {
@@ -163,16 +159,32 @@ for (slice in slices) {
       multiplier = (ref6 = constraints[c].multiplier) != null ? ref6 : 0;
       switch (c) {
         case "top":
-          slices[slice].y = Align.top(constant);
+          if (multiplier != null) {
+            slices[slice].y = Align.top(container.height * multiplier - constant);
+          } else {
+            Align.top(constant);
+          }
           break;
         case "bottom":
-          slices[slice].y = Align.bottom(-constant);
+          if (multiplier != null) {
+            slices[slice].y = Align.bottom(-(container.height * multiplier) - constant);
+          } else {
+            Align.bottom(constant);
+          }
           break;
         case "left":
-          slices[slice].x = Align.left(constant);
+          if (multiplier != null) {
+            slices[slice].x = Align.left(container.width * multiplier - constant);
+          } else {
+            Align.left(constant);
+          }
           break;
         case "right":
-          slices[slice].x = Align.right(-constant);
+          if (multiplier != null) {
+            slices[slice].x = Align.right(-(container.width * multiplier) - constant);
+          } else {
+            Align.right(-constant);
+          }
           break;
         case "width":
           if (multiplier != null) {
@@ -205,14 +217,47 @@ for (slice in slices) {
       }
     }
   }
-  if (anima != null ? anima.kViewTypeKey : void 0) {
+  if ((anima != null ? anima.kViewTypeKey : void 0) != null) {
+    flexprops = anima != null ? anima.kModelPropertiesKey : void 0;
+    style = slices[slice].style;
+    style.display = "flex";
+    switch (flexprops.type) {
+      case 0:
+        style.flexDirection = "column";
+        break;
+      case 1:
+        style.flexDirection = "row";
+        break;
+      default:
+        break;
+    }
+    switch (flexprops.align) {
+      case 0:
+        style.alignItems = "center";
+        break;
+      case 1:
+        style.alignItems = "stretch";
+        break;
+      case 2:
+        style.alignItems = "flex-start";
+        break;
+      case 3:
+        style.alignItems = "flex-end";
+        break;
+      default:
+        break;
+    }
     break;
   }
 }
 
-print(slices["field"].width);
+slices["rect_group"].style.alignItems = "stretch";
 
-print(slices["field"].parent);
+print(slices["rect_group"].style.display);
+
+print(slices["rect_group"].style.flexDirection);
+
+print(slices["rect_group"].style.alignItems);
 
 
 },{"findModule":2,"firebaseframer":3,"inputfield":4}],2:[function(require,module,exports){
