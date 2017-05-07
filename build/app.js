@@ -1,13 +1,231 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var FirebaseFramer, HEIGHT, Input, WIDTH, bg, button, demoDB, field, footer, lineHeight, post, stream, textfield;
+var FirebaseFramer, Input, Slice, _assets, _layers, _slices, bg, constrain, demoDB, getObject, getParents, groups, j, len, lineHeight, makeLayerFromParent, post, ref, ref1, slice, slices, textfield, ƒ, ƒƒ,
+  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  hasProp = {}.hasOwnProperty;
+
+ref = require('findModule'), ƒ = ref.ƒ, ƒƒ = ref.ƒƒ;
+
+_slices = Utils.domLoadJSONSync("slices.json");
+
+_assets = Utils.domLoadJSONSync("assets.json");
+
+_layers = Utils.domLoadJSONSync("layers.json");
+
+makeLayerFromParent = function(item) {
+  var layer, matches, ref1, ref2, ref3, ref4, ref5, ref6, ref7, ref8;
+  layer = null;
+  if (item.name != null) {
+    matches = ƒƒ(item.name);
+  } else {
+    return layer;
+  }
+  switch (matches.length) {
+    case 0:
+      slices[item.name] = new Slice({
+        name: item.name,
+        x: (ref1 = (ref2 = item.relative) != null ? ref2.x : void 0) != null ? ref1 : 0,
+        y: (ref3 = (ref4 = item.relative) != null ? ref4.y : void 0) != null ? ref3 : 0,
+        width: (ref5 = (ref6 = item.relative) != null ? ref6.width : void 0) != null ? ref5 : Canvas.width,
+        height: (ref7 = (ref8 = item.relative) != null ? ref8.height : void 0) != null ? ref7 : Canvas.height,
+        sketch_id: item.id,
+        backgroundColor: "transparent"
+      });
+      layer = slices[item.name];
+      break;
+    case 1:
+      layer = matches[0];
+  }
+  return layer;
+};
+
+getObject = function(object, key, value) {
+  var i, prop, result;
+  result = null;
+  if (object instanceof Array) {
+    i = 0;
+    while (i < object.length) {
+      result = getObject(object[i], key, value);
+      if (result) {
+        break;
+      }
+      i++;
+    }
+  } else {
+    for (prop in object) {
+      if (prop === key) {
+        if (!value) {
+          return object;
+        }
+        if (object[prop] === value) {
+          return object;
+        }
+      }
+      if (object[prop] instanceof Object || object[prop] instanceof Array) {
+        result = getObject(object[prop], key, value);
+        if (result) {
+          break;
+        }
+      }
+    }
+  }
+  return result;
+};
+
+getParents = function(object, list) {
+  var layer, layers, parent, parent_slice_list, prop, results, slice;
+  results = [];
+  for (prop in object) {
+    if (object[prop].hasOwnProperty("layers")) {
+      layers = object[prop].layers;
+      results.push((function() {
+        var j, len, obj, results1;
+        results1 = [];
+        for (j = 0, len = layers.length; j < len; j++) {
+          layer = layers[j];
+          for (slice in list) {
+            if (layer.id === list[slice].sketch_id) {
+              parent = makeLayerFromParent(object[prop]);
+              if (parent != null) {
+                list[slice].parent = parent;
+                parent_slice_list = (
+                  obj = {},
+                  obj["" + parent.name] = slices[parent.name],
+                  obj
+                );
+                getParents(_layers, parent_slice_list);
+              }
+            }
+          }
+          results1.push(getParents(layers, list));
+        }
+        return results1;
+      })());
+    } else {
+      results.push(getParents(object[prop], list));
+    }
+  }
+  return results;
+};
+
+slices = {};
+
+groups = {};
+
+Slice = (function(superClass) {
+  extend(Slice, superClass);
+
+  function Slice(options) {
+    var base;
+    this.options = options != null ? options : {};
+    if ((base = this.options).sketch_id == null) {
+      base.sketch_id = "111";
+    }
+    Slice.__super__.constructor.call(this, this.options);
+    this.sketch_id = this.options.sketch_id;
+  }
+
+  return Slice;
+
+})(Layer);
+
+ref1 = _slices.pages[0].slices;
+for (j = 0, len = ref1.length; j < len; j++) {
+  slice = ref1[j];
+  slices[slice.name] = new Slice({
+    name: slice.name,
+    image: "images/" + slice.name + ".png",
+    sketch_id: slice.id,
+    x: slice.relative.x,
+    y: slice.relative.y,
+    width: slice.relative.width,
+    height: slice.relative.height
+  });
+}
+
+getParents(_layers, slices);
+
+slices["canvas"].width = Canvas.width;
+
+slices["canvas"].height = Canvas.height;
+
+Canvas.on("change:size", function() {
+  return slices["canvas"].size = Canvas.size;
+});
+
+slices["canvas"].on("change:size", function() {
+  var child, k, len1, ref2, results;
+  ref2 = slices["canvas"].children;
+  results = [];
+  for (k = 0, len1 = ref2.length; k < len1; k++) {
+    child = ref2[k];
+    results.push(child.size = slices["canvas"].size);
+  }
+  return results;
+});
+
+constrain = function(s) {
+  var anima, asset, c, constant, constraints, container, multiplier, ref2, ref3, ref4, ref5, results;
+  asset = getObject(_assets, "objectID", s.sketch_id);
+  anima = asset != null ? (ref2 = asset.userInfo) != null ? ref2["com.animaapp.stc-sketch-plugin"] : void 0 : void 0;
+  container = s.parent;
+  constraints = anima != null ? (ref3 = anima.kModelPropertiesKey) != null ? ref3.constraints : void 0 : void 0;
+  if (constraints != null) {
+    results = [];
+    for (c in constraints) {
+      constant = (ref4 = constraints[c].constant) != null ? ref4 : 0;
+      multiplier = (ref5 = constraints[c].multiplier) != null ? ref5 : 0;
+      switch (c) {
+        case "top":
+          results.push(container.on("change:height", function() {
+            return s.y = Align.top(container.height * multiplier - constant);
+          }));
+          break;
+        case "bottom":
+          results.push(container.on("change:height", function() {
+            return s.y = Align.bottom(-(container.height * multiplier) - constant);
+          }));
+          break;
+        case "left":
+          results.push(container.on("change.width", function() {
+            return s.x = Align.left(container.width * multiplier - constant);
+          }));
+          break;
+        case "right":
+          results.push(container.on("change.width", function() {
+            return s.x = Align.right(-(container.width * multiplier) - constant);
+          }));
+          break;
+        case "width":
+          results.push(container.on("change.width", function() {
+            return s.width = (container.width * multiplier) - constant;
+          }));
+          break;
+        case "height":
+          results.push(container.on("change.height", function() {
+            return s.height = (container.height * multiplier) - constant;
+          }));
+          break;
+        case "centerHorizontally":
+          results.push(s.x = Align.center(constant));
+          break;
+        case "centerVertically":
+          results.push(s.y = Align.center(constant));
+          break;
+        default:
+          break;
+      }
+    }
+    return results;
+  }
+};
+
+for (slice in slices) {
+  constrain(slices[slice]);
+}
 
 FirebaseFramer = require('firebaseframer').FirebaseFramer;
 
 Input = require("inputfield").Input;
-
-WIDTH = Framer.Screen.width;
-
-HEIGHT = Framer.Screen.height;
 
 lineHeight = 30;
 
@@ -25,56 +243,23 @@ bg = new BackgroundLayer({
   backgroundColor: "#fafafa"
 });
 
-footer = new Layer({
-  x: 0,
-  y: Canvas.height - 230,
-  width: Canvas.width,
-  height: 230,
-  backgroundColor: "#999"
-});
-
-stream = new Layer({
-  x: 0,
-  y: 0,
-  width: Canvas.width,
-  height: Canvas.height - 230,
-  backgroundColor: "transparent"
-});
-
-button = new Layer({
-  x: 620,
-  y: Canvas.height - 200,
-  width: 50,
-  height: 50,
-  image: "images/button.png"
-});
-
-button.onMouseDown(function() {
-  return button.image = "images/button-down.png";
-});
-
-field = new Layer({
-  x: 100,
-  y: Canvas.height - 200,
-  width: 520,
-  height: 50,
-  image: "images/field.png"
+slices.button.onMouseDown(function() {
+  return slices.button.image = "images/button-down.png";
 });
 
 textfield = new Input({
+  parent: slices["field"],
   setup: false,
   type: "text",
-  x: 100,
-  y: Canvas.height - 200,
-  width: 500,
-  height: 30
+  width: slices["field"].width,
+  height: slices["field"].height
 });
 
 textfield.style = {
   fontSize: "14px",
   color: "#333",
   fontFamily: "Helvetica",
-  padding: "10px 10px 10px 20px"
+  padding: "0px 0px 0px 20px"
 };
 
 post = function() {
@@ -86,10 +271,10 @@ post = function() {
 };
 
 demoDB.onChange("/messages", function(message) {
-  var child, h, i, j, k, len, line, m, messageArray, ref, ref1, results, t;
-  ref = stream.children;
-  for (j = 0, len = ref.length; j < len; j++) {
-    child = ref[j];
+  var child, h, i, k, l, len1, line, m, messageArray, ref2, ref3, results, t;
+  ref2 = slices.chat_window.children;
+  for (k = 0, len1 = ref2.length; k < len1; k++) {
+    child = ref2[k];
     child.animate({
       y: child.y - lineHeight
     });
@@ -98,26 +283,27 @@ demoDB.onChange("/messages", function(message) {
   i = 1;
   h = lineHeight;
   results = [];
-  for (k = messageArray.length - 1; k >= 0; k += -1) {
-    m = messageArray[k];
-    t = (ref1 = m.text) != null ? ref1 : m;
+  for (l = messageArray.length - 1; l >= 0; l += -1) {
+    m = messageArray[l];
+    t = (ref3 = m.text) != null ? ref3 : m;
     line = new TextLayer({
-      x: 120,
+      x: 0,
       textAlign: "left",
-      y: Canvas.height - 250 - h * i,
+      y: slices.chat_window.height - h * i,
       text: t,
       color: "#333",
       font: "14px/1.5 Helvetica"
     });
-    line.parent = stream;
+    line.parent = slices.chat_window;
     results.push(i++);
   }
   return results;
 });
 
-button.onMouseUp(function() {
-  button.image = "images/button.png";
-  return post();
+slices.button.onMouseUp(function() {
+  slices.button.image = "images/button.png";
+  post();
+  return textfield.value = "";
 });
 
 document.addEventListener('keypress', function(event) {
@@ -129,7 +315,94 @@ document.addEventListener('keypress', function(event) {
 });
 
 
-},{"firebaseframer":2,"inputfield":3}],2:[function(require,module,exports){
+},{"findModule":2,"firebaseframer":3,"inputfield":4}],2:[function(require,module,exports){
+var _findAll, _getHierarchy, _match;
+
+_getHierarchy = function(layer) {
+  var a, i, len, ref, string;
+  string = '';
+  ref = layer.ancestors();
+  for (i = 0, len = ref.length; i < len; i++) {
+    a = ref[i];
+    string = a.name + '>' + string;
+  }
+  return string = string + layer.name;
+};
+
+_match = function(hierarchy, string) {
+  var regExp, regexString;
+  string = string.replace(/\s*>\s*/g, '>');
+  string = string.split('*').join('[^>]*');
+  string = string.split(' ').join('(?:.*)>');
+  string = string.split(',').join('$|');
+  regexString = "(^|>)" + string + "$";
+  regExp = new RegExp(regexString);
+  return hierarchy.match(regExp);
+};
+
+_findAll = function(selector, fromLayer) {
+  var layers, stringNeedsRegex;
+  layers = Framer.CurrentContext._layers;
+  if (selector != null) {
+    stringNeedsRegex = _.find(['*', ' ', '>', ','], function(c) {
+      return _.includes(selector, c);
+    });
+    if (!(stringNeedsRegex || fromLayer)) {
+      return layers = _.filter(layers, function(layer) {
+        if (layer.name === selector) {
+          return true;
+        }
+      });
+    } else {
+      return layers = _.filter(layers, function(layer) {
+        var hierarchy;
+        hierarchy = _getHierarchy(layer);
+        if (fromLayer != null) {
+          return _match(hierarchy, fromLayer.name + ' ' + selector);
+        } else {
+          return _match(hierarchy, selector);
+        }
+      });
+    }
+  } else {
+    return layers;
+  }
+};
+
+exports.Find = function(selector, fromLayer) {
+  return _findAll(selector, fromLayer)[0];
+};
+
+exports.ƒ = function(selector, fromLayer) {
+  return _findAll(selector, fromLayer)[0];
+};
+
+exports.FindAll = function(selector, fromLayer) {
+  return _findAll(selector, fromLayer);
+};
+
+exports.ƒƒ = function(selector, fromLayer) {
+  return _findAll(selector, fromLayer);
+};
+
+Layer.prototype.find = function(selector, fromLayer) {
+  return _findAll(selector, this)[0];
+};
+
+Layer.prototype.ƒ = function(selector, fromLayer) {
+  return _findAll(selector, this)[0];
+};
+
+Layer.prototype.findAll = function(selector, fromLayer) {
+  return _findAll(selector, this);
+};
+
+Layer.prototype.ƒƒ = function(selector, fromLayer) {
+  return _findAll(selector, this);
+};
+
+
+},{}],3:[function(require,module,exports){
 var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
 
@@ -362,7 +635,7 @@ exports.FirebaseFramer = (function(superClass) {
 })(Framer.BaseClass);
 
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
 

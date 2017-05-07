@@ -8,6 +8,7 @@
     "coffeeify": "^1.1.0",
     "dotenv": "^4.0.0",
     "firebase": "*",
+    "fs-web": "^1.0.1",
     "gulp": "^3.8.10",
     "gulp-changed": "^3.0.0",
     "gulp-coffee": "^2.2.0",
