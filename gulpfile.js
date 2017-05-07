@@ -25,12 +25,12 @@ gulp.task('post', function(){
 });
 gulp.task('default', ['build', 'watch']);
 
-gulp.task('watch', function(){
-
 gulp.task('copy-watch', ['copy'], function (done) {
     browserSync.reload();
     done();
 })
+
+gulp.task('watch', function(){
 
   gulp.watch('./src/*.coffee', ['coffee']);
   gulp.watch('./src/*.sketch', ['sketch']);
@@ -72,7 +72,7 @@ gulp.task('coffee', function(){
 })
 
 gulp.task('sketch', function(){
-  gulp.src('src/*.sketch')
+  return gulp.src('src/*.sketch')
     .pipe(sketch({
       export: 'slices',
       format: 'png',
