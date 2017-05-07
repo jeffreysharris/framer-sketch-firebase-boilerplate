@@ -1,5 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var FirebaseFramer, Input, Slice, _assets, _layers, _slices, anima, asset, c, constant, constraints, container, flexprops, getObject, getParents, groups, j, len, makeLayerFromParent, multiplier, ref, ref1, ref2, ref3, ref4, ref5, ref6, slice, slices, style, ƒ, ƒƒ,
+var FirebaseFramer, Input, Slice, _assets, _layers, _slices, bg, constrain, demoDB, getObject, getParents, groups, j, len, lineHeight, makeLayerFromParent, post, ref, ref1, slice, slices, textfield, ƒ, ƒƒ,
   extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
 
@@ -122,7 +122,7 @@ Slice = (function(superClass) {
     var base;
     this.options = options != null ? options : {};
     if ((base = this.options).sketch_id == null) {
-      base.sketch_id = 111;
+      base.sketch_id = "111";
     }
     Slice.__super__.constructor.call(this, this.options);
     this.sketch_id = this.options.sketch_id;
@@ -148,116 +148,171 @@ for (j = 0, len = ref1.length; j < len; j++) {
 
 getParents(_layers, slices);
 
-for (slice in slices) {
-  asset = getObject(_assets, "objectID", slices[slice].sketch_id);
-  container = (ref2 = slices[slice].parent) != null ? ref2 : Canvas;
-  anima = (ref3 = asset.userInfo) != null ? ref3["com.animaapp.stc-sketch-plugin"] : void 0;
-  constraints = anima != null ? (ref4 = anima.kModelPropertiesKey) != null ? ref4.constraints : void 0 : void 0;
+slices["canvas"].width = Canvas.width;
+
+slices["canvas"].height = Canvas.height;
+
+Canvas.on("change:size", function() {
+  return slices["canvas"].size = Canvas.size;
+});
+
+slices["canvas"].on("change:size", function() {
+  var child, k, len1, ref2, results;
+  ref2 = slices["canvas"].children;
+  results = [];
+  for (k = 0, len1 = ref2.length; k < len1; k++) {
+    child = ref2[k];
+    results.push(child.size = slices["canvas"].size);
+  }
+  return results;
+});
+
+constrain = function(s) {
+  var anima, asset, c, constant, constraints, container, multiplier, ref2, ref3, ref4, ref5, results;
+  asset = getObject(_assets, "objectID", s.sketch_id);
+  anima = asset != null ? (ref2 = asset.userInfo) != null ? ref2["com.animaapp.stc-sketch-plugin"] : void 0 : void 0;
+  container = s.parent;
+  constraints = anima != null ? (ref3 = anima.kModelPropertiesKey) != null ? ref3.constraints : void 0 : void 0;
   if (constraints != null) {
+    results = [];
     for (c in constraints) {
-      constant = (ref5 = constraints[c].constant) != null ? ref5 : 0;
-      multiplier = (ref6 = constraints[c].multiplier) != null ? ref6 : 0;
+      constant = (ref4 = constraints[c].constant) != null ? ref4 : 0;
+      multiplier = (ref5 = constraints[c].multiplier) != null ? ref5 : 0;
       switch (c) {
         case "top":
-          if (multiplier != null) {
-            slices[slice].y = Align.top(container.height * multiplier - constant);
-          } else {
-            Align.top(constant);
-          }
+          results.push(container.on("change:height", function() {
+            return s.y = Align.top(container.height * multiplier - constant);
+          }));
           break;
         case "bottom":
-          if (multiplier != null) {
-            slices[slice].y = Align.bottom(-(container.height * multiplier) - constant);
-          } else {
-            Align.bottom(constant);
-          }
+          results.push(container.on("change:height", function() {
+            return s.y = Align.bottom(-(container.height * multiplier) - constant);
+          }));
           break;
         case "left":
-          if (multiplier != null) {
-            slices[slice].x = Align.left(container.width * multiplier - constant);
-          } else {
-            Align.left(constant);
-          }
+          results.push(container.on("change.width", function() {
+            return s.x = Align.left(container.width * multiplier - constant);
+          }));
           break;
         case "right":
-          if (multiplier != null) {
-            slices[slice].x = Align.right(-(container.width * multiplier) - constant);
-          } else {
-            Align.right(-constant);
-          }
+          results.push(container.on("change.width", function() {
+            return s.x = Align.right(-(container.width * multiplier) - constant);
+          }));
           break;
         case "width":
-          if (multiplier != null) {
-            slices[slice].width = container.width * multiplier;
-            if (constant != null) {
-              slices[slice].width -= constant;
-            }
-          } else {
-            slices[slice].width = container.width - constant;
-          }
+          results.push(container.on("change.width", function() {
+            return s.width = (container.width * multiplier) - constant;
+          }));
           break;
         case "height":
-          if (multiplier != null) {
-            slices[slice].height = container.height * multiplier;
-            if (constant != null) {
-              slices[slice].height -= constant;
-            }
-          } else {
-            slices[slice].width = container.width - constant;
-          }
+          results.push(container.on("change.height", function() {
+            return s.height = (container.height * multiplier) - constant;
+          }));
           break;
         case "centerHorizontally":
-          slices[slice].x = Align.center(constant);
+          results.push(s.x = Align.center(constant));
           break;
         case "centerVertically":
-          slices[slice].y = Align.center(constant);
+          results.push(s.y = Align.center(constant));
           break;
         default:
           break;
       }
     }
+    return results;
   }
-  if ((anima != null ? anima.kViewTypeKey : void 0) != null) {
-    flexprops = anima != null ? anima.kModelPropertiesKey : void 0;
-    style = slices[slice].style;
-    style.display = "flex";
-    switch (flexprops.type) {
-      case 0:
-        style.flexDirection = "column";
-        break;
-      case 1:
-        style.flexDirection = "row";
-        break;
-      default:
-        break;
-    }
-    switch (flexprops.align) {
-      case 0:
-        style.alignItems = "center";
-        break;
-      case 1:
-        style.alignItems = "stretch";
-        break;
-      case 2:
-        style.alignItems = "flex-start";
-        break;
-      case 3:
-        style.alignItems = "flex-end";
-        break;
-      default:
-        break;
-    }
-    break;
-  }
+};
+
+for (slice in slices) {
+  constrain(slices[slice]);
 }
 
-slices["rect_group"].style.alignItems = "stretch";
+lineHeight = 30;
 
-print(slices["rect_group"].style.display);
+Framer.Defaults.Animation = {
+  curve: 'spring(150, 10, 0)'
+};
 
-print(slices["rect_group"].style.flexDirection);
+demoDB = new FirebaseFramer({
+  projectID: "framer-sketch-firebase-test",
+  secret: "lHwsK4ljhwUmMt3EU1ybrMPQcSDgbKhvTIwuqJ9I",
+  server: "s-usc1c-nss-134.firebaseio.com"
+});
 
-print(slices["rect_group"].style.alignItems);
+bg = new BackgroundLayer({
+  backgroundColor: "#fafafa"
+});
+
+slices.button.onMouseDown(function() {
+  return slices.button.image = "images/button-down.png";
+});
+
+textfield = new Input({
+  parent: slices["field"],
+  setup: false,
+  type: "text",
+  width: slices["field"].width,
+  height: slices["field"].height
+});
+
+textfield.style = {
+  fontSize: "14px",
+  color: "#333",
+  fontFamily: "Helvetica",
+  padding: "0px 0px 0px 20px"
+};
+
+post = function() {
+  if (textfield.value.length) {
+    return demoDB.post('/messages', {
+      "text": textfield.value
+    });
+  }
+};
+
+demoDB.onChange("/messages", function(message) {
+  var child, h, i, k, l, len1, line, m, messageArray, ref2, ref3, results, t;
+  ref2 = slices.chat_window.children;
+  for (k = 0, len1 = ref2.length; k < len1; k++) {
+    child = ref2[k];
+    child.animate({
+      y: child.y - lineHeight
+    });
+  }
+  messageArray = _.toArray(message);
+  i = 1;
+  h = lineHeight;
+  results = [];
+  for (l = messageArray.length - 1; l >= 0; l += -1) {
+    m = messageArray[l];
+    t = (ref3 = m.text) != null ? ref3 : m;
+    line = new TextLayer({
+      x: 0,
+      textAlign: "left",
+      y: slices.chat_window.height - h * i,
+      text: t,
+      color: "#333",
+      font: "14px/1.5 Helvetica"
+    });
+    line.parent = slices.chat_window;
+    results.push(i++);
+  }
+  return results;
+});
+
+slices.button.onMouseUp(function() {
+  slices.button.image = "images/button.png";
+  post();
+  return textfield.value = "";
+});
+
+document.addEventListener('keypress', function(event) {
+  if (event.keyCode === 13) {
+    event.preventDefault();
+    post();
+    return textfield.value = "";
+  }
+});
 
 
 },{"findModule":2,"firebaseframer":3,"inputfield":4}],2:[function(require,module,exports){

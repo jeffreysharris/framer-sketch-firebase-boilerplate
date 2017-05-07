@@ -21,11 +21,16 @@ gulp.task('build', ['copy', 'coffee', 'sketch']);
 gulp.task('post', function(){
     // runSeq(['coffee', 'sketch'], 'deploy');
     // turn off deploy for now...
-    runSeq(['coffee', 'sketch']);
+    runSeq(['sketch', 'coffee', 'copy', 'deploy']);
 });
 gulp.task('default', ['build', 'watch']);
 
 gulp.task('watch', function(){
+
+gulp.task('copy-watch', ['copy'], function (done) {
+    browserSync.reload();
+    done();
+})
 
   gulp.watch('./src/*.coffee', ['coffee']);
   gulp.watch('./src/*.sketch', ['sketch']);
