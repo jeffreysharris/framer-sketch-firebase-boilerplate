@@ -3,26 +3,26 @@
     {
       "id" : "16F2D4DF-EA73-41AC-9B38-BB5700B67C08",
       "name" : "canvas",
-      "bounds" : "2123.000000,652.000000,1440.000000,800.000000",
+      "bounds" : "0.000000,0.000000,1440.000000,754.000000",
       "slices" : [
         {
           "rect" : {
-            "y" : 1282,
-            "x" : 2123,
+            "y" : 584,
+            "x" : 0,
             "width" : 1440,
             "height" : 170
           },
           "id" : "035510DD-9BE1-4E49-81D8-DE66BF194E1E",
           "influence" : {
-            "y" : 1282,
-            "x" : 2123,
+            "y" : 584,
+            "x" : 0,
             "width" : 1440,
             "height" : 170
           },
           "name" : "footer",
           "trimmed" : {
-            "y" : 1282,
-            "x" : 2123,
+            "y" : 584,
+            "x" : 0,
             "width" : 1440,
             "height" : 170
           },
@@ -35,114 +35,198 @@
         },
         {
           "rect" : {
-            "y" : 1308,
-            "x" : 2793,
-            "width" : 50,
+            "y" : 610,
+            "x" : 671,
+            "width" : 49,
             "height" : 50
           },
           "id" : "E07A13A2-EED2-4140-8F5F-A16014C8711B",
           "influence" : {
-            "y" : 1308,
-            "x" : 2793,
-            "width" : 50,
+            "y" : 610,
+            "x" : 671,
+            "width" : 49,
             "height" : 50
           },
           "name" : "button-down",
           "trimmed" : {
-            "y" : 1308,
-            "x" : 2793,
-            "width" : 50,
+            "y" : 610,
+            "x" : 671,
+            "width" : 49,
             "height" : 50
           },
           "relative" : {
             "y" : 0,
-            "x" : 520,
-            "width" : 50,
+            "x" : 521,
+            "width" : 49,
             "height" : 50
           }
         },
         {
           "rect" : {
-            "y" : 1308,
-            "x" : 2273,
-            "width" : 520,
+            "y" : 610,
+            "x" : 150,
+            "width" : 521,
             "height" : 50
           },
           "id" : "3CA158CA-F241-417D-81DA-AC0E8696E871",
           "influence" : {
-            "y" : 1308,
-            "x" : 2273,
-            "width" : 520,
+            "y" : 610,
+            "x" : 150,
+            "width" : 521,
             "height" : 50
           },
           "name" : "field",
           "trimmed" : {
-            "y" : 1308,
-            "x" : 2273,
-            "width" : 520,
+            "y" : 610,
+            "x" : 150,
+            "width" : 521,
             "height" : 50
           },
           "relative" : {
             "y" : 0,
             "x" : 0,
-            "width" : 520,
+            "width" : 521,
             "height" : 50
           }
         },
         {
           "rect" : {
-            "y" : 1308,
-            "x" : 2793,
-            "width" : 50,
+            "y" : 610,
+            "x" : 671,
+            "width" : 49,
             "height" : 50
           },
           "id" : "8D8CFD44-DEF1-4020-BA05-1807D94C730E",
           "influence" : {
-            "y" : 1308,
-            "x" : 2793,
-            "width" : 50,
+            "y" : 610,
+            "x" : 671,
+            "width" : 49,
             "height" : 50
           },
           "name" : "button",
           "trimmed" : {
-            "y" : 1308,
-            "x" : 2793,
-            "width" : 50,
+            "y" : 610,
+            "x" : 671,
+            "width" : 49,
             "height" : 50
           },
           "relative" : {
             "y" : 0,
-            "x" : 520,
-            "width" : 50,
+            "x" : 521,
+            "width" : 49,
             "height" : 50
           }
         },
         {
           "rect" : {
-            "y" : 682,
-            "x" : 2288,
+            "y" : 30,
+            "x" : 165,
             "width" : 530,
-            "height" : 580
+            "height" : 530
           },
           "id" : "8078D452-8D45-43EA-840A-1B99D2B2A54F",
           "influence" : {
-            "y" : 682,
-            "x" : 2288,
+            "y" : 30,
+            "x" : 165,
             "width" : 530.0000000000002,
-            "height" : 580
+            "height" : 530
           },
           "name" : "chat_window",
           "trimmed" : {
-            "y" : 682,
-            "x" : 2288,
-            "width" : 530,
-            "height" : 580
+            "y" : 30,
+            "x" : 165,
+            "width" : 531,
+            "height" : 530
           },
           "relative" : {
             "y" : 30,
             "x" : 165,
             "width" : 530,
-            "height" : 580
+            "height" : 530
+          }
+        },
+        {
+          "rect" : {
+            "y" : 295,
+            "x" : 35,
+            "width" : 100,
+            "height" : 100
+          },
+          "id" : "C46A326A-9425-43DF-9FFF-E4CC9798BA45",
+          "influence" : {
+            "y" : 295,
+            "x" : 35,
+            "width" : 100,
+            "height" : 100
+          },
+          "name" : "test_rect_1",
+          "trimmed" : {
+            "y" : 295,
+            "x" : 35,
+            "width" : 100,
+            "height" : 100
+          },
+          "relative" : {
+            "y" : 0,
+            "x" : 0,
+            "width" : 100,
+            "height" : 100
+          }
+        },
+        {
+          "rect" : {
+            "y" : 305,
+            "x" : 145,
+            "width" : 80,
+            "height" : 80
+          },
+          "id" : "CE8AEE44-F0AB-4221-B3D1-C10168C67C5F",
+          "influence" : {
+            "y" : 305,
+            "x" : 145,
+            "width" : 80,
+            "height" : 80
+          },
+          "name" : "test_rect_2",
+          "trimmed" : {
+            "y" : 305,
+            "x" : 145,
+            "width" : 80,
+            "height" : 80
+          },
+          "relative" : {
+            "y" : 10,
+            "x" : 110,
+            "width" : 80,
+            "height" : 80
+          }
+        },
+        {
+          "rect" : {
+            "y" : 320,
+            "x" : 235,
+            "width" : 50,
+            "height" : 50
+          },
+          "id" : "DDE1682C-FF56-4F73-BE7A-16C973DB29BA",
+          "influence" : {
+            "y" : 320,
+            "x" : 235,
+            "width" : 50,
+            "height" : 50
+          },
+          "name" : "test_rect_3",
+          "trimmed" : {
+            "y" : 320,
+            "x" : 235,
+            "width" : 50,
+            "height" : 50
+          },
+          "relative" : {
+            "y" : 25,
+            "x" : 200,
+            "width" : 50,
+            "height" : 50
           }
         }
       ]

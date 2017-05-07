@@ -1,154 +1,132 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var FirebaseFramer, Input, Slice, _assets, _layers, _slices, anima, asset, constant, constraint, constraints, container, getObject, getParents, groups, j, len, ref, ref1, ref2, slice, slice_ids, slices,
-  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-  hasProp = {}.hasOwnProperty;
+var FirebaseFramer, HEIGHT, Input, WIDTH, bg, button, demoDB, field, footer, lineHeight, post, stream, textfield;
 
 FirebaseFramer = require('firebaseframer').FirebaseFramer;
 
 Input = require("inputfield").Input;
 
-_slices = Utils.domLoadJSONSync("slices.json");
+WIDTH = Framer.Screen.width;
 
-_assets = Utils.domLoadJSONSync("assets.json");
+HEIGHT = Framer.Screen.height;
 
-_layers = Utils.domLoadJSONSync("layers.json");
+lineHeight = 30;
 
-getObject = function(object, key, value) {
-  var i, prop, result;
-  result = null;
-  if (object instanceof Array) {
-    i = 0;
-    while (i < object.length) {
-      result = getObject(object[i], key, value);
-      if (result) {
-        break;
-      }
-      i++;
-    }
-  } else {
-    for (prop in object) {
-      if (prop === key) {
-        if (!value) {
-          return object;
-        }
-        if (object[prop] === value) {
-          return object;
-        }
-      }
-      if (object[prop] instanceof Object || object[prop] instanceof Array) {
-        result = getObject(object[prop], key, value);
-        if (result) {
-          break;
-        }
-      }
-    }
-  }
-  return result;
+Framer.Defaults.Animation = {
+  curve: 'spring(150, 10, 0)'
 };
 
-getParents = function(list) {
-  var id, layer, result, results;
+demoDB = new FirebaseFramer({
+  projectID: "framer-sketch-firebase-test",
+  secret: "lHwsK4ljhwUmMt3EU1ybrMPQcSDgbKhvTIwuqJ9I",
+  server: "s-usc1c-nss-134.firebaseio.com"
+});
+
+bg = new BackgroundLayer({
+  backgroundColor: "#fafafa"
+});
+
+footer = new Layer({
+  x: 0,
+  y: Canvas.height - 230,
+  width: Canvas.width,
+  height: 230,
+  backgroundColor: "#999"
+});
+
+stream = new Layer({
+  x: 0,
+  y: 0,
+  width: Canvas.width,
+  height: Canvas.height - 230,
+  backgroundColor: "transparent"
+});
+
+button = new Layer({
+  x: 620,
+  y: Canvas.height - 200,
+  width: 50,
+  height: 50,
+  image: "images/button.png"
+});
+
+button.onMouseDown(function() {
+  return button.image = "images/button-down.png";
+});
+
+field = new Layer({
+  x: 100,
+  y: Canvas.height - 200,
+  width: 520,
+  height: 50,
+  image: "images/field.png"
+});
+
+textfield = new Input({
+  setup: false,
+  type: "text",
+  x: 100,
+  y: Canvas.height - 200,
+  width: 500,
+  height: 30
+});
+
+textfield.style = {
+  fontSize: "14px",
+  color: "#333",
+  fontFamily: "Helvetica",
+  padding: "10px 10px 10px 20px"
+};
+
+post = function() {
+  if (textfield.value.length) {
+    return demoDB.post('/messages', {
+      "text": textfield.value
+    });
+  }
+};
+
+demoDB.onChange("/messages", function(message) {
+  var child, h, i, j, k, len, line, m, messageArray, ref, ref1, results, t;
+  ref = stream.children;
+  for (j = 0, len = ref.length; j < len; j++) {
+    child = ref[j];
+    child.animate({
+      y: child.y - lineHeight
+    });
+  }
+  messageArray = _.toArray(message);
+  i = 1;
+  h = lineHeight;
   results = [];
-  for (layer in _layers) {
-    if (layer.layers.length > 0) {
-      results.push((function() {
-        var j, len, results1;
-        results1 = [];
-        for (j = 0, len = list.length; j < len; j++) {
-          id = list[j];
-          result = getObject(layer.layers, "id", id);
-          print(result);
-          if (result) {
-            results1.push(print(layer.name));
-          } else {
-            results1.push(void 0);
-          }
-        }
-        return results1;
-      })());
-    } else {
-      results.push(void 0);
-    }
+  for (k = messageArray.length - 1; k >= 0; k += -1) {
+    m = messageArray[k];
+    t = (ref1 = m.text) != null ? ref1 : m;
+    line = new TextLayer({
+      x: 120,
+      textAlign: "left",
+      y: Canvas.height - 250 - h * i,
+      text: t,
+      color: "#333",
+      font: "14px/1.5 Helvetica"
+    });
+    line.parent = stream;
+    results.push(i++);
   }
   return results;
-};
+});
 
-slices = {};
+button.onMouseUp(function() {
+  button.image = "images/button.png";
+  return post();
+});
 
-groups = {};
-
-slice_ids = [];
-
-Slice = (function(superClass) {
-  extend(Slice, superClass);
-
-  function Slice(options) {
-    var base;
-    this.options = options != null ? options : {};
-    if ((base = this.options).sketch_id == null) {
-      base.sketch_id = 111;
-    }
-    Slice.__super__.constructor.call(this, this.options);
-    this.sketch_id = this.options.sketch_id;
+document.addEventListener('keypress', function(event) {
+  if (event.keyCode === 13) {
+    event.preventDefault();
+    post();
+    return textfield.value = "";
   }
-
-  return Slice;
-
-})(Layer);
-
-ref = _slices.pages[0].slices;
-for (j = 0, len = ref.length; j < len; j++) {
-  slice = ref[j];
-  slices[slice.name] = new Slice({
-    name: slice.name,
-    image: "images/" + slice.name + ".png",
-    sketch_id: slice.id
-  });
-  slice_ids.push(slice.id);
-}
-
-for (slice in slices) {
-  asset = getObject(_assets, "objectID", slices[slice].sketch_id);
-  container = (ref1 = slices[slice].parent) != null ? ref1 : Screen;
-  anima = asset.userInfo["com.animaapp.stc-sketch-plugin"];
-  constraints = anima.kModelPropertiesKey.constraints;
-  if (constraints) {
-    for (constraint in constraints) {
-      constant = (ref2 = constraint.constant) != null ? ref2 : 0;
-      switch (constraint) {
-        case "top":
-          slices[slice].y = Align.top(constant);
-          break;
-        case "bottom":
-          slices[slice].y = Align.bottom(constant);
-          break;
-        case "left":
-          slices[slice].x = Align.left(constant);
-          break;
-        case "right":
-          slices[slice].x = Align.right(constant);
-          break;
-        case "width":
-          slices[slice].width = container.width - constant;
-          break;
-        case "height":
-          slices[slice].height = container.height - constant;
-          break;
-        case "centerHorizontally":
-          slices[slice].x = Align.center(constant);
-          break;
-        case "centerVertically":
-          slices[slice].y = Align.center(constant);
-          break;
-        default:
-          break;
-      }
-    }
-  }
-  if (anima.kViewTypeKey) {
-    break;
-  }
-}
+});
 
 
 },{"firebaseframer":2,"inputfield":3}],2:[function(require,module,exports){
