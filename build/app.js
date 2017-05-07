@@ -3,10 +3,6 @@ var FirebaseFramer, Input, Slice, _assets, _layers, _slices, bg, constrain, demo
   extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
 
-FirebaseFramer = require('firebaseframer').FirebaseFramer;
-
-Input = require("inputfield").Input;
-
 ref = require('findModule'), ƒ = ref.ƒ, ƒƒ = ref.ƒƒ;
 
 _slices = Utils.domLoadJSONSync("slices.json");
@@ -226,6 +222,10 @@ constrain = function(s) {
 for (slice in slices) {
   constrain(slices[slice]);
 }
+
+FirebaseFramer = require('firebaseframer').FirebaseFramer;
+
+Input = require("inputfield").Input;
 
 lineHeight = 30;
 
