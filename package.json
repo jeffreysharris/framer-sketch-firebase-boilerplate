@@ -11,6 +11,7 @@
     "fs-web": "^1.0.1",
     "gulp": "^3.8.10",
     "gulp-changed": "^3.0.0",
+    "gulp-exec": "^2.1.3",
     "gulp-coffee": "^2.2.0",
     "gulp-gh-pages": "^0.5.4",
     "gulp-sketch": "^1.0.3",

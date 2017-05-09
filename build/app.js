@@ -1,231 +1,13 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var FirebaseFramer, Input, Slice, _assets, _layers, _slices, bg, constrain, demoDB, getObject, getParents, groups, j, len, lineHeight, makeLayerFromParent, post, ref, ref1, slice, slices, textfield, ƒ, ƒƒ,
-  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-  hasProp = {}.hasOwnProperty;
+var FirebaseFramer, Input, bg, demoDB, lineHeight, post, s, slices, textfield;
 
-ref = require('findModule'), ƒ = ref.ƒ, ƒƒ = ref.ƒƒ;
-
-_slices = Utils.domLoadJSONSync("slices.json");
-
-_assets = Utils.domLoadJSONSync("assets.json");
-
-_layers = Utils.domLoadJSONSync("layers.json");
-
-makeLayerFromParent = function(item) {
-  var layer, matches, ref1, ref2, ref3, ref4, ref5, ref6, ref7, ref8;
-  layer = null;
-  if (item.name != null) {
-    matches = ƒƒ(item.name);
-  } else {
-    return layer;
-  }
-  switch (matches.length) {
-    case 0:
-      slices[item.name] = new Slice({
-        name: item.name,
-        x: (ref1 = (ref2 = item.relative) != null ? ref2.x : void 0) != null ? ref1 : 0,
-        y: (ref3 = (ref4 = item.relative) != null ? ref4.y : void 0) != null ? ref3 : 0,
-        width: (ref5 = (ref6 = item.relative) != null ? ref6.width : void 0) != null ? ref5 : Canvas.width,
-        height: (ref7 = (ref8 = item.relative) != null ? ref8.height : void 0) != null ? ref7 : Canvas.height,
-        sketch_id: item.id,
-        backgroundColor: "transparent"
-      });
-      layer = slices[item.name];
-      break;
-    case 1:
-      layer = matches[0];
-  }
-  return layer;
-};
-
-getObject = function(object, key, value) {
-  var i, prop, result;
-  result = null;
-  if (object instanceof Array) {
-    i = 0;
-    while (i < object.length) {
-      result = getObject(object[i], key, value);
-      if (result) {
-        break;
-      }
-      i++;
-    }
-  } else {
-    for (prop in object) {
-      if (prop === key) {
-        if (!value) {
-          return object;
-        }
-        if (object[prop] === value) {
-          return object;
-        }
-      }
-      if (object[prop] instanceof Object || object[prop] instanceof Array) {
-        result = getObject(object[prop], key, value);
-        if (result) {
-          break;
-        }
-      }
-    }
-  }
-  return result;
-};
-
-getParents = function(object, list) {
-  var layer, layers, parent, parent_slice_list, prop, results, slice;
-  results = [];
-  for (prop in object) {
-    if (object[prop].hasOwnProperty("layers")) {
-      layers = object[prop].layers;
-      results.push((function() {
-        var j, len, obj, results1;
-        results1 = [];
-        for (j = 0, len = layers.length; j < len; j++) {
-          layer = layers[j];
-          for (slice in list) {
-            if (layer.id === list[slice].sketch_id) {
-              parent = makeLayerFromParent(object[prop]);
-              if (parent != null) {
-                list[slice].parent = parent;
-                parent_slice_list = (
-                  obj = {},
-                  obj["" + parent.name] = slices[parent.name],
-                  obj
-                );
-                getParents(_layers, parent_slice_list);
-              }
-            }
-          }
-          results1.push(getParents(layers, list));
-        }
-        return results1;
-      })());
-    } else {
-      results.push(getParents(object[prop], list));
-    }
-  }
-  return results;
-};
-
-slices = {};
-
-groups = {};
-
-Slice = (function(superClass) {
-  extend(Slice, superClass);
-
-  function Slice(options) {
-    var base;
-    this.options = options != null ? options : {};
-    if ((base = this.options).sketch_id == null) {
-      base.sketch_id = "111";
-    }
-    Slice.__super__.constructor.call(this, this.options);
-    this.sketch_id = this.options.sketch_id;
-  }
-
-  return Slice;
-
-})(Layer);
-
-ref1 = _slices.pages[0].slices;
-for (j = 0, len = ref1.length; j < len; j++) {
-  slice = ref1[j];
-  slices[slice.name] = new Slice({
-    name: slice.name,
-    image: "images/" + slice.name + ".png",
-    sketch_id: slice.id,
-    x: slice.relative.x,
-    y: slice.relative.y,
-    width: slice.relative.width,
-    height: slice.relative.height
-  });
-}
-
-getParents(_layers, slices);
-
-slices["canvas"].width = Canvas.width;
-
-slices["canvas"].height = Canvas.height;
-
-Canvas.on("change:size", function() {
-  return slices["canvas"].size = Canvas.size;
-});
-
-slices["canvas"].on("change:size", function() {
-  var child, k, len1, ref2, results;
-  ref2 = slices["canvas"].children;
-  results = [];
-  for (k = 0, len1 = ref2.length; k < len1; k++) {
-    child = ref2[k];
-    results.push(child.size = slices["canvas"].size);
-  }
-  return results;
-});
-
-constrain = function(s) {
-  var anima, asset, c, constant, constraints, container, multiplier, ref2, ref3, ref4, ref5, results;
-  asset = getObject(_assets, "objectID", s.sketch_id);
-  anima = asset != null ? (ref2 = asset.userInfo) != null ? ref2["com.animaapp.stc-sketch-plugin"] : void 0 : void 0;
-  container = s.parent;
-  constraints = anima != null ? (ref3 = anima.kModelPropertiesKey) != null ? ref3.constraints : void 0 : void 0;
-  if (constraints != null) {
-    results = [];
-    for (c in constraints) {
-      constant = (ref4 = constraints[c].constant) != null ? ref4 : 0;
-      multiplier = (ref5 = constraints[c].multiplier) != null ? ref5 : 0;
-      switch (c) {
-        case "top":
-          results.push(container.on("change:height", function() {
-            return s.y = Align.top(container.height * multiplier - constant);
-          }));
-          break;
-        case "bottom":
-          results.push(container.on("change:height", function() {
-            return s.y = Align.bottom(-(container.height * multiplier) - constant);
-          }));
-          break;
-        case "left":
-          results.push(container.on("change.width", function() {
-            return s.x = Align.left(container.width * multiplier - constant);
-          }));
-          break;
-        case "right":
-          results.push(container.on("change.width", function() {
-            return s.x = Align.right(-(container.width * multiplier) - constant);
-          }));
-          break;
-        case "width":
-          results.push(container.on("change.width", function() {
-            return s.width = (container.width * multiplier) - constant;
-          }));
-          break;
-        case "height":
-          results.push(container.on("change.height", function() {
-            return s.height = (container.height * multiplier) - constant;
-          }));
-          break;
-        case "centerHorizontally":
-          results.push(s.x = Align.center(constant));
-          break;
-        case "centerVertically":
-          results.push(s.y = Align.center(constant));
-          break;
-        default:
-          break;
-      }
-    }
-    return results;
-  }
-};
-
-for (slice in slices) {
-  constrain(slices[slice]);
-}
+s = require('sketchSlicer');
 
 FirebaseFramer = require('firebaseframer').FirebaseFramer;
 
 Input = require("inputfield").Input;
+
+slices = s.sketchSlicer();
 
 lineHeight = 30;
 
@@ -243,8 +25,8 @@ bg = new BackgroundLayer({
   backgroundColor: "#fafafa"
 });
 
-slices.button.onMouseDown(function() {
-  return slices.button.image = "images/button-down.png";
+slices["button"].onMouseDown(function() {
+  return slices["button"].image = "images/button-down.png";
 });
 
 textfield = new Input({
@@ -271,10 +53,10 @@ post = function() {
 };
 
 demoDB.onChange("/messages", function(message) {
-  var child, h, i, k, l, len1, line, m, messageArray, ref2, ref3, results, t;
-  ref2 = slices.chat_window.children;
-  for (k = 0, len1 = ref2.length; k < len1; k++) {
-    child = ref2[k];
+  var child, h, i, j, k, len, line, m, messageArray, ref, ref1, results, t;
+  ref = slices["chat_window"].children;
+  for (j = 0, len = ref.length; j < len; j++) {
+    child = ref[j];
     child.animate({
       y: child.y - lineHeight
     });
@@ -283,13 +65,13 @@ demoDB.onChange("/messages", function(message) {
   i = 1;
   h = lineHeight;
   results = [];
-  for (l = messageArray.length - 1; l >= 0; l += -1) {
-    m = messageArray[l];
-    t = (ref3 = m.text) != null ? ref3 : m;
+  for (k = messageArray.length - 1; k >= 0; k += -1) {
+    m = messageArray[k];
+    t = (ref1 = m.text) != null ? ref1 : m;
     line = new TextLayer({
       x: 0,
       textAlign: "left",
-      y: slices.chat_window.height - h * i,
+      y: slices["chat_window"].height - h * i,
       text: t,
       color: "#333",
       font: "14px/1.5 Helvetica"
@@ -300,8 +82,8 @@ demoDB.onChange("/messages", function(message) {
   return results;
 });
 
-slices.button.onMouseUp(function() {
-  slices.button.image = "images/button.png";
+slices["button"].onMouseUp(function() {
+  slices["button"].image = "images/button.png";
   post();
   return textfield.value = "";
 });
@@ -315,7 +97,7 @@ document.addEventListener('keypress', function(event) {
 });
 
 
-},{"findModule":2,"firebaseframer":3,"inputfield":4}],2:[function(require,module,exports){
+},{"firebaseframer":3,"inputfield":4,"sketchSlicer":5}],2:[function(require,module,exports){
 var _findAll, _getHierarchy, _match;
 
 _getHierarchy = function(layer) {
@@ -744,6 +526,327 @@ exports.Input = (function(superClass) {
 })(Layer);
 
 
-},{}]},{},[1])
+},{}],5:[function(require,module,exports){
+var Slice, _assets, _layers, _slices, assignConstraints, getObject, getParents, groups, makeLayerFromParent, ref, slices, updateConstraints, ƒ, ƒƒ,
+  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  hasProp = {}.hasOwnProperty;
+
+ref = require('findModule'), ƒ = ref.ƒ, ƒƒ = ref.ƒƒ;
+
+_slices = Utils.domLoadJSONSync("slices.json");
+
+_assets = Utils.domLoadJSONSync("assets.json");
+
+_layers = Utils.domLoadJSONSync("layers.json");
+
+Slice = (function(superClass) {
+  extend(Slice, superClass);
+
+  function Slice(options) {
+    var base;
+    this.options = options != null ? options : {};
+    if ((base = this.options).sketch_id == null) {
+      base.sketch_id = "111";
+    }
+    this.options.constraints = {};
+    Slice.__super__.constructor.call(this, this.options);
+    this.sketch_id = this.options.sketch_id;
+    this.constraints = this.options.constraints;
+  }
+
+  return Slice;
+
+})(Layer);
+
+makeLayerFromParent = function(item) {
+  var layer, matches, ref1, ref2, ref3, ref4, ref5, ref6, ref7, ref8;
+  layer = null;
+  if (item.name != null) {
+    matches = ƒƒ(item.name);
+  } else {
+    return layer;
+  }
+  switch (matches.length) {
+    case 0:
+      slices[item.name] = new Slice({
+        name: item.name,
+        x: (ref1 = (ref2 = item.relative) != null ? ref2.x : void 0) != null ? ref1 : 0,
+        y: (ref3 = (ref4 = item.relative) != null ? ref4.y : void 0) != null ? ref3 : 0,
+        width: (ref5 = (ref6 = item.relative) != null ? ref6.width : void 0) != null ? ref5 : Canvas.width,
+        height: (ref7 = (ref8 = item.relative) != null ? ref8.height : void 0) != null ? ref7 : Canvas.height,
+        sketch_id: item.id,
+        backgroundColor: "transparent"
+      });
+      layer = slices[item.name];
+      break;
+    case 1:
+      layer = matches[0];
+  }
+  return layer;
+};
+
+getObject = function(object, key, value) {
+  var i, prop, result;
+  result = null;
+  if (object instanceof Array) {
+    i = 0;
+    while (i < object.length) {
+      result = getObject(object[i], key, value);
+      if (result) {
+        break;
+      }
+      i++;
+    }
+  } else {
+    for (prop in object) {
+      if (prop === key) {
+        if (!value) {
+          return object;
+        }
+        if (object[prop] === value) {
+          return object;
+        }
+      }
+      if (object[prop] instanceof Object || object[prop] instanceof Array) {
+        result = getObject(object[prop], key, value);
+        if (result) {
+          break;
+        }
+      }
+    }
+  }
+  return result;
+};
+
+getParents = function(object, list) {
+  var layer, layers, parent, parent_slice_list, prop, results, slice;
+  results = [];
+  for (prop in object) {
+    if (object[prop].hasOwnProperty("layers")) {
+      layers = object[prop].layers;
+      results.push((function() {
+        var j, len, obj, results1;
+        results1 = [];
+        for (j = 0, len = layers.length; j < len; j++) {
+          layer = layers[j];
+          for (slice in list) {
+            if (layer.id === list[slice].sketch_id) {
+              parent = makeLayerFromParent(object[prop]);
+              if (parent != null) {
+                list[slice].parent = parent;
+                parent_slice_list = (
+                  obj = {},
+                  obj["" + parent.name] = slices[parent.name],
+                  obj
+                );
+                getParents(_layers, parent_slice_list);
+              }
+            }
+          }
+          results1.push(getParents(layers, list));
+        }
+        return results1;
+      })());
+    } else {
+      results.push(getParents(object[prop], list));
+    }
+  }
+  return results;
+};
+
+assignConstraints = function(s) {
+  var anima, asset, constraints, ref1, ref2;
+  asset = getObject(_assets, "objectID", s.sketch_id);
+  anima = asset != null ? (ref1 = asset.userInfo) != null ? ref1["com.animaapp.stc-sketch-plugin"] : void 0 : void 0;
+  constraints = anima != null ? (ref2 = anima.kModelPropertiesKey) != null ? ref2.constraints : void 0 : void 0;
+  if (constraints != null) {
+    return s.constraints = constraints;
+  }
+};
+
+updateConstraints = function(s) {
+  var c, constant, container, multiplier, ref1, ref2, results;
+  container = s.parent;
+  results = [];
+  for (c in s.constraints) {
+    switch (c) {
+      case "top":
+        if (s.constraints[c].multiplier != null) {
+          multiplier = s.constraints[c].multiplier;
+        }
+        if (s.constraints[c].constant != null) {
+          constant = s.constraints[c].constant;
+        }
+        if (multiplier != null) {
+          s.y = Align.top(container.height * multiplier);
+          container.on("change:height", function() {
+            return s.y = Align.top(container.height * multiplier);
+          });
+        }
+        if (constant != null) {
+          s.y = Align.top(constant);
+          results.push(container.on("change:height", function() {
+            return s.y = Align.top(constant);
+          }));
+        } else {
+          results.push(void 0);
+        }
+        break;
+      case "bottom":
+        if (s.constraints[c].multiplier != null) {
+          multiplier = s.constraints[c].multiplier;
+        }
+        if (s.constraints[c].constant != null) {
+          constant = s.constraints[c].constant;
+        }
+        if (multiplier != null) {
+          s.y = Align.bottom(container.height * multiplier);
+          container.on("change:height", function() {
+            return s.y = Align.bottom(container.height * multiplier);
+          });
+        }
+        if (constant != null) {
+          s.y = Align.bottom(-constant);
+          results.push(container.on("change:height", function() {
+            return s.y = Align.bottom(-constant);
+          }));
+        } else {
+          results.push(void 0);
+        }
+        break;
+      case "left":
+        if (s.constraints[c].multiplier != null) {
+          multiplier = s.constraints[c].multiplier;
+        }
+        if (s.constraints[c].constant != null) {
+          constant = s.constraints[c].constant;
+        }
+        if (multiplier != null) {
+          s.x = Align.left(container.height * multiplier);
+          container.on("change:width", function() {
+            return s.x = Align.left(container.height * multiplier);
+          });
+        }
+        if (constant != null) {
+          s.x = Align.left(constant);
+          results.push(container.on("change:width", function() {
+            return s.x = Align.left(constant);
+          }));
+        } else {
+          results.push(void 0);
+        }
+        break;
+      case "right":
+        if (s.constraints[c].multiplier != null) {
+          multiplier = s.constraints[c].multiplier;
+        }
+        if (s.constraints[c].constant != null) {
+          constant = s.constraints[c].constant;
+        }
+        if (multiplier != null) {
+          s.x = Align.right(container.height * multiplier);
+          container.on("change:width", function() {
+            return s.x = Align.right(container.height * multiplier);
+          });
+        }
+        if (constant != null) {
+          s.x = Align.right(-constant);
+          results.push(container.on("change:width", function() {
+            return s.x = Align.right(-constant);
+          }));
+        } else {
+          results.push(void 0);
+        }
+        break;
+      case "width":
+        if (s.constraints[c].multiplier != null) {
+          multiplier = s.constraints[c].multiplier;
+        }
+        if (s.constraints[c].constant != null) {
+          constant = s.constraints[c].constant;
+        }
+        if (constant) {
+          results.push(s.width = constant);
+        } else {
+          s.width = container.width * multiplier;
+          results.push(container.on("change:width", function() {
+            return s.width = container.width * multiplier;
+          }));
+        }
+        break;
+      case "height":
+        if (s.constraints[c].multiplier != null) {
+          multiplier = s.constraints[c].multiplier;
+        }
+        if (s.constraints[c].constant != null) {
+          constant = s.constraints[c].constant;
+        }
+        if (constant) {
+          results.push(s.height = constant);
+        } else {
+          s.height = container.height * multiplier;
+          results.push(container.on("change:height", function() {
+            return s.height = container.height * multiplier;
+          }));
+        }
+        break;
+      case "centerHorizontally":
+        constant = (ref1 = s.constraints[c].constant) != null ? ref1 : 0;
+        results.push(s.x = Align.center(constant));
+        break;
+      case "centerVertically":
+        constant = (ref2 = s.constraints[c].constant) != null ? ref2 : 0;
+        results.push(s.y = Align.center(constant));
+        break;
+      default:
+        break;
+    }
+  }
+  return results;
+};
+
+slices = {};
+
+groups = {};
+
+exports.sketchSlicer = function() {
+  var child, j, k, len, len1, ref1, ref2, slice;
+  ref1 = _slices.pages[0].slices;
+  for (j = 0, len = ref1.length; j < len; j++) {
+    slice = ref1[j];
+    slices[slice.name] = new Slice({
+      name: slice.name,
+      image: "images/" + slice.name + ".png",
+      sketch_id: slice.id,
+      x: slice.relative.x,
+      y: slice.relative.y,
+      width: slice.relative.width,
+      height: slice.relative.height
+    });
+  }
+  getParents(_layers, slices);
+  slices["canvas"].width = Canvas.width;
+  slices["canvas"].height = Canvas.height;
+  Canvas.on("change:size", function() {
+    return slices["canvas"].size = Canvas.size;
+  });
+  ref2 = slices["canvas"].children;
+  for (k = 0, len1 = ref2.length; k < len1; k++) {
+    child = ref2[k];
+    slices["canvas"].on("change:size", function() {
+      return child.size = slices["canvas"].size;
+    });
+  }
+  for (slice in slices) {
+    assignConstraints(slices[slice]);
+  }
+  for (slice in slices) {
+    updateConstraints(slices[slice]);
+  }
+  return slices;
+};
+
+
+},{"findModule":2}]},{},[1])
 
 //# sourceMappingURL=app.js.map

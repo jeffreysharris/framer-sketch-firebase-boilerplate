@@ -1,7 +1,9 @@
 # ======= CHAT APP ========
-{sketchSlicer} = require 'sketchSlicer'
+s = require 'sketchSlicer'
 {FirebaseFramer} = require 'firebaseframer'
 {Input} = require "inputfield"
+
+slices = s.sketchSlicer()
 
 lineHeight = 30
 
@@ -18,8 +20,8 @@ bg = new BackgroundLayer
 
 #input
 
-slices.button.onMouseDown ->
-    slices.button.image = "images/button-down.png"
+slices["button"].onMouseDown ->
+    slices["button"].image = "images/button-down.png"
 
 textfield = new Input
     parent: slices["field"]
@@ -41,7 +43,7 @@ post = ->
         demoDB.post '/messages', {"text": textfield.value}
 
 demoDB.onChange "/messages", (message) ->
-    for child in slices.chat_window.children
+    for child in slices["chat_window"].children
         child.animate
             y: child.y - lineHeight
     messageArray = _.toArray(message)
@@ -54,15 +56,15 @@ demoDB.onChange "/messages", (message) ->
         line = new TextLayer
             x: 0
             textAlign: "left"
-            y: slices.chat_window.height - h * i
+            y: slices["chat_window"].height - h * i
             text: t
             color: "#333"
             font: "14px/1.5 Helvetica"
         line.parent = slices.chat_window
         i++
 
-slices.button.onMouseUp ->
-    slices.button.image = "images/button.png"
+slices["button"].onMouseUp ->
+    slices["button"].image = "images/button.png"
     post()
     textfield.value = ""
 
