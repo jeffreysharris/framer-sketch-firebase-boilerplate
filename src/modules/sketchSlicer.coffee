@@ -16,9 +16,12 @@ class Slice extends Layer
         @options.sketch_id ?= "111"
         @options.constraints = {
         }
+        @options.flexprops = {
+        }
         super(@options)
         @sketch_id = @options.sketch_id
         @constraints = @options.constraints
+        @flexprops = @options.flexprops
 
 makeLayerFromParent = (item) ->
     # print item.name
@@ -94,7 +97,7 @@ getParents = (object, list) ->
         # if not, check children
         else getParents(object[prop], list)
 
-assignConstraints = (s) ->
+getConstraints = (s) ->
     # find slice in assets to collect anima data
     asset = getObject(_assets, "objectID", s.sketch_id)
     # check for anima data i.e. kModelPropertiesKey
@@ -104,9 +107,17 @@ assignConstraints = (s) ->
     constraints = anima?.kModelPropertiesKey?.constraints
     if constraints?
         s.constraints = constraints
+        assignConstraints(s)
         # cycle through contraints and match to flexbox properties
 
-updateConstraints = (s) ->
+# ===== FLEXBOX ======
+    # if a stacked group parent object i.e. kViewTypeKey
+    if anima?.kViewTypeKey?
+        flexprops = anima?.kModelPropertiesKey
+        s.flexprops = flexprops
+        assignFlexbox(s)
+
+assignConstraints = (s) ->
     # print s.constraints
     # TODO: SUPPORT FOR WIDTH/HEIGHT MIN & MAX
     container = s.parent
@@ -114,67 +125,67 @@ updateConstraints = (s) ->
         # AnimaApp -> Framer translation
         switch c
             when "top"
-                multiplier = s.constraints[c].multiplier if s.constraints[c].multiplier?
-                constant = s.constraints[c].constant if s.constraints[c].constant?
-                if multiplier?
-                    s.y = Align.top(container.height * multiplier)
+                multiplier_top = s.constraints[c].multiplier if s.constraints[c].multiplier?
+                constant_top = s.constraints[c].constant if s.constraints[c].constant?
+                if multiplier_top?
+                    s.y = Align.top(container.height * multiplier_top)
                     container.on "change:height", ->
-                        s.y = Align.top(container.height * multiplier)
-                if constant?
-                    s.y = Align.top(constant)
+                        s.y = Align.top(container.height * multiplier_top)
+                if constant_top?
+                    s.y = Align.top(constant_top)
                     container.on "change:height", ->
-                        s.y = Align.top(constant)
+                        s.y = Align.top(constant_top)
             when "bottom"
-                multiplier = s.constraints[c].multiplier if s.constraints[c].multiplier?
-                constant = s.constraints[c].constant if s.constraints[c].constant?
-                if multiplier?
-                    s.y = Align.bottom(container.height * multiplier)
+                multiplier_bottom = s.constraints[c].multiplier if s.constraints[c].multiplier?
+                constant_bottom = s.constraints[c].constant if s.constraints[c].constant?
+                if multiplier_bottom?
+                    s.y = Align.bottom(container.height * multiplier_bottom)
                     container.on "change:height", ->
-                        s.y = Align.bottom(container.height * multiplier)
-                if constant?
-                    s.y = Align.bottom(-constant)
+                        s.y = Align.bottom(container.height * multiplier_bottom)
+                if constant_bottom?
+                    s.y = Align.bottom(-constant_bottom)
                     container.on "change:height", ->
-                        s.y = Align.bottom(-constant)
+                        s.y = Align.bottom(-constant_bottom)
             when "left"
-                multiplier = s.constraints[c].multiplier if s.constraints[c].multiplier?
-                constant = s.constraints[c].constant if s.constraints[c].constant?
-                if multiplier?
-                    s.x = Align.left(container.height * multiplier)
+                multiplier_left = s.constraints[c].multiplier if s.constraints[c].multiplier?
+                constant_left = s.constraints[c].constant if s.constraints[c].constant?
+                if multiplier_left?
+                    s.x = Align.left(container.height * multiplier_left)
                     container.on "change:width", ->
-                        s.x = Align.left(container.height * multiplier)
-                if constant?
-                    s.x = Align.left(constant)
+                        s.x = Align.left(container.height * multiplier_left)
+                if constant_left?
+                    s.x = Align.left(constant_left)
                     container.on "change:width", ->
-                        s.x = Align.left(constant)
+                        s.x = Align.left(constant_left)
             when "right"
-                multiplier = s.constraints[c].multiplier if s.constraints[c].multiplier?
-                constant = s.constraints[c].constant if s.constraints[c].constant?
-                if multiplier?
-                    s.x = Align.right(container.height * multiplier)
+                multiplier_right = s.constraints[c].multiplier if s.constraints[c].multiplier?
+                constant_right = s.constraints[c].constant if s.constraints[c].constant?
+                if multiplier_right?
+                    s.x = Align.right(container.height * multiplier_right)
                     container.on "change:width", ->
-                        s.x = Align.right(container.height * multiplier)
-                if constant?
-                    s.x = Align.right(-constant)
+                        s.x = Align.right(container.height * multiplier_right)
+                if constant_right?
+                    s.x = Align.right(-constant_right)
                     container.on "change:width", ->
-                        s.x = Align.right(-constant)
+                        s.x = Align.right(-constant_right)
             when "width"
-                multiplier = s.constraints[c].multiplier if s.constraints[c].multiplier?
-                constant = s.constraints[c].constant if s.constraints[c].constant?
-                if constant
-                    s.width = (constant)
+                multiplier_width = s.constraints[c].multiplier if s.constraints[c].multiplier?
+                constant_width = s.constraints[c].constant if s.constraints[c].constant?
+                if constant_width
+                    s.width = (constant_width)
                 else
-                    s.width = (container.width * multiplier)
+                    s.width = (container.width * multiplier_width)
                     container.on "change:width", ->
-                        s.width = (container.width * multiplier)
+                        s.width = (container.width * multiplier_width)
             when "height"
-                multiplier = s.constraints[c].multiplier if s.constraints[c].multiplier?
-                constant = s.constraints[c].constant if s.constraints[c].constant?
-                if constant
-                    s.height = (constant)
+                multiplier_height = s.constraints[c].multiplier if s.constraints[c].multiplier?
+                constant_height = s.constraints[c].constant if s.constraints[c].constant?
+                if constant_height
+                    s.height = (constant_height)
                 else
-                    s.height = (container.height * multiplier)
+                    s.height = (container.height * multiplier_height)
                     container.on "change:height", ->
-                        s.height = (container.height * multiplier)
+                        s.height = (container.height * multiplier_height)
             when "centerHorizontally"
                 constant = s.constraints[c].constant ? 0
                 s.x = Align.center(constant)
@@ -185,6 +196,7 @@ updateConstraints = (s) ->
 
 
 # ====== REBUILD FLEXBOX IN FRAMER ======
+assignFlexbox = (s) ->
 
 # display: "flex"
 
@@ -198,11 +210,11 @@ updateConstraints = (s) ->
 
 # ====== TAKE FLEXBOX INSTRUCTIONS FROM ANIMA =======
 
-    # # if a stacked group parent object i.e. kViewTypeKey
+    # if a stacked group parent object i.e. kViewTypeKey
     # if anima?.kViewTypeKey?
     #     flexprops = anima?.kModelPropertiesKey
-    #
-    #     # make this layer a Flexbox container, etc.
+
+        # make this layer a Flexbox container, etc.
     #     setFlexBox = (props, layer) ->
     #         style = layer.style
     #         style.display = "flex"
@@ -254,11 +266,13 @@ exports.sketchSlicer = ->
     slices["canvas"].height = Canvas.height
     Canvas.on "change:size", ->
         slices["canvas"].size = Canvas.size
+        # print slices.stack_group.constraints
+        # print slices.stack_group.x, slices.stack_group.y
     for child in slices["canvas"].children
+        child.size = slices["canvas"].size
         slices["canvas"].on "change:size", ->
             child.size = slices["canvas"].size
 
-    assignConstraints(slices[slice]) for slice of slices
-    updateConstraints(slices[slice]) for slice of slices
+    getConstraints(slices[slice]) for slice of slices
 
     return slices

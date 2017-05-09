@@ -527,7 +527,7 @@ exports.Input = (function(superClass) {
 
 
 },{}],5:[function(require,module,exports){
-var Slice, _assets, _layers, _slices, assignConstraints, getObject, getParents, groups, makeLayerFromParent, ref, slices, updateConstraints, ƒ, ƒƒ,
+var Slice, _assets, _layers, _slices, assignConstraints, assignFlexbox, getConstraints, getObject, getParents, groups, makeLayerFromParent, ref, slices, ƒ, ƒƒ,
   extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
 
@@ -549,9 +549,11 @@ Slice = (function(superClass) {
       base.sketch_id = "111";
     }
     this.options.constraints = {};
+    this.options.flexprops = {};
     Slice.__super__.constructor.call(this, this.options);
     this.sketch_id = this.options.sketch_id;
     this.constraints = this.options.constraints;
+    this.flexprops = this.options.flexprops;
   }
 
   return Slice;
@@ -654,39 +656,45 @@ getParents = function(object, list) {
   return results;
 };
 
-assignConstraints = function(s) {
-  var anima, asset, constraints, ref1, ref2;
+getConstraints = function(s) {
+  var anima, asset, constraints, flexprops, ref1, ref2;
   asset = getObject(_assets, "objectID", s.sketch_id);
   anima = asset != null ? (ref1 = asset.userInfo) != null ? ref1["com.animaapp.stc-sketch-plugin"] : void 0 : void 0;
   constraints = anima != null ? (ref2 = anima.kModelPropertiesKey) != null ? ref2.constraints : void 0 : void 0;
   if (constraints != null) {
-    return s.constraints = constraints;
+    s.constraints = constraints;
+    assignConstraints(s);
+  }
+  if ((anima != null ? anima.kViewTypeKey : void 0) != null) {
+    flexprops = anima != null ? anima.kModelPropertiesKey : void 0;
+    s.flexprops = flexprops;
+    return assignFlexbox(s);
   }
 };
 
-updateConstraints = function(s) {
-  var c, constant, container, multiplier, ref1, ref2, results;
+assignConstraints = function(s) {
+  var c, constant, constant_bottom, constant_height, constant_left, constant_right, constant_top, constant_width, container, multiplier_bottom, multiplier_height, multiplier_left, multiplier_right, multiplier_top, multiplier_width, ref1, ref2, results;
   container = s.parent;
   results = [];
   for (c in s.constraints) {
     switch (c) {
       case "top":
         if (s.constraints[c].multiplier != null) {
-          multiplier = s.constraints[c].multiplier;
+          multiplier_top = s.constraints[c].multiplier;
         }
         if (s.constraints[c].constant != null) {
-          constant = s.constraints[c].constant;
+          constant_top = s.constraints[c].constant;
         }
-        if (multiplier != null) {
-          s.y = Align.top(container.height * multiplier);
+        if (multiplier_top != null) {
+          s.y = Align.top(container.height * multiplier_top);
           container.on("change:height", function() {
-            return s.y = Align.top(container.height * multiplier);
+            return s.y = Align.top(container.height * multiplier_top);
           });
         }
-        if (constant != null) {
-          s.y = Align.top(constant);
+        if (constant_top != null) {
+          s.y = Align.top(constant_top);
           results.push(container.on("change:height", function() {
-            return s.y = Align.top(constant);
+            return s.y = Align.top(constant_top);
           }));
         } else {
           results.push(void 0);
@@ -694,21 +702,21 @@ updateConstraints = function(s) {
         break;
       case "bottom":
         if (s.constraints[c].multiplier != null) {
-          multiplier = s.constraints[c].multiplier;
+          multiplier_bottom = s.constraints[c].multiplier;
         }
         if (s.constraints[c].constant != null) {
-          constant = s.constraints[c].constant;
+          constant_bottom = s.constraints[c].constant;
         }
-        if (multiplier != null) {
-          s.y = Align.bottom(container.height * multiplier);
+        if (multiplier_bottom != null) {
+          s.y = Align.bottom(container.height * multiplier_bottom);
           container.on("change:height", function() {
-            return s.y = Align.bottom(container.height * multiplier);
+            return s.y = Align.bottom(container.height * multiplier_bottom);
           });
         }
-        if (constant != null) {
-          s.y = Align.bottom(-constant);
+        if (constant_bottom != null) {
+          s.y = Align.bottom(-constant_bottom);
           results.push(container.on("change:height", function() {
-            return s.y = Align.bottom(-constant);
+            return s.y = Align.bottom(-constant_bottom);
           }));
         } else {
           results.push(void 0);
@@ -716,21 +724,21 @@ updateConstraints = function(s) {
         break;
       case "left":
         if (s.constraints[c].multiplier != null) {
-          multiplier = s.constraints[c].multiplier;
+          multiplier_left = s.constraints[c].multiplier;
         }
         if (s.constraints[c].constant != null) {
-          constant = s.constraints[c].constant;
+          constant_left = s.constraints[c].constant;
         }
-        if (multiplier != null) {
-          s.x = Align.left(container.height * multiplier);
+        if (multiplier_left != null) {
+          s.x = Align.left(container.height * multiplier_left);
           container.on("change:width", function() {
-            return s.x = Align.left(container.height * multiplier);
+            return s.x = Align.left(container.height * multiplier_left);
           });
         }
-        if (constant != null) {
-          s.x = Align.left(constant);
+        if (constant_left != null) {
+          s.x = Align.left(constant_left);
           results.push(container.on("change:width", function() {
-            return s.x = Align.left(constant);
+            return s.x = Align.left(constant_left);
           }));
         } else {
           results.push(void 0);
@@ -738,21 +746,21 @@ updateConstraints = function(s) {
         break;
       case "right":
         if (s.constraints[c].multiplier != null) {
-          multiplier = s.constraints[c].multiplier;
+          multiplier_right = s.constraints[c].multiplier;
         }
         if (s.constraints[c].constant != null) {
-          constant = s.constraints[c].constant;
+          constant_right = s.constraints[c].constant;
         }
-        if (multiplier != null) {
-          s.x = Align.right(container.height * multiplier);
+        if (multiplier_right != null) {
+          s.x = Align.right(container.height * multiplier_right);
           container.on("change:width", function() {
-            return s.x = Align.right(container.height * multiplier);
+            return s.x = Align.right(container.height * multiplier_right);
           });
         }
-        if (constant != null) {
-          s.x = Align.right(-constant);
+        if (constant_right != null) {
+          s.x = Align.right(-constant_right);
           results.push(container.on("change:width", function() {
-            return s.x = Align.right(-constant);
+            return s.x = Align.right(-constant_right);
           }));
         } else {
           results.push(void 0);
@@ -760,33 +768,33 @@ updateConstraints = function(s) {
         break;
       case "width":
         if (s.constraints[c].multiplier != null) {
-          multiplier = s.constraints[c].multiplier;
+          multiplier_width = s.constraints[c].multiplier;
         }
         if (s.constraints[c].constant != null) {
-          constant = s.constraints[c].constant;
+          constant_width = s.constraints[c].constant;
         }
-        if (constant) {
-          results.push(s.width = constant);
+        if (constant_width) {
+          results.push(s.width = constant_width);
         } else {
-          s.width = container.width * multiplier;
+          s.width = container.width * multiplier_width;
           results.push(container.on("change:width", function() {
-            return s.width = container.width * multiplier;
+            return s.width = container.width * multiplier_width;
           }));
         }
         break;
       case "height":
         if (s.constraints[c].multiplier != null) {
-          multiplier = s.constraints[c].multiplier;
+          multiplier_height = s.constraints[c].multiplier;
         }
         if (s.constraints[c].constant != null) {
-          constant = s.constraints[c].constant;
+          constant_height = s.constraints[c].constant;
         }
-        if (constant) {
-          results.push(s.height = constant);
+        if (constant_height) {
+          results.push(s.height = constant_height);
         } else {
-          s.height = container.height * multiplier;
+          s.height = container.height * multiplier_height;
           results.push(container.on("change:height", function() {
-            return s.height = container.height * multiplier;
+            return s.height = container.height * multiplier_height;
           }));
         }
         break;
@@ -804,6 +812,8 @@ updateConstraints = function(s) {
   }
   return results;
 };
+
+assignFlexbox = function(s) {};
 
 slices = {};
 
@@ -833,15 +843,13 @@ exports.sketchSlicer = function() {
   ref2 = slices["canvas"].children;
   for (k = 0, len1 = ref2.length; k < len1; k++) {
     child = ref2[k];
+    child.size = slices["canvas"].size;
     slices["canvas"].on("change:size", function() {
       return child.size = slices["canvas"].size;
     });
   }
   for (slice in slices) {
-    assignConstraints(slices[slice]);
-  }
-  for (slice in slices) {
-    updateConstraints(slices[slice]);
+    getConstraints(slices[slice]);
   }
   return slices;
 };
