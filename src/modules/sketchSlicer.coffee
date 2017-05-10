@@ -57,8 +57,8 @@ class TextStyle
         @textDecoration = @options.textDecoration
 
 getTextStyles = ->
-    colorConverter = (val) ->
-        convert = (x) ->
+    colorConverter = (val) =>
+        convert = (x) =>
             x *= 255
             return x
         # print val.split("rgba(").join("").split(")").join("").split(",")
@@ -67,18 +67,54 @@ getTextStyles = ->
         new_val.push(convert(v)) for v in split
         new_val.join(",")
         return "rgba(" + new_val + ")"
+    align = (n) =>
+        alignment = null
+        switch n
+            when 0
+                # left
+                alignment = "left"
+            when 1
+                # right
+                alignment = "right"
+            when 2
+                # center
+                alignment = "center"
+            when 3
+                # justified
+                alignment = "justified"
+            else break
+        return alignment
+    transform = (n) =>
+        x = null
+        switch n
+            when 0
+                break
+            when 1
+                x = "uppercase"
+            when 2
+                x = "lowercase"
+            else break
+        return x
+    decoration = (m, n) =>
+        x = null
+        if m then x = "line-through"
+        if n then x = "underline"
+        return x
     layerTextStyles = _assets.layerTextStyles?.objects
     if layerTextStyles?
         for style in layerTextStyles
-            color_val = colorConverter(style.value.textStyle.NSColor.color)
+            # color_val = colorConverter(style.value.textStyle.NSColor.color)
             text_styles[style.name] = new TextStyle
                 name: style.name
-                color: color_val
+                color: colorConverter(style.value.textStyle.NSColor.color)
                 fontSize: style.value.textStyle.NSFont.attributes.NSFontSizeAttribute
                 fontFamily: style.value.textStyle.NSFont.family
                 fontStyle: style.value.textStyle.NSFont.name.split(" ")[style.value.textStyle.NSFont.name.split(" ").length - 1].toLowerCase()
                 lineHeight: style.value.textStyle.NSParagraphStyle.style.minimumLineHeight / style.value.textStyle.NSFont.attributes.NSFontSizeAttribute
                 letterSpacing: style.value.textStyle.NSKern
+                textAlign: align(style.value.textStyle.NSParagraphStyle.style.alignment)
+                textTransform: transform(style.value.textStyle.MSAttributedStringTextTransformAttribute)
+                textDecoration: decoration(style.value.textStyle.NSStrikethrough, style.value.textStyle.NSUnderline)
 
 
     return text_styles

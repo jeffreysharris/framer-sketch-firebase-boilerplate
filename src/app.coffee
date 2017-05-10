@@ -5,7 +5,7 @@ s = require 'sketchSlicer'
 
 slices = s.sketchSlicer()
 textStyles = s.textStyles()
-# print textStyles[style].lineHeight for style of textStyles
+print textStyles.chat_message.textDecoration
 
 lineHeight = 30
 
@@ -57,7 +57,7 @@ demoDB.onChange "/messages", (message) ->
         t = m.text ? m
         line = new TextLayer
             x: 0
-            textAlign: "left"
+            textAlign: textStyles.chat_message.textAlign
             y: slices["chat_window"].height - h * i
             text: t
             color: textStyles.chat_message.color
@@ -66,7 +66,10 @@ demoDB.onChange "/messages", (message) ->
             fontStyle: textStyles.chat_message.fontStyle
             lineHeight: textStyles.chat_message.lineHeight
             letterSpacing: textStyles.chat_message.letterSpacing
+            textTransform: textStyles.chat_message.textTransform
+            textDecoration: textStyles.chat_message.textDecoration
         line.parent = slices.chat_window
+        line.width = line.parent.width
         i++
 
 slices["button"].onMouseUp ->

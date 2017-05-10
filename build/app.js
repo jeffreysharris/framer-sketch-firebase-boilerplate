@@ -11,6 +11,8 @@ slices = s.sketchSlicer();
 
 textStyles = s.textStyles();
 
+print(textStyles.chat_message.textDecoration);
+
 lineHeight = 30;
 
 Framer.Defaults.Animation = {
@@ -72,7 +74,7 @@ demoDB.onChange("/messages", function(message) {
     t = (ref1 = m.text) != null ? ref1 : m;
     line = new TextLayer({
       x: 0,
-      textAlign: "left",
+      textAlign: textStyles.chat_message.textAlign,
       y: slices["chat_window"].height - h * i,
       text: t,
       color: textStyles.chat_message.color,
@@ -80,9 +82,12 @@ demoDB.onChange("/messages", function(message) {
       fontFamily: textStyles.chat_message.fontFamily,
       fontStyle: textStyles.chat_message.fontStyle,
       lineHeight: textStyles.chat_message.lineHeight,
-      letterSpacing: textStyles.chat_message.letterSpacing
+      letterSpacing: textStyles.chat_message.letterSpacing,
+      textTransform: textStyles.chat_message.textTransform,
+      textDecoration: textStyles.chat_message.textDecoration
     });
     line.parent = slices.chat_window;
+    line.width = line.parent.width;
     results.push(i++);
   }
   return results;
@@ -604,35 +609,94 @@ TextStyle = (function() {
 })();
 
 getTextStyles = function() {
-  var colorConverter, color_val, j, layerTextStyles, len, ref1, style;
-  colorConverter = function(val) {
-    var convert, j, len, new_val, split, v;
-    convert = function(x) {
-      x *= 255;
+  var align, colorConverter, decoration, j, layerTextStyles, len, ref1, style, transform;
+  colorConverter = (function(_this) {
+    return function(val) {
+      var convert, j, len, new_val, split, v;
+      convert = function(x) {
+        x *= 255;
+        return x;
+      };
+      split = val.split("rgba(").join("").split(")").join("").split(",");
+      new_val = [];
+      for (j = 0, len = split.length; j < len; j++) {
+        v = split[j];
+        new_val.push(convert(v));
+      }
+      new_val.join(",");
+      return "rgba(" + new_val + ")";
+    };
+  })(this);
+  align = (function(_this) {
+    return function(n) {
+      var alignment;
+      alignment = null;
+      switch (n) {
+        case 0:
+          alignment = "left";
+          break;
+        case 1:
+          alignment = "right";
+          break;
+        case 2:
+          alignment = "center";
+          break;
+        case 3:
+          alignment = "justified";
+          break;
+        default:
+          break;
+      }
+      return alignment;
+    };
+  })(this);
+  transform = (function(_this) {
+    return function(n) {
+      var x;
+      x = null;
+      switch (n) {
+        case 0:
+          break;
+        case 1:
+          x = "uppercase";
+          break;
+        case 2:
+          x = "lowercase";
+          break;
+        default:
+          break;
+      }
       return x;
     };
-    split = val.split("rgba(").join("").split(")").join("").split(",");
-    new_val = [];
-    for (j = 0, len = split.length; j < len; j++) {
-      v = split[j];
-      new_val.push(convert(v));
-    }
-    new_val.join(",");
-    return "rgba(" + new_val + ")";
-  };
+  })(this);
+  decoration = (function(_this) {
+    return function(m, n) {
+      var x;
+      x = null;
+      if (m) {
+        x = "line-through";
+      }
+      if (n) {
+        x = "underline";
+      }
+      return x;
+    };
+  })(this);
   layerTextStyles = (ref1 = _assets.layerTextStyles) != null ? ref1.objects : void 0;
   if (layerTextStyles != null) {
     for (j = 0, len = layerTextStyles.length; j < len; j++) {
       style = layerTextStyles[j];
-      color_val = colorConverter(style.value.textStyle.NSColor.color);
       text_styles[style.name] = new TextStyle({
         name: style.name,
-        color: color_val,
+        color: colorConverter(style.value.textStyle.NSColor.color),
         fontSize: style.value.textStyle.NSFont.attributes.NSFontSizeAttribute,
         fontFamily: style.value.textStyle.NSFont.family,
         fontStyle: style.value.textStyle.NSFont.name.split(" ")[style.value.textStyle.NSFont.name.split(" ").length - 1].toLowerCase(),
         lineHeight: style.value.textStyle.NSParagraphStyle.style.minimumLineHeight / style.value.textStyle.NSFont.attributes.NSFontSizeAttribute,
-        letterSpacing: style.value.textStyle.NSKern
+        letterSpacing: style.value.textStyle.NSKern,
+        textAlign: align(style.value.textStyle.NSParagraphStyle.style.alignment),
+        textTransform: transform(style.value.textStyle.MSAttributedStringTextTransformAttribute),
+        textDecoration: decoration(style.value.textStyle.NSStrikethrough, style.value.textStyle.NSUnderline)
       });
     }
   }
