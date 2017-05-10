@@ -1,5 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var FirebaseFramer, Input, bg, demoDB, lineHeight, post, s, slices, textfield;
+var FirebaseFramer, Input, bg, demoDB, lineHeight, post, s, slices, textStyles, textfield;
 
 s = require('sketchSlicer');
 
@@ -8,6 +8,8 @@ FirebaseFramer = require('firebaseframer').FirebaseFramer;
 Input = require("inputfield").Input;
 
 slices = s.sketchSlicer();
+
+textStyles = s.textStyles();
 
 lineHeight = 30;
 
@@ -39,7 +41,7 @@ textfield = new Input({
 
 textfield.style = {
   fontSize: "14px",
-  color: "#333",
+  color: textStyles.chat_message.color,
   fontFamily: "Helvetica",
   padding: "0px 0px 0px 20px"
 };
@@ -73,8 +75,12 @@ demoDB.onChange("/messages", function(message) {
       textAlign: "left",
       y: slices["chat_window"].height - h * i,
       text: t,
-      color: "#333",
-      font: "14px/1.5 Helvetica"
+      color: textStyles.chat_message.color,
+      fontSize: textStyles.chat_message.fontSize,
+      fontFamily: textStyles.chat_message.fontFamily,
+      fontStyle: textStyles.chat_message.fontStyle,
+      lineHeight: textStyles.chat_message.lineHeight,
+      letterSpacing: textStyles.chat_message.letterSpacing
     });
     line.parent = slices.chat_window;
     results.push(i++);
@@ -527,7 +533,7 @@ exports.Input = (function(superClass) {
 
 
 },{}],5:[function(require,module,exports){
-var Slice, _assets, _layers, _slices, assignConstraints, assignFlexbox, getConstraints, getObject, getParents, groups, makeLayerFromParent, ref, slices, ƒ, ƒƒ,
+var Slice, TextStyle, _assets, _layers, _slices, assignConstraints, assignFlexbox, getConstraints, getObject, getParents, getTextStyles, groups, makeLayerFromParent, ref, slices, text_styles, ƒ, ƒƒ,
   extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
 
@@ -538,6 +544,12 @@ _slices = Utils.domLoadJSONSync("slices.json");
 _assets = Utils.domLoadJSONSync("assets.json");
 
 _layers = Utils.domLoadJSONSync("layers.json");
+
+slices = {};
+
+groups = {};
+
+text_styles = {};
 
 Slice = (function(superClass) {
   extend(Slice, superClass);
@@ -559,6 +571,73 @@ Slice = (function(superClass) {
   return Slice;
 
 })(Layer);
+
+TextStyle = (function() {
+  function TextStyle(options) {
+    this.options = options != null ? options : {};
+    this.name;
+    this.color;
+    this.fontSize;
+    this.fontFamily;
+    this.fontWeight;
+    this.fontStyle;
+    this.lineHeight;
+    this.letterSpacing;
+    this.textAlign;
+    this.textTransform;
+    this.textDecoration;
+    this.name = this.options.name;
+    this.color = this.options.color;
+    this.fontSize = this.options.fontSize;
+    this.fontFamily = this.options.fontFamily;
+    this.fontWeight = this.options.fontWeight;
+    this.fontStyle = this.options.fontStyle;
+    this.lineHeight = this.options.lineHeight;
+    this.letterSpacing = this.options.letterSpacing;
+    this.textAlign = this.options.textAlign;
+    this.textTransform = this.options.textTransform;
+    this.textDecoration = this.options.textDecoration;
+  }
+
+  return TextStyle;
+
+})();
+
+getTextStyles = function() {
+  var colorConverter, color_val, j, layerTextStyles, len, ref1, style;
+  colorConverter = function(val) {
+    var convert, j, len, new_val, split, v;
+    convert = function(x) {
+      x *= 255;
+      return x;
+    };
+    split = val.split("rgba(").join("").split(")").join("").split(",");
+    new_val = [];
+    for (j = 0, len = split.length; j < len; j++) {
+      v = split[j];
+      new_val.push(convert(v));
+    }
+    new_val.join(",");
+    return "rgba(" + new_val + ")";
+  };
+  layerTextStyles = (ref1 = _assets.layerTextStyles) != null ? ref1.objects : void 0;
+  if (layerTextStyles != null) {
+    for (j = 0, len = layerTextStyles.length; j < len; j++) {
+      style = layerTextStyles[j];
+      color_val = colorConverter(style.value.textStyle.NSColor.color);
+      text_styles[style.name] = new TextStyle({
+        name: style.name,
+        color: color_val,
+        fontSize: style.value.textStyle.NSFont.attributes.NSFontSizeAttribute,
+        fontFamily: style.value.textStyle.NSFont.family,
+        fontStyle: style.value.textStyle.NSFont.name.split(" ")[style.value.textStyle.NSFont.name.split(" ").length - 1].toLowerCase(),
+        lineHeight: style.value.textStyle.NSParagraphStyle.style.minimumLineHeight / style.value.textStyle.NSFont.attributes.NSFontSizeAttribute,
+        letterSpacing: style.value.textStyle.NSKern
+      });
+    }
+  }
+  return text_styles;
+};
 
 makeLayerFromParent = function(item) {
   var layer, matches, ref1, ref2, ref3, ref4, ref5, ref6, ref7, ref8;
@@ -815,9 +894,9 @@ assignConstraints = function(s) {
 
 assignFlexbox = function(s) {};
 
-slices = {};
-
-groups = {};
+exports.textStyles = function() {
+  return getTextStyles();
+};
 
 exports.sketchSlicer = function() {
   var child, j, k, len, len1, ref1, ref2, slice;

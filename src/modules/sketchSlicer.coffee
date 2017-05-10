@@ -11,6 +11,13 @@ _slices = Utils.domLoadJSONSync "slices.json"
 _assets = Utils.domLoadJSONSync "assets.json"
 _layers = Utils.domLoadJSONSync "layers.json"
 
+# prepare list of slices
+slices = {}
+# prepare list of groups
+groups = {}
+# prepare list of text styles
+text_styles = {}
+
 class Slice extends Layer
     constructor: (@options={}) ->
         @options.sketch_id ?= "111"
@@ -22,6 +29,59 @@ class Slice extends Layer
         @sketch_id = @options.sketch_id
         @constraints = @options.constraints
         @flexprops = @options.flexprops
+
+class TextStyle
+    # TODO: Add support for text shadows
+    constructor: (@options={})->
+        @name
+        @color
+        @fontSize
+        @fontFamily
+        @fontWeight
+        @fontStyle
+        @lineHeight
+        @letterSpacing
+        @textAlign
+        @textTransform
+        @textDecoration
+        @name = @options.name
+        @color = @options.color
+        @fontSize = @options.fontSize
+        @fontFamily = @options.fontFamily
+        @fontWeight = @options.fontWeight
+        @fontStyle = @options.fontStyle
+        @lineHeight = @options.lineHeight
+        @letterSpacing = @options.letterSpacing
+        @textAlign = @options.textAlign
+        @textTransform = @options.textTransform
+        @textDecoration = @options.textDecoration
+
+getTextStyles = ->
+    colorConverter = (val) ->
+        convert = (x) ->
+            x *= 255
+            return x
+        # print val.split("rgba(").join("").split(")").join("").split(",")
+        split = val.split("rgba(").join("").split(")").join("").split(",")
+        new_val = []
+        new_val.push(convert(v)) for v in split
+        new_val.join(",")
+        return "rgba(" + new_val + ")"
+    layerTextStyles = _assets.layerTextStyles?.objects
+    if layerTextStyles?
+        for style in layerTextStyles
+            color_val = colorConverter(style.value.textStyle.NSColor.color)
+            text_styles[style.name] = new TextStyle
+                name: style.name
+                color: color_val
+                fontSize: style.value.textStyle.NSFont.attributes.NSFontSizeAttribute
+                fontFamily: style.value.textStyle.NSFont.family
+                fontStyle: style.value.textStyle.NSFont.name.split(" ")[style.value.textStyle.NSFont.name.split(" ").length - 1].toLowerCase()
+                lineHeight: style.value.textStyle.NSParagraphStyle.style.minimumLineHeight / style.value.textStyle.NSFont.attributes.NSFontSizeAttribute
+                letterSpacing: style.value.textStyle.NSKern
+
+
+    return text_styles
 
 makeLayerFromParent = (item) ->
     # print item.name
@@ -120,6 +180,7 @@ getConstraints = (s) ->
 assignConstraints = (s) ->
     # print s.constraints
     # TODO: SUPPORT FOR WIDTH/HEIGHT MIN & MAX
+    # TODO: MAKE THIS MORE ELEGANT, FUNCTIONAL INSTEAD OF KLUGY SWITCH LOGIC
     container = s.parent
     for c of s.constraints
         # AnimaApp -> Framer translation
@@ -241,12 +302,14 @@ assignFlexbox = (s) ->
 
 # ======= MAIN RETURN FUNCTION ======
 
-# prepare list of slices
-slices = {}
-# prepare list of groups
-groups = {}
+exports.textStyles = ->
+    getTextStyles()
 
 exports.sketchSlicer = ->
+    # TODO: MATCH TEXT STYLES TO LAYERS
+    # get Text Styles
+    # _textStyles = getTextStyles()
+
     # catalog each slice, but don't position yet
     # TODO: INCLUDE SUPPORT FOR MULTIPLE PAGES
     for slice in _slices.pages[0].slices
@@ -266,8 +329,6 @@ exports.sketchSlicer = ->
     slices["canvas"].height = Canvas.height
     Canvas.on "change:size", ->
         slices["canvas"].size = Canvas.size
-        # print slices.stack_group.constraints
-        # print slices.stack_group.x, slices.stack_group.y
     for child in slices["canvas"].children
         child.size = slices["canvas"].size
         slices["canvas"].on "change:size", ->

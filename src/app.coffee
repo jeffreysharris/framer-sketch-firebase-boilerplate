@@ -4,6 +4,8 @@ s = require 'sketchSlicer'
 {Input} = require "inputfield"
 
 slices = s.sketchSlicer()
+textStyles = s.textStyles()
+# print textStyles[style].lineHeight for style of textStyles
 
 lineHeight = 30
 
@@ -32,7 +34,7 @@ textfield = new Input
 
 textfield.style =
     fontSize: "14px"
-    color: "#333"
+    color: textStyles.chat_message.color
     fontFamily: "Helvetica"
     padding: "0px 0px 0px 20px"
 
@@ -58,8 +60,12 @@ demoDB.onChange "/messages", (message) ->
             textAlign: "left"
             y: slices["chat_window"].height - h * i
             text: t
-            color: "#333"
-            font: "14px/1.5 Helvetica"
+            color: textStyles.chat_message.color
+            fontSize: textStyles.chat_message.fontSize
+            fontFamily: textStyles.chat_message.fontFamily
+            fontStyle: textStyles.chat_message.fontStyle
+            lineHeight: textStyles.chat_message.lineHeight
+            letterSpacing: textStyles.chat_message.letterSpacing
         line.parent = slices.chat_window
         i++
 
