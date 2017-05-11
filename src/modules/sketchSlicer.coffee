@@ -319,9 +319,13 @@ assignConstraints = (s) ->
             when "centerHorizontally"
                 constant = s.constraints[c].constant ? 0
                 s.x = Align.center(constant)
+                container.on "change:width", ->
+                    s.x = Align.center(constant)
             when "centerVertically"
                 constant = s.constraints[c].constant ? 0
                 s.y = Align.center(constant)
+                container.on "change:height", ->
+                    s.y = Align.center(constant)
             else break
 
 
@@ -392,12 +396,15 @@ exports.sketchSlicer = ->
     # now go through catalog and determine hierarchy and positioning based on groups
     getParents(_layers, slices)
 
-    slices["canvas"].width = Canvas.width
-    slices["canvas"].height = Canvas.height
+    slices["canvas"].size = Canvas.size
+    slices["canvas"].x = 0
+    slices["canvas"].y = 0
     Canvas.on "change:size", ->
         slices["canvas"].size = Canvas.size
     for child in slices["canvas"].children
         child.size = slices["canvas"].size
+        child.x = slices["canvas"].x
+        child.y = slices["canvas"].y
         slices["canvas"].on "change:size", ->
             child.size = slices["canvas"].size
 
