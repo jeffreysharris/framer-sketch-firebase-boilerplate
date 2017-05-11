@@ -439,7 +439,6 @@ exports.sketchTextLayers = ->
         # getParents
         # getConstraints
     getParents(_layers, text_layers)
-    print text_layers[text].sketch_id for text of text_layers
     getConstraints(text_layers[text]) for text of text_layers
 
     return text_layers

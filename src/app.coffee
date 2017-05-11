@@ -51,15 +51,16 @@ demoDB.onChange "/messages", (message) ->
             y: child.y - lineHeight
     messageArray = _.toArray(message)
     # print message for message in messageArray
-    i = 1
+    i = 0
     h = lineHeight
     # Get messages on load
     for m in messageArray by -1
         t = m.text ? m
         line = text.chat_message.copy()
         line.text = t
-        line.y = slices.chat_window.height - text.chat_message.lineHeight * text.chat_message.fontSize * i
+        line.y = text.chat_message.y - (text.chat_message.lineHeight * text.chat_message.fontSize * i)
         line.parent = slices.chat_window
+        line.visible = true
         i++
 
 slices["button"].onMouseUp ->
@@ -72,3 +73,6 @@ document.addEventListener 'keypress', (event) ->
         event.preventDefault()
         post()
         textfield.value = ""
+
+# hide our placeholder TextLayer from Sketch
+text.chat_message.visible = false

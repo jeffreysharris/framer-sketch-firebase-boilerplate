@@ -66,7 +66,7 @@ demoDB.onChange("/messages", function(message) {
     });
   }
   messageArray = _.toArray(message);
-  i = 1;
+  i = 0;
   h = lineHeight;
   results = [];
   for (k = messageArray.length - 1; k >= 0; k += -1) {
@@ -74,8 +74,9 @@ demoDB.onChange("/messages", function(message) {
     t = (ref1 = m.text) != null ? ref1 : m;
     line = text.chat_message.copy();
     line.text = t;
-    line.y = slices.chat_window.height - text.chat_message.lineHeight * text.chat_message.fontSize * i;
+    line.y = text.chat_message.y - (text.chat_message.lineHeight * text.chat_message.fontSize * i);
     line.parent = slices.chat_window;
+    line.visible = true;
     results.push(i++);
   }
   return results;
@@ -94,6 +95,8 @@ document.addEventListener('keypress', function(event) {
     return textfield.value = "";
   }
 });
+
+text.chat_message.visible = false;
 
 
 },{"firebaseframer":3,"inputfield":4,"sketchSlicer":5}],2:[function(require,module,exports){
@@ -1068,9 +1071,6 @@ exports.sketchTextLayers = function() {
     }
   }
   getParents(_layers, text_layers);
-  for (text in text_layers) {
-    print(text_layers[text].sketch_id);
-  }
   for (text in text_layers) {
     getConstraints(text_layers[text]);
   }
