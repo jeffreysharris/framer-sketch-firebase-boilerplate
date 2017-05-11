@@ -1,5 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var FirebaseFramer, Input, bg, demoDB, lineHeight, post, s, slices, textStyles, textfield;
+var FirebaseFramer, Input, bg, demoDB, lineHeight, post, s, slices, text, textStyles, textfield;
 
 s = require('sketchSlicer');
 
@@ -7,11 +7,11 @@ FirebaseFramer = require('firebaseframer').FirebaseFramer;
 
 Input = require("inputfield").Input;
 
-slices = s.sketchSlicer();
-
 textStyles = s.textStyles();
 
-print(textStyles.chat_message.textDecoration);
+slices = s.sketchSlicer();
+
+text = s.sketchTextLayers();
 
 lineHeight = 30;
 
@@ -72,22 +72,10 @@ demoDB.onChange("/messages", function(message) {
   for (k = messageArray.length - 1; k >= 0; k += -1) {
     m = messageArray[k];
     t = (ref1 = m.text) != null ? ref1 : m;
-    line = new TextLayer({
-      x: 0,
-      textAlign: textStyles.chat_message.textAlign,
-      y: slices["chat_window"].height - h * i,
-      text: t,
-      color: textStyles.chat_message.color,
-      fontSize: textStyles.chat_message.fontSize,
-      fontFamily: textStyles.chat_message.fontFamily,
-      fontStyle: textStyles.chat_message.fontStyle,
-      lineHeight: textStyles.chat_message.lineHeight,
-      letterSpacing: textStyles.chat_message.letterSpacing,
-      textTransform: textStyles.chat_message.textTransform,
-      textDecoration: textStyles.chat_message.textDecoration
-    });
+    line = text.chat_message.copy();
+    line.text = t;
+    line.y = slices.chat_window.height - text.chat_message.lineHeight * text.chat_message.fontSize * i;
     line.parent = slices.chat_window;
-    line.width = line.parent.width;
     results.push(i++);
   }
   return results;
@@ -538,7 +526,7 @@ exports.Input = (function(superClass) {
 
 
 },{}],5:[function(require,module,exports){
-var Slice, TextStyle, _assets, _layers, _slices, assignConstraints, assignFlexbox, getConstraints, getObject, getParents, getTextStyles, groups, makeLayerFromParent, ref, slices, text_styles, ƒ, ƒƒ,
+var SketchTextLayer, Slice, TextStyle, _assets, _layers, _slices, assignConstraints, assignFlexbox, findObjects, getConstraints, getObject, getParents, getTextStyles, groups, makeLayerFromParent, ref, slices, text_styles, ƒ, ƒƒ,
   extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
 
@@ -577,10 +565,32 @@ Slice = (function(superClass) {
 
 })(Layer);
 
+SketchTextLayer = (function(superClass) {
+  extend(SketchTextLayer, superClass);
+
+  function SketchTextLayer(options) {
+    var base;
+    this.options = options != null ? options : {};
+    if ((base = this.options).sketch_id == null) {
+      base.sketch_id = "111";
+    }
+    this.options.constraints = {};
+    this.options.flexprops = {};
+    SketchTextLayer.__super__.constructor.call(this, this.options);
+    this.sketch_id = this.options.sketch_id;
+    this.constraints = this.options.constraints;
+    this.flexprops = this.options.flexprops;
+  }
+
+  return SketchTextLayer;
+
+})(TextLayer);
+
 TextStyle = (function() {
   function TextStyle(options) {
     this.options = options != null ? options : {};
     this.name;
+    this.id;
     this.color;
     this.fontSize;
     this.fontFamily;
@@ -592,6 +602,7 @@ TextStyle = (function() {
     this.textTransform;
     this.textDecoration;
     this.name = this.options.name;
+    this.id = this.options.id;
     this.color = this.options.color;
     this.fontSize = this.options.fontSize;
     this.fontFamily = this.options.fontFamily;
@@ -688,6 +699,7 @@ getTextStyles = function() {
       style = layerTextStyles[j];
       text_styles[style.name] = new TextStyle({
         name: style.name,
+        id: style.objectID,
         color: colorConverter(style.value.textStyle.NSColor.color),
         fontSize: style.value.textStyle.NSFont.attributes.NSFontSizeAttribute,
         fontFamily: style.value.textStyle.NSFont.family,
@@ -732,7 +744,6 @@ makeLayerFromParent = function(item) {
 
 getObject = function(object, key, value) {
   var i, prop, result;
-  result = null;
   if (object instanceof Array) {
     i = 0;
     while (i < object.length) {
@@ -761,6 +772,37 @@ getObject = function(object, key, value) {
     }
   }
   return result;
+};
+
+findObjects = function(object, key, value, finalResults) {
+  var getAllMatches;
+  finalResults = {};
+  getAllMatches = function(theObject) {
+    var i, prop, result;
+    result = null;
+    if (theObject instanceof Array) {
+      i = 0;
+      while (i < theObject.length) {
+        getAllMatches(theObject[i]);
+        i++;
+      }
+    } else {
+      for (prop in theObject) {
+        if (theObject.hasOwnProperty(prop)) {
+          if (prop === key) {
+            if (theObject[prop] === value) {
+              finalResults[theObject.name] = theObject;
+            }
+          }
+          if (theObject[prop] instanceof Object || theObject[prop] instanceof Array) {
+            getAllMatches(theObject[prop]);
+          }
+        }
+      }
+    }
+  };
+  getAllMatches(object);
+  return finalResults;
 };
 
 getParents = function(object, list) {
@@ -995,6 +1037,44 @@ exports.sketchSlicer = function() {
     getConstraints(slices[slice]);
   }
   return slices;
+};
+
+exports.sketchTextLayers = function() {
+  var my_style, t_rel, text, text_layers;
+  text_layers = findObjects(_assets, "<class>", "MSTextLayer");
+  getTextStyles();
+  for (text in text_layers) {
+    my_style = getObject(text_styles, "id", text_layers[text].style.sharedObjectID);
+    t_rel = getObject(_layers, "id", text_layers[text].objectID);
+    if (my_style != null) {
+      text_layers[text] = new SketchTextLayer({
+        name: text_layers[text].name,
+        sketch_id: text_layers[text].objectID,
+        x: t_rel.relative.x,
+        y: t_rel.relative.y,
+        width: t_rel.relative.width,
+        height: t_rel.relative.height,
+        textAlign: my_style.textAlign,
+        text: my_style.text,
+        color: my_style.color,
+        fontSize: my_style.fontSize,
+        fontFamily: my_style.fontFamily,
+        fontStyle: my_style.fontStyle,
+        lineHeight: my_style.lineHeight,
+        letterSpacing: my_style.letterSpacing,
+        textTransform: my_style.textTransform,
+        textDecoration: my_style.textDecoration
+      });
+    }
+  }
+  getParents(_layers, text_layers);
+  for (text in text_layers) {
+    print(text_layers[text].sketch_id);
+  }
+  for (text in text_layers) {
+    getConstraints(text_layers[text]);
+  }
+  return text_layers;
 };
 
 

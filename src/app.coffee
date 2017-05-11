@@ -3,9 +3,10 @@ s = require 'sketchSlicer'
 {FirebaseFramer} = require 'firebaseframer'
 {Input} = require "inputfield"
 
-slices = s.sketchSlicer()
 textStyles = s.textStyles()
-print textStyles.chat_message.textDecoration
+slices = s.sketchSlicer()
+text = s.sketchTextLayers()
+# print textStyles.chat_message.id
 
 lineHeight = 30
 
@@ -55,21 +56,10 @@ demoDB.onChange "/messages", (message) ->
     # Get messages on load
     for m in messageArray by -1
         t = m.text ? m
-        line = new TextLayer
-            x: 0
-            textAlign: textStyles.chat_message.textAlign
-            y: slices["chat_window"].height - h * i
-            text: t
-            color: textStyles.chat_message.color
-            fontSize: textStyles.chat_message.fontSize
-            fontFamily: textStyles.chat_message.fontFamily
-            fontStyle: textStyles.chat_message.fontStyle
-            lineHeight: textStyles.chat_message.lineHeight
-            letterSpacing: textStyles.chat_message.letterSpacing
-            textTransform: textStyles.chat_message.textTransform
-            textDecoration: textStyles.chat_message.textDecoration
+        line = text.chat_message.copy()
+        line.text = t
+        line.y = slices.chat_window.height - text.chat_message.lineHeight * text.chat_message.fontSize * i
         line.parent = slices.chat_window
-        line.width = line.parent.width
         i++
 
 slices["button"].onMouseUp ->

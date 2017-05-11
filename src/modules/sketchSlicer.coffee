@@ -30,10 +30,23 @@ class Slice extends Layer
         @constraints = @options.constraints
         @flexprops = @options.flexprops
 
+class SketchTextLayer extends TextLayer
+    constructor: (@options={}) ->
+        @options.sketch_id ?= "111"
+        @options.constraints = {
+        }
+        @options.flexprops = {
+        }
+        super(@options)
+        @sketch_id = @options.sketch_id
+        @constraints = @options.constraints
+        @flexprops = @options.flexprops
+
 class TextStyle
     # TODO: Add support for text shadows
     constructor: (@options={})->
         @name
+        @id
         @color
         @fontSize
         @fontFamily
@@ -45,6 +58,7 @@ class TextStyle
         @textTransform
         @textDecoration
         @name = @options.name
+        @id = @options.id
         @color = @options.color
         @fontSize = @options.fontSize
         @fontFamily = @options.fontFamily
@@ -103,9 +117,9 @@ getTextStyles = ->
     layerTextStyles = _assets.layerTextStyles?.objects
     if layerTextStyles?
         for style in layerTextStyles
-            # color_val = colorConverter(style.value.textStyle.NSColor.color)
             text_styles[style.name] = new TextStyle
                 name: style.name
+                id: style.objectID
                 color: colorConverter(style.value.textStyle.NSColor.color)
                 fontSize: style.value.textStyle.NSFont.attributes.NSFontSizeAttribute
                 fontFamily: style.value.textStyle.NSFont.family
@@ -115,8 +129,6 @@ getTextStyles = ->
                 textAlign: align(style.value.textStyle.NSParagraphStyle.style.alignment)
                 textTransform: transform(style.value.textStyle.MSAttributedStringTextTransformAttribute)
                 textDecoration: decoration(style.value.textStyle.NSStrikethrough, style.value.textStyle.NSUnderline)
-
-
     return text_styles
 
 makeLayerFromParent = (item) ->
@@ -146,9 +158,8 @@ makeLayerFromParent = (item) ->
             layer = matches[0]
     return layer
 
-# traversing a nested json object for matching value
+# traversing a nested json object for first matching kvp
 getObject = (object, key, value) ->
-    result = null
     if object instanceof Array
         i = 0
         while i < object.length
@@ -168,6 +179,28 @@ getObject = (object, key, value) ->
                 if result
                     break
     return result
+
+# finding all matches for key value pairs, not just first match
+findObjects = (object, key, value, finalResults) ->
+    finalResults = {}
+    getAllMatches = (theObject) ->
+        result = null
+        if theObject instanceof Array
+            i = 0
+            while i < theObject.length
+                getAllMatches theObject[i]
+                i++
+        else
+            for prop of theObject
+                if theObject.hasOwnProperty(prop)
+                    if prop == key
+                        if theObject[prop] == value
+                            finalResults[theObject.name] = theObject
+                    if theObject[prop] instanceof Object || theObject[prop] instanceof Array
+                        getAllMatches theObject[prop]
+        return
+    getAllMatches object
+    return finalResults
 
 getParents = (object, list) ->
     # take an object of slices and search for them in each _layers.x.layers array, assign as parents
@@ -339,12 +372,10 @@ assignFlexbox = (s) ->
 # ======= MAIN RETURN FUNCTION ======
 
 exports.textStyles = ->
+    # get all Shared Text Styles in case we need to apply to dynamic text elements created only in Framer, not in Sketch
     getTextStyles()
 
 exports.sketchSlicer = ->
-    # TODO: MATCH TEXT STYLES TO LAYERS
-    # get Text Styles
-    # _textStyles = getTextStyles()
 
     # catalog each slice, but don't position yet
     # TODO: INCLUDE SUPPORT FOR MULTIPLE PAGES
@@ -373,3 +404,42 @@ exports.sketchSlicer = ->
     getConstraints(slices[slice]) for slice of slices
 
     return slices
+
+exports.sketchTextLayers = ->
+    # get all the text layers created in Sketch
+    text_layers = findObjects _assets, "<class>", "MSTextLayer"
+    # get all the Text Styles, remember text_styles is already initialized globally
+    getTextStyles()
+
+    for text of text_layers
+        # find correct text style
+        my_style = getObject text_styles, "id", text_layers[text].style.sharedObjectID
+        # correlate with _layers to get relative position
+        t_rel = getObject _layers, "id", text_layers[text].objectID
+        # check if we found my_style, otherwise we have to hand jam!
+        if my_style?
+            text_layers[text] = new SketchTextLayer
+                name: text_layers[text].name
+                sketch_id: text_layers[text].objectID
+                x: t_rel.relative.x
+                y: t_rel.relative.y
+                width: t_rel.relative.width
+                height: t_rel.relative.height
+                textAlign: my_style.textAlign
+                text: my_style.text
+                color: my_style.color
+                fontSize: my_style.fontSize
+                fontFamily: my_style.fontFamily
+                fontStyle: my_style.fontStyle
+                lineHeight: my_style.lineHeight
+                letterSpacing: my_style.letterSpacing
+                textTransform: my_style.textTransform
+                textDecoration: my_style.textDecoration
+        # TODO: ADD TEXT_LAYER INIT W/ NO TEXT STYLE
+        # getParents
+        # getConstraints
+    getParents(_layers, text_layers)
+    print text_layers[text].sketch_id for text of text_layers
+    getConstraints(text_layers[text]) for text of text_layers
+
+    return text_layers
