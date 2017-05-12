@@ -42,11 +42,12 @@ https://github.com/awt2542/Find-for-Framer
 ### Extra-Credit: AnimaApp Auto-Layout
 
 While not required, the AnimaApp Auto-Layout plugin for Sketch will enable you to maximize the potential of this workflow:
-* Position and size your Framer elements by percentage
+* Position and size your Framer elements by percentages
 * Maintain Align.top/bottom/etc.
 * Add offset values for any Auto-Layout property.
 
 ### To Do
 
 * Support for multiple Sketch Pages
+* Add ad hoc text styles
 * True Flexbox layout in Framer

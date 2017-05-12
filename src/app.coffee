@@ -2,6 +2,7 @@
 s = require 'sketchSlicer'
 {FirebaseFramer} = require 'firebaseframer'
 {Input} = require "inputfield"
+words = require "words"
 
 textStyles = s.textStyles()
 slices = s.sketchSlicer()
@@ -21,6 +22,11 @@ demoDB = new FirebaseFramer
 bg = new BackgroundLayer
     backgroundColor: "#fafafa"
 
+messageLayers = []
+
+# my unique username
+username = words.adjectives[Math.floor Math.random() * words.adjectives.length] + " " + words.nouns[Math.floor Math.random() * words.nouns.length]
+
 #input
 
 slices["button"].onMouseDown ->
@@ -34,34 +40,43 @@ textfield = new Input
     height: slices["field"].height
 
 textfield.style =
-    fontSize: "14px"
+    fontSize: textStyles.chat_message.fontSize + "px"
     color: textStyles.chat_message.color
-    fontFamily: "Helvetica"
+    fontFamily: textStyles.chat_message.fontFamily
     padding: "0px 0px 0px 20px"
+
+text.clear_text.onClick ->
+    demoDB.delete "/messages"
+    layer.destroy() for layer in messageLayers
 
 # Events + FirebaseFramer --------------------
 
 post = ->
     if textfield.value.length
-        demoDB.post '/messages', {"text": textfield.value}
+        demoDB.post '/messages', {"username": username, "text": textfield.value}
 
 demoDB.onChange "/messages", (message) ->
-    for child in slices["chat_window"].children
-        child.animate
-            y: child.y - lineHeight
-    messageArray = _.toArray(message)
-    # print message for message in messageArray
+    messageArray = []
+    for m of message
+        if message[m].username?
+            messageArray = _.toArray(message)
+        else
+            messageArray = [message]
     i = 0
-    h = lineHeight
+    lh = text.chat_message.lineHeight * text.chat_message.fontSize
     # Get messages on load
     for m in messageArray by -1
-        t = m.text ? m
+        # print m
         line = text.chat_message.copy()
-        line.text = t
-        line.y = text.chat_message.y - (text.chat_message.lineHeight * text.chat_message.fontSize * i)
+        line.text = m.username + " : " + m.text
+        line.y = text.chat_message.y - lh * i
         line.parent = slices.chat_window
         line.visible = true
         i++
+        messageLayers.push line
+    for child in slices["chat_window"].children
+        child.animate
+            y: child.y - lh
 
 slices["button"].onMouseUp ->
     slices["button"].image = "images/button.png"

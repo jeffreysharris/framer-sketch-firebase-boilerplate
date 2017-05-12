@@ -255,77 +255,52 @@ assignConstraints = (s) ->
         # AnimaApp -> Framer translation
         switch c
             when "top"
-                multiplier_top = s.constraints[c].multiplier if s.constraints[c].multiplier?
-                constant_top = s.constraints[c].constant if s.constraints[c].constant?
-                if multiplier_top?
-                    s.y = Align.top(container.height * multiplier_top)
-                    container.on "change:height", ->
-                        s.y = Align.top(container.height * multiplier_top)
-                if constant_top?
-                    s.y = Align.top(constant_top)
-                    container.on "change:height", ->
-                        s.y = Align.top(constant_top)
-            when "bottom"
-                multiplier_bottom = s.constraints[c].multiplier if s.constraints[c].multiplier?
-                constant_bottom = s.constraints[c].constant if s.constraints[c].constant?
-                if multiplier_bottom?
-                    s.y = Align.bottom(container.height * multiplier_bottom)
-                    container.on "change:height", ->
-                        s.y = Align.bottom(container.height * multiplier_bottom)
-                if constant_bottom?
-                    s.y = Align.bottom(-constant_bottom)
-                    container.on "change:height", ->
-                        s.y = Align.bottom(-constant_bottom)
-            when "left"
-                multiplier_left = s.constraints[c].multiplier if s.constraints[c].multiplier?
-                constant_left = s.constraints[c].constant if s.constraints[c].constant?
-                if multiplier_left?
-                    s.x = Align.left(container.height * multiplier_left)
-                    container.on "change:width", ->
-                        s.x = Align.left(container.height * multiplier_left)
-                if constant_left?
-                    s.x = Align.left(constant_left)
-                    container.on "change:width", ->
-                        s.x = Align.left(constant_left)
-            when "right"
-                multiplier_right = s.constraints[c].multiplier if s.constraints[c].multiplier?
-                constant_right = s.constraints[c].constant if s.constraints[c].constant?
-                if multiplier_right?
-                    s.x = Align.right(container.height * multiplier_right)
-                    container.on "change:width", ->
-                        s.x = Align.right(container.height * multiplier_right)
-                if constant_right?
-                    s.x = Align.right(-constant_right)
-                    container.on "change:width", ->
-                        s.x = Align.right(-constant_right)
-            when "width"
-                multiplier_width = s.constraints[c].multiplier if s.constraints[c].multiplier?
-                constant_width = s.constraints[c].constant if s.constraints[c].constant?
-                if constant_width
-                    s.width = (constant_width)
-                else
-                    s.width = (container.width * multiplier_width)
-                    container.on "change:width", ->
-                        s.width = (container.width * multiplier_width)
-            when "height"
-                multiplier_height = s.constraints[c].multiplier if s.constraints[c].multiplier?
-                constant_height = s.constraints[c].constant if s.constraints[c].constant?
-                if constant_height
-                    s.height = (constant_height)
-                else
-                    s.height = (container.height * multiplier_height)
-                    container.on "change:height", ->
-                        s.height = (container.height * multiplier_height)
-            when "centerHorizontally"
-                constant = s.constraints[c].constant ? 0
-                s.x = Align.center(constant)
-                container.on "change:width", ->
-                    s.x = Align.center(constant)
-            when "centerVertically"
-                constant = s.constraints[c].constant ? 0
-                s.y = Align.center(constant)
+                multiplier_top = if s.constraints[c].multiplier? then s.constraints[c].multiplier else 0
+                constant_top = if s.constraints[c].constant? then s.constraints[c].constant else 0
+                s.y = Align.top(container.height * multiplier_top + constant_top)
                 container.on "change:height", ->
-                    s.y = Align.center(constant)
+                    s.y = Align.top(container.height * multiplier_top + constant_top)
+
+            when "bottom"
+                multiplier_bottom = if s.constraints[c].multiplier? then s.constraints[c].multiplier else 0
+                constant_bottom = if s.constraints[c].constant? then s.constraints[c].constant else 0
+                s.y = Align.bottom(container.height * multiplier_bottom - constant_bottom)
+                container.on "change:height", ->
+                    s.y = Align.bottom(container.height * multiplier_bottom - constant_bottom)
+            when "left"
+                multiplier_left = if s.constraints[c].multiplier? then s.constraints[c].multiplier else 0
+                constant_left = if s.constraints[c].constant? then s.constraints[c].constant else 0
+                s.x = Align.left(container.width * multiplier_left + constant_left)
+                container.on "change:width", ->
+                    s.x = Align.left(container.width * multiplier_left + constant_left)
+            when "right"
+                multiplier_right = if s.constraints[c].multiplier? then s.constraints[c].multiplier else 0
+                constant_right = if s.constraints[c].constant? then s.constraints[c].constant else 0
+                s.x = Align.right(container.width * multiplier_right - constant_right)
+                container.on "change:width", ->
+                    s.x = Align.right(container.width * multiplier_right - constant_right)
+            when "width"
+                multiplier_width = if s.constraints[c].multiplier? then s.constraints[c].multiplier else 0
+                constant_width = if s.constraints[c].constant? then s.constraints[c].constant else 0
+                s.width = (container.width * multiplier_width + constant_width)
+                container.on "change:width", ->
+                    s.width = (container.width * multiplier_width + constant_width)
+            when "height"
+                multiplier_height = if s.constraints[c].multiplier? then s.constraints[c].multiplier else 0
+                constant_height = if s.constraints[c].constant? then s.constraints[c].constant else 0
+                s.height = (container.height * multiplier_height + constant_height)
+                container.on "change:height", ->
+                    s.height = (container.height * multiplier_height + constant_height)
+            when "centerHorizontally"
+                constant_horz = if s.constraints[c].constant? then s.constraints[c].constant else 0
+                s.x = Align.center(constant_horz)
+                container.on "change:width", ->
+                    s.x = Align.center(constant_horz)
+            when "centerVertically"
+                constant_vert = if s.constraints[c].constant? then s.constraints[c].constant else 0
+                s.y = Align.center(constant_vert)
+                container.on "change:height", ->
+                    s.y = Align.center(constant_vert)
             else break
 
 
@@ -433,7 +408,7 @@ exports.sketchTextLayers = ->
                 width: t_rel.relative.width
                 height: t_rel.relative.height
                 textAlign: my_style.textAlign
-                text: my_style.text
+                text: text_layers[text].attributedString.value.text
                 color: my_style.color
                 fontSize: my_style.fontSize
                 fontFamily: my_style.fontFamily
